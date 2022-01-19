@@ -21,11 +21,13 @@ class FormulaView: UIView {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .blue
-        imageView.image = UIImage(systemName: "formula")
+        imageView.image = UIImage(systemName: "function")
+        imageView.tintColor = .label
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    
+    
     
     override func layoutSubviews() {
         super.layoutSubviews()
