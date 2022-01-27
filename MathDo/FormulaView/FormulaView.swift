@@ -7,7 +7,9 @@
 
 import UIKit
 
-class FormulaView: UIView {
+final class FormulaView: UIView {
+    
+    weak var formulaVC: FormulaViewController!
     
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
@@ -15,24 +17,33 @@ class FormulaView: UIView {
         stackView.alignment = .center
         stackView.spacing = 10
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.backgroundColor = .white
+        stackView.backgroundColor = .link
         return stackView
     }()
     
-    private lazy var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = .blue
-        imageView.image = UIImage(systemName: "formula")
+    private lazy var imageView: UIView = {
+        let imageView = UIView()
+        imageView.backgroundColor = .white
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
+    convenience init(viewController: FormulaViewController) {
+        self.init()
+        formulaVC = viewController
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
+        setupLayout()
+    }
+    
+    private func setupLayout() {
+        stackView.addArrangedSubview(imageView)
         addSubview(stackView)
         setStackViewSettings()
-        stackView.addSubview(imageView)
         setImageViewSettings()
+        print(stackView.frame)
     }
     
     private func setStackViewSettings() {
@@ -44,21 +55,14 @@ class FormulaView: UIView {
         constraints.append(stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor))
         
         NSLayoutConstraint.activate(constraints)
-//        let padding = 0.0
-//        stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding).isActive = true
-//        stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding).isActive = true
-//        stackView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
-//        stackView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, constant: -padding).isActive = true
     }
     
     private func setImageViewSettings() {
         var constraints = [NSLayoutConstraint]()
-        
-        constraints.append(imageView.topAnchor.constraint(equalTo: stackView.topAnchor, constant: 50))
-        constraints.append(imageView.centerXAnchor.constraint(equalTo: stackView.centerXAnchor))
+
         constraints.append(imageView.widthAnchor.constraint(equalToConstant: 50))
-        constraints.append(imageView.heightAnchor.constraint(equalToConstant: 50))
-        
+        constraints.append(imageView.heightAnchor.constraint(equalToConstant: 150))
+
         NSLayoutConstraint.activate(constraints)
     }
     
