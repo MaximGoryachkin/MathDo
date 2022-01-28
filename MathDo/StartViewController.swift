@@ -16,7 +16,6 @@ class StartViewController: UITableViewController {
         setButtonSettings()
         setNavigationBarSettings()
         view.backgroundColor = .white
-        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     

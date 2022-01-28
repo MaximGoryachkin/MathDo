@@ -12,10 +12,17 @@ final class FormulaViewController: UIViewController {
     var formula: Formula!
     let label = UILabel(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
     
-    lazy var formulaView: FormulaView = { FormulaView(viewController: self) }()
+    lazy var formulaView = {
+        FormulaView(viewController: self, formula: formula)
+    }()
     
     override func loadView() {
-        view = formulaView
+        self.view = formulaView
+        view.backgroundColor = .white
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
 
 }

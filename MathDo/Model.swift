@@ -11,13 +11,14 @@ struct Formula {
     let body: String
     let favourite: Bool
     let description: String?
+    let variables: [String]
 }
 
 extension Formula {
     static func getData() -> [Formula] {
         [
-            Formula(id: 0, name: "Ohm's law", body: "U=RI", favourite: false, description: nil),
-            Formula(id: 1, name: "Quadratic equation", body: "y=x^2", favourite: false, description: nil)
+            Formula(id: 0, name: "Ohm's law", body: "U=RI", favourite: false, description: nil, variables: ["A", "B"]),
+            Formula(id: 1, name: "Quadratic equation", body: "y=x^2", favourite: false, description: nil, variables: ["C", "D"])
         ]
     }
 }
