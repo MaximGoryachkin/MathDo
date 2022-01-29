@@ -10,7 +10,7 @@ import UIKit
 
 final class FormulaCreatingView: UIView {
 
-    weak var formulaCreatingVC: FormulaCreatingViewController!
+    weak var formulaCreatingVC: FormulaCreatingProtocol?
     
     lazy var formulaTextField: UITextField  = {
         let formulaTextField = UITextField()
@@ -49,7 +49,7 @@ final class FormulaCreatingView: UIView {
         return addVariableButton
     }()
     
-    convenience init(viewController: FormulaCreatingViewController) {
+    convenience init(viewController: FormulaCreatingProtocol) {
         self.init()
         formulaCreatingVC = viewController
     }
@@ -90,9 +90,11 @@ final class FormulaCreatingView: UIView {
     }
     
     private func setAddVariableButtonSettings() {
+        addVariableButton.addTarget(formulaCreatingVC, action: #selector(formulaCreatingVC?.addNewVariable(sender:)), for: .touchUpInside)
         addVariableButton.heightAnchor.constraint(equalToConstant: frame.width / 7).isActive = true
         addVariableButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
         addVariableButton.translatesAutoresizingMaskIntoConstraints = false
+        
     }
     
 }

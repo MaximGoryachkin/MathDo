@@ -21,6 +21,12 @@
 		F9279ABC278F6A73005C1071 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9279ABB278F6A73005C1071 /* StringExtensions.swift */; };
 		F9CA34C0279F53B500C0FB0B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CA34BF279F53B500C0FB0B /* Models.swift */; };
 		F9E19675278A4968008FEF7A /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E19674278A4968008FEF7A /* NavigationController.swift */; };
+		F9FA052727A2C9560076DCA0 /* VariablesCreatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052627A2C9560076DCA0 /* VariablesCreatingViewController.swift */; };
+		F9FA052927A2D04B0076DCA0 /* VariablesCreatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052827A2D04B0076DCA0 /* VariablesCreatingView.swift */; };
+		F9FA052D27A485890076DCA0 /* HorizontalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */; };
+		F9FA053027A498740076DCA0 /* AdvancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052F27A498740076DCA0 /* AdvancedTextField.swift */; };
+		F9FA053227A553250076DCA0 /* VariableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053127A553250076DCA0 /* VariableView.swift */; };
+		F9FA053527A55F450076DCA0 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053427A55F450076DCA0 /* UIExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +46,12 @@
 		F9279ABB278F6A73005C1071 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		F9CA34BF279F53B500C0FB0B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		F9E19674278A4968008FEF7A /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		F9FA052627A2C9560076DCA0 /* VariablesCreatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariablesCreatingViewController.swift; sourceTree = "<group>"; };
+		F9FA052827A2D04B0076DCA0 /* VariablesCreatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariablesCreatingView.swift; sourceTree = "<group>"; };
+		F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalPickerView.swift; sourceTree = "<group>"; };
+		F9FA052F27A498740076DCA0 /* AdvancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedTextField.swift; sourceTree = "<group>"; };
+		F9FA053127A553250076DCA0 /* VariableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableView.swift; sourceTree = "<group>"; };
+		F9FA053427A55F450076DCA0 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +93,7 @@
 		89691B822786DFF4005674C9 /* MathDo */ = {
 			isa = PBXGroup;
 			children = (
-				F9279ABB278F6A73005C1071 /* StringExtensions.swift */,
+				F9FA053327A55F330076DCA0 /* Extensions */,
 				89691B832786DFF4005674C9 /* AppDelegate.swift */,
 				89691B852786DFF4005674C9 /* SceneDelegate.swift */,
 				896368C02798739900BB6FA9 /* FormulaView */,
@@ -100,8 +112,8 @@
 		F9279AB7278B4EE7005C1071 /* FormulaCreating */ = {
 			isa = PBXGroup;
 			children = (
-				F9279AB3278B45AA005C1071 /* FormulaCreatingViewController.swift */,
-				F9279AB5278B4EE3005C1071 /* FormulaCreatingView.swift */,
+				F9FA052B27A2D0710076DCA0 /* FormulaCreating */,
+				F9FA052A27A2D04F0076DCA0 /* VariablesCreating */,
 			);
 			path = FormulaCreating;
 			sourceTree = "<group>";
@@ -121,6 +133,44 @@
 				F9CA34BF279F53B500C0FB0B /* Models.swift */,
 			);
 			path = FormulaReader;
+			sourceTree = "<group>";
+		};
+		F9FA052A27A2D04F0076DCA0 /* VariablesCreating */ = {
+			isa = PBXGroup;
+			children = (
+				F9FA052627A2C9560076DCA0 /* VariablesCreatingViewController.swift */,
+				F9FA052827A2D04B0076DCA0 /* VariablesCreatingView.swift */,
+				F9FA052E27A486740076DCA0 /* subviews */,
+			);
+			path = VariablesCreating;
+			sourceTree = "<group>";
+		};
+		F9FA052B27A2D0710076DCA0 /* FormulaCreating */ = {
+			isa = PBXGroup;
+			children = (
+				F9279AB3278B45AA005C1071 /* FormulaCreatingViewController.swift */,
+				F9279AB5278B4EE3005C1071 /* FormulaCreatingView.swift */,
+			);
+			path = FormulaCreating;
+			sourceTree = "<group>";
+		};
+		F9FA052E27A486740076DCA0 /* subviews */ = {
+			isa = PBXGroup;
+			children = (
+				F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */,
+				F9FA052F27A498740076DCA0 /* AdvancedTextField.swift */,
+				F9FA053127A553250076DCA0 /* VariableView.swift */,
+			);
+			path = subviews;
+			sourceTree = "<group>";
+		};
+		F9FA053327A55F330076DCA0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F9279ABB278F6A73005C1071 /* StringExtensions.swift */,
+				F9FA053427A55F450076DCA0 /* UIExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,7 +243,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9FA052D27A485890076DCA0 /* HorizontalPickerView.swift in Sources */,
+				F9FA053027A498740076DCA0 /* AdvancedTextField.swift in Sources */,
 				895D8BEF278C6DF800139F2A /* Model.swift in Sources */,
+				F9FA053527A55F450076DCA0 /* UIExtensions.swift in Sources */,
 				F9279AB6278B4EE3005C1071 /* FormulaCreatingView.swift in Sources */,
 				89691B882786DFF4005674C9 /* StartViewController.swift in Sources */,
 				895D8BF1278F4FF500139F2A /* FormulaViewController.swift in Sources */,
@@ -201,10 +254,13 @@
 				F9E19675278A4968008FEF7A /* NavigationController.swift in Sources */,
 				F9279ABC278F6A73005C1071 /* StringExtensions.swift in Sources */,
 				F9279AB9278F69F8005C1071 /* FormulaReader.swift in Sources */,
+				F9FA053227A553250076DCA0 /* VariableView.swift in Sources */,
 				89691B842786DFF4005674C9 /* AppDelegate.swift in Sources */,
 				F9CA34C0279F53B500C0FB0B /* Models.swift in Sources */,
 				89691B862786DFF4005674C9 /* SceneDelegate.swift in Sources */,
+				F9FA052727A2C9560076DCA0 /* VariablesCreatingViewController.swift in Sources */,
 				F9279AB4278B45AA005C1071 /* FormulaCreatingViewController.swift in Sources */,
+				F9FA052927A2D04B0076DCA0 /* VariablesCreatingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
