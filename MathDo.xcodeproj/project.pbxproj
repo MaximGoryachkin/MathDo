@@ -26,7 +26,7 @@
 		F9FA052D27A485890076DCA0 /* HorizontalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */; };
 		F9FA053027A498740076DCA0 /* AdvancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052F27A498740076DCA0 /* AdvancedTextField.swift */; };
 		F9FA053227A553250076DCA0 /* VariableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053127A553250076DCA0 /* VariableView.swift */; };
-		F9FA053527A55F450076DCA0 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053427A55F450076DCA0 /* UIExtensions.swift */; };
+		F9FA053727A56F6F0076DCA0 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053627A56F6F0076DCA0 /* UIExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +51,7 @@
 		F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalPickerView.swift; sourceTree = "<group>"; };
 		F9FA052F27A498740076DCA0 /* AdvancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedTextField.swift; sourceTree = "<group>"; };
 		F9FA053127A553250076DCA0 /* VariableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableView.swift; sourceTree = "<group>"; };
-		F9FA053427A55F450076DCA0 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		F9FA053627A56F6F0076DCA0 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,7 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				F9279ABB278F6A73005C1071 /* StringExtensions.swift */,
-				F9FA053427A55F450076DCA0 /* UIExtensions.swift */,
+				F9FA053627A56F6F0076DCA0 /* UIExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -246,7 +246,7 @@
 				F9FA052D27A485890076DCA0 /* HorizontalPickerView.swift in Sources */,
 				F9FA053027A498740076DCA0 /* AdvancedTextField.swift in Sources */,
 				895D8BEF278C6DF800139F2A /* Model.swift in Sources */,
-				F9FA053527A55F450076DCA0 /* UIExtensions.swift in Sources */,
+				F9FA053727A56F6F0076DCA0 /* UIExtensions.swift in Sources */,
 				F9279AB6278B4EE3005C1071 /* FormulaCreatingView.swift in Sources */,
 				89691B882786DFF4005674C9 /* StartViewController.swift in Sources */,
 				895D8BF1278F4FF500139F2A /* FormulaViewController.swift in Sources */,
