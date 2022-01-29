@@ -7,6 +7,10 @@
 
 import UIKit
 
+@objc protocol FormulaCreatingProtocol {
+    @objc func addNewVariable(sender: UIButton)
+}
+
 
  final class FormulaCreatingViewController: UIViewController {
 
@@ -35,4 +39,14 @@ import UIKit
          navigationItem.rightBarButtonItem = addItem
      }
 
+}
+
+extension FormulaCreatingViewController: FormulaCreatingProtocol {
+   @objc func addNewVariable(sender: UIButton) {
+       let variablesCreatingVC = VariablesCreatingViewController()
+       present(variablesCreatingVC, animated: true)
+       
+    }
+    
+    
 }
