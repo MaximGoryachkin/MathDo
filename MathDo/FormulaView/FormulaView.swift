@@ -9,8 +9,9 @@ import UIKit
 
 final class FormulaView: UIView {
     
-    weak var formulaVC: FormulaViewController!
+    var formulaVC: FormulaViewProtocol!
     var formula: Formula!
+    var flag = true
     
     private lazy var resultView: UIView = {
         let view = UIView()
@@ -38,7 +39,7 @@ final class FormulaView: UIView {
         return view
     }()
     
-    convenience init(viewController: FormulaViewController, formula: Formula) {
+    convenience init(viewController: FormulaViewProtocol, formula: Formula) {
         self.init()
         formulaVC = viewController
         self.formula = formula
@@ -51,7 +52,7 @@ final class FormulaView: UIView {
         print(safeAreaLayoutGuide.layoutFrame)
     }
     
-    func setupLayout() {
+    private func setupLayout() {
         addSubview(resultView)
         addSubview(variableTableView)
         addSubview(resultButtonView)
@@ -81,7 +82,14 @@ final class FormulaView: UIView {
         NSLayoutConstraint.activate(constraints)
     }
     
+    @objc func resultButtonPressed() {
+        flag.toggle()
+        resultView.backgroundColor = flag ? .red : .yellow
+    }
+    
     private func setButtonView() {
+        resultButtonView.addTarget(self, action: #selector(resultButtonPressed), for: .touchUpInside)
+        
         var constraints = [NSLayoutConstraint]()
         
         constraints.append(resultButtonView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 10))
@@ -115,4 +123,8 @@ extension FormulaView: UITableViewDelegate, UITableViewDataSource {
         "Variables"
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        formulaVC.presentAllert()
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }

@@ -26,9 +26,11 @@ class StartViewController: UITableViewController {
     
     private func setButtonSettings() {
         let addItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(routeToFomulaCreatingVC))
+        let backBarButtton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         navigationItem.rightBarButtonItem = addItem
         navigationItem.leftBarButtonItem = editButtonItem
+        navigationItem.backBarButtonItem = backBarButtton
     }
     
     private func setNavigationBarSettings() {

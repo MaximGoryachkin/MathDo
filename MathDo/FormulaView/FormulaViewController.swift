@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol FormulaViewProtocol {
+    func presentAllert()
+}
+
 final class FormulaViewController: UIViewController {
     
     var formula: Formula!
@@ -23,6 +27,20 @@ final class FormulaViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = formula.name
+        
     }
+}
 
+extension FormulaViewController: FormulaViewProtocol {
+    func presentAllert() {
+        let alert = UIAlertController(title: "Set the value", message: "You shuold set the value of variable", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        
+        alert.addTextField { _ in
+            //значение переменной в модели
+        }
+        alert.addAction(action)
+        present(alert, animated: true)
+    }
 }
