@@ -113,7 +113,7 @@ extension FormulaView: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "variableCell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = formula.variables[indexPath.row]
+        content.text = "\(formula.variables[indexPath.row].character) - \(formula.variables[indexPath.row].description ?? "")"
         cell.contentConfiguration = content
         
         return cell
