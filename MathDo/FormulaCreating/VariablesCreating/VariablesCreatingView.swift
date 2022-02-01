@@ -32,7 +32,7 @@ final class VariablesCreatingView: UIView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.text = "Variable creating"
+        label.text = "Create variable"
         label.textColor = .white
         label.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         return label
@@ -56,7 +56,7 @@ final class VariablesCreatingView: UIView {
     private lazy var variableCreatingButton: UIButton = {
         let variableCreatingButton = UIButton(type: .system)
         variableCreatingButton.translatesAutoresizingMaskIntoConstraints = false
-        variableCreatingButton.setTitle("Create variable", for: .normal)
+        variableCreatingButton.setTitle("Done", for: .normal)
         variableCreatingButton.layer.cornerRadius = 10
         variableCreatingButton.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         variableCreatingButton.tintColor = .white
