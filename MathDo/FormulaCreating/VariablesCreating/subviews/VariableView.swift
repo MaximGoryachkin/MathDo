@@ -26,8 +26,8 @@ final class VariableView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func setText(_ text: String) {
-        label.text = text
+    public func setCharacter(_ char: Character) {
+        label.text = String(char)
     }
     
     public func setColor(_ color: UIColor) {

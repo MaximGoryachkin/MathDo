@@ -10,15 +10,17 @@ import UIKit
 
 final class FormulaCreatingView: UIView {
 
-    weak var formulaCreatingVC: FormulaCreatingProtocol?
-    
+  
     lazy var formulaTextField: UITextField  = {
         let formulaTextField = UITextField()
         formulaTextField.translatesAutoresizingMaskIntoConstraints = false
         formulaTextField.borderStyle = .line
         formulaTextField.placeholder = "Write your formula"
+        formulaTextField.backgroundColor = .white
         return formulaTextField
     }()
+    
+    private weak var formulaCreatingVC: (FormulaCreatingProtocol & VariableDisplayProtocol & VariableCreatingCellDelegate)!
     
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
@@ -36,22 +38,28 @@ final class FormulaCreatingView: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.register(VariableCreatingCell.self, forCellReuseIdentifier: VariableCreatingCell.nameOfClass)
+        tableView.rowHeight = 50
+        tableView.separatorInset = .zero
+        tableView.separatorColor = .lightGray
         return tableView
     }()
     
     private lazy var addVariableButton: UIButton = {
-        let addVariableButton = UIButton()
+        let addVariableButton = UIButton(type: .system)
         addVariableButton.translatesAutoresizingMaskIntoConstraints = false
         addVariableButton.setTitle("New variable", for: .normal)
         addVariableButton.layer.cornerRadius = 10
         addVariableButton.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        addVariableButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         addVariableButton.tintColor = .white
         return addVariableButton
     }()
     
-    convenience init(viewController: FormulaCreatingProtocol) {
+    convenience init(viewController: FormulaCreatingProtocol & VariableDisplayProtocol & VariableCreatingCellDelegate) {
         self.init()
         formulaCreatingVC = viewController
+        setPrimarySettings()
     }
     
     override func layoutSubviews() {
@@ -59,12 +67,41 @@ final class FormulaCreatingView: UIView {
         setupLayout()
     }
     
-    private func setupLayout() {
-        backgroundColor = .white
+    public func addNewVariable(variable: Variable) {
+        variablesTableView.performBatchUpdates {
+            formulaCreatingVC.variables.append(variable)
+            let indexPath = IndexPath.init(row: formulaCreatingVC.variables.count - 1, section: .zero)
+            variablesTableView.insertRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    public func removeVariableFormTableView(cell: VariableCreatingCell) {
+        guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
+        variablesTableView.performBatchUpdates {
+            formulaCreatingVC.variables.remove(at: indexPath.row)
+            variablesTableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    public func scrollToBottom() {
+        guard formulaCreatingVC.variables.count > 0 else { return }
+        let lastIndexOVariables = formulaCreatingVC.variables.count - 1
+            DispatchQueue.main.async { [weak self] in
+                let indexPath = IndexPath(row: lastIndexOVariables, section: .zero)
+                self?.variablesTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
+    }
+    
+    private func setPrimarySettings() {
+        backgroundColor = #colorLiteral(red: 0.9245480299, green: 0.9361869693, blue: 0.9359821677, alpha: 1)
         stackView.addArrangedSubview(formulaTextField)
         stackView.addArrangedSubview(variablesTableView)
         stackView.addArrangedSubview(addVariableButton)
         addSubview(stackView)
+    }
+    
+    private func setupLayout() {
+        
         setStackViewSettings()
         setFormulaTextFieldSettings()
         setVariablesTableViewSettings()
@@ -85,12 +122,12 @@ final class FormulaCreatingView: UIView {
     }
     
     private func setVariablesTableViewSettings() {
+        variablesTableView.separatorInset = .zero
         variablesTableView.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
-        variablesTableView.separatorStyle = .none
     }
     
     private func setAddVariableButtonSettings() {
-        addVariableButton.addTarget(formulaCreatingVC, action: #selector(formulaCreatingVC?.addNewVariable(sender:)), for: .touchUpInside)
+        addVariableButton.addTarget(formulaCreatingVC, action: #selector(formulaCreatingVC?.addVariableButtonTapped(sender:)), for: .touchUpInside)
         addVariableButton.heightAnchor.constraint(equalToConstant: frame.width / 7).isActive = true
         addVariableButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
         addVariableButton.translatesAutoresizingMaskIntoConstraints = false
@@ -100,17 +137,22 @@ final class FormulaCreatingView: UIView {
 }
 
 extension FormulaCreatingView: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        formulaCreatingVC.variables.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: VariableCreatingCell.nameOfClass, for: indexPath) as? VariableCreatingCell else { return UITableViewCell() }
+        let variableCharacter = formulaCreatingVC.variables[indexPath.row].character
+        let variableDescription = formulaCreatingVC.variables[indexPath.row].description
+        cell.setVariable(character: variableCharacter, description: variableDescription)
+        cell.delegate = formulaCreatingVC
+        return cell
     }
+    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         "Variables"
     }
-    
-    
 }

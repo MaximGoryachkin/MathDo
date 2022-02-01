@@ -5,6 +5,8 @@
 //  Created by Вячеслав Макаров on 25.01.2022.
 //
 
+import Foundation
+
 enum OperationType: Character, CaseIterable {
     case exponentiation = "^"
     case multiplication = "*"
@@ -45,5 +47,14 @@ struct AllowedSymbols {
     
    mutating func addAllowedSymbol(character: Character) {
         allowedSymbols.append(character)
+    }
+    
+    func getPossibleVariables(without variables: [Variable]) -> [Character] {
+        var variableCharacters = Set<Character>()
+        variables.forEach { variable in
+            variableCharacters.insert(variable.character)
+        }
+        let filtredVariableCharacters: [Character] = possibleVariables.filter { !variableCharacters.contains($0) }
+        return filtredVariableCharacters
     }
 }

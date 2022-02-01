@@ -9,7 +9,11 @@ import UIKit
 
 final class VariablesCreatingView: UIView {
     
-   private lazy var pickerView: HorizontalPickerView = {
+    private weak var variableCreatingVC: (VariableCreatingCancelProtocol & VariableCreatingProtocol)!
+    
+    private var variablesCharacters: [Character]!
+    
+    private lazy var pickerView: HorizontalPickerView = {
         let pickerView = HorizontalPickerView()
         pickerView.dataSource = self
         pickerView.delegate = self
@@ -44,39 +48,39 @@ final class VariablesCreatingView: UIView {
     private lazy var variableDescriptionTextField: UITextField  = {
         let formulaTextField = AdvancedTextField()
         formulaTextField.translatesAutoresizingMaskIntoConstraints = false
-//        formulaTextField.borderStyle = .line
         formulaTextField.placeholder = "Write name of variable"
         return formulaTextField
     }()
     
     
     private lazy var variableCreatingButton: UIButton = {
-        let variableCreatingButton = UIButton()
+        let variableCreatingButton = UIButton(type: .system)
         variableCreatingButton.translatesAutoresizingMaskIntoConstraints = false
         variableCreatingButton.setTitle("Create variable", for: .normal)
         variableCreatingButton.layer.cornerRadius = 10
         variableCreatingButton.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         variableCreatingButton.tintColor = .white
+        variableCreatingButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+        variableCreatingButton.addTarget(self, action: #selector(createVariableButtonTapped(sender:)), for: .touchUpInside)
         return variableCreatingButton
     }()
     
     private lazy var cancelButton: UIButton = {
-        let cancelButton = UIButton()
+        let cancelButton = UIButton(type: .system)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.layer.cornerRadius = 10
         cancelButton.backgroundColor = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
         cancelButton.tintColor = .white
+        cancelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+        cancelButton.addTarget(variableCreatingVC, action: #selector(variableCreatingVC.cancelButtonTapped(sender:)), for: .touchUpInside)
         return cancelButton
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(variableCreatingVC: (VariableCreatingCancelProtocol) & VariableCreatingProtocol) {
+        self.init()
+        self.variableCreatingVC = variableCreatingVC
         setPrimarySettings()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {
@@ -84,12 +88,19 @@ final class VariablesCreatingView: UIView {
         setupLayout()
     }
     
-    
-    private func setPrimarySettings() {
-        backgroundColor = .white
+    @objc private func createVariableButtonTapped(sender: UIButton) {
+        guard pickerView.numberOfRows(inComponent: 0) != .zero else { return }
+        let row = pickerView.selectedRow(inComponent: 0)
+        let variableCharacter = variablesCharacters[row]
+        let variableDescription = variableDescriptionTextField.text
+        let variable = Variable(character: variableCharacter, description: variableDescription)
+        variableCreatingVC.addVariable(variable: variable)
     }
     
-    private func setupLayout() {
+    private func setPrimarySettings() {
+        let usedVariables = variableCreatingVC.variableDisplay.variables
+        variablesCharacters = FormulaReader.shared.allowedSymbols.getPossibleVariables(without: usedVariables)
+        backgroundColor = .white
         addSubview(pickerView)
         addSubview(titleLabel)
         stackView.addArrangedSubview(characterLabel)
@@ -97,6 +108,10 @@ final class VariablesCreatingView: UIView {
         stackView.addArrangedSubview(variableCreatingButton)
         stackView.addArrangedSubview(cancelButton)
         addSubview(stackView)
+    }
+    
+    private func setupLayout() {
+        
         setCharactertLabelSettings()
         setPickerViewSettings()
         setDescriptionLabelSettings()
@@ -130,7 +145,6 @@ final class VariablesCreatingView: UIView {
         let paddingDependsCharactertLabel = titleLabel.frame.maxY + 10
         pickerView.frame = CGRect(x: 0, y: paddingDependsCharactertLabel, width: stackView.frame.width, height: 100)
         pickerView.center.x = safeAreaLayoutGuide.layoutFrame.midX
-//        pickerView.subviews.first?.subviews.last?.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1).withAlphaComponent(0.25)
     }
     
     private func setVariableDescriptionTextFieldSettings() {
@@ -156,11 +170,7 @@ extension VariablesCreatingView: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        FormulaReader.shared.allowedSymbols.possibleVariablesStrings.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        FormulaReader.shared.allowedSymbols.possibleVariablesStrings[row]
+        variablesCharacters.count
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
@@ -173,7 +183,7 @@ extension VariablesCreatingView: UIPickerViewDataSource, UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let view = VariableView()
-        view.setText(FormulaReader.shared.allowedSymbols.possibleVariablesStrings[row])
+        view.setCharacter(variablesCharacters[row])
         view.transform = CGAffineTransform(rotationAngle: 90 * (CGFloat.pi/180))
         return view
     }
