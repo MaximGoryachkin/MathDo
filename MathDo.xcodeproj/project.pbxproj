@@ -21,12 +21,14 @@
 		F9279ABC278F6A73005C1071 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9279ABB278F6A73005C1071 /* StringExtensions.swift */; };
 		F9CA34C0279F53B500C0FB0B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CA34BF279F53B500C0FB0B /* Models.swift */; };
 		F9E19675278A4968008FEF7A /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E19674278A4968008FEF7A /* NavigationController.swift */; };
-		F9FA052727A2C9560076DCA0 /* VariablesCreatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052627A2C9560076DCA0 /* VariablesCreatingViewController.swift */; };
+		F9FA052727A2C9560076DCA0 /* VariableCreatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052627A2C9560076DCA0 /* VariableCreatingViewController.swift */; };
 		F9FA052927A2D04B0076DCA0 /* VariablesCreatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052827A2D04B0076DCA0 /* VariablesCreatingView.swift */; };
 		F9FA052D27A485890076DCA0 /* HorizontalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */; };
 		F9FA053027A498740076DCA0 /* AdvancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052F27A498740076DCA0 /* AdvancedTextField.swift */; };
 		F9FA053227A553250076DCA0 /* VariableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053127A553250076DCA0 /* VariableView.swift */; };
 		F9FA053727A56F6F0076DCA0 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053627A56F6F0076DCA0 /* UIExtensions.swift */; };
+		F9FA053927A6E0070076DCA0 /* NameOfClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053827A6E0070076DCA0 /* NameOfClass.swift */; };
+		F9FA053B27A70A4C0076DCA0 /* VariableCreatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA053A27A70A4C0076DCA0 /* VariableCreatingCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,12 +48,14 @@
 		F9279ABB278F6A73005C1071 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		F9CA34BF279F53B500C0FB0B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		F9E19674278A4968008FEF7A /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
-		F9FA052627A2C9560076DCA0 /* VariablesCreatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariablesCreatingViewController.swift; sourceTree = "<group>"; };
+		F9FA052627A2C9560076DCA0 /* VariableCreatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableCreatingViewController.swift; sourceTree = "<group>"; };
 		F9FA052827A2D04B0076DCA0 /* VariablesCreatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariablesCreatingView.swift; sourceTree = "<group>"; };
 		F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalPickerView.swift; sourceTree = "<group>"; };
 		F9FA052F27A498740076DCA0 /* AdvancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedTextField.swift; sourceTree = "<group>"; };
 		F9FA053127A553250076DCA0 /* VariableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableView.swift; sourceTree = "<group>"; };
 		F9FA053627A56F6F0076DCA0 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		F9FA053827A6E0070076DCA0 /* NameOfClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameOfClass.swift; sourceTree = "<group>"; };
+		F9FA053A27A70A4C0076DCA0 /* VariableCreatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableCreatingCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +142,7 @@
 		F9FA052A27A2D04F0076DCA0 /* VariablesCreating */ = {
 			isa = PBXGroup;
 			children = (
-				F9FA052627A2C9560076DCA0 /* VariablesCreatingViewController.swift */,
+				F9FA052627A2C9560076DCA0 /* VariableCreatingViewController.swift */,
 				F9FA052827A2D04B0076DCA0 /* VariablesCreatingView.swift */,
 				F9FA052E27A486740076DCA0 /* subviews */,
 			);
@@ -150,6 +154,7 @@
 			children = (
 				F9279AB3278B45AA005C1071 /* FormulaCreatingViewController.swift */,
 				F9279AB5278B4EE3005C1071 /* FormulaCreatingView.swift */,
+				F9FA053C27A70A590076DCA0 /* views */,
 			);
 			path = FormulaCreating;
 			sourceTree = "<group>";
@@ -169,8 +174,17 @@
 			children = (
 				F9279ABB278F6A73005C1071 /* StringExtensions.swift */,
 				F9FA053627A56F6F0076DCA0 /* UIExtensions.swift */,
+				F9FA053827A6E0070076DCA0 /* NameOfClass.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F9FA053C27A70A590076DCA0 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				F9FA053A27A70A4C0076DCA0 /* VariableCreatingCell.swift */,
+			);
+			path = views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,6 +260,7 @@
 				F9FA052D27A485890076DCA0 /* HorizontalPickerView.swift in Sources */,
 				F9FA053027A498740076DCA0 /* AdvancedTextField.swift in Sources */,
 				895D8BEF278C6DF800139F2A /* Model.swift in Sources */,
+				F9FA053927A6E0070076DCA0 /* NameOfClass.swift in Sources */,
 				F9FA053727A56F6F0076DCA0 /* UIExtensions.swift in Sources */,
 				F9279AB6278B4EE3005C1071 /* FormulaCreatingView.swift in Sources */,
 				89691B882786DFF4005674C9 /* StartViewController.swift in Sources */,
@@ -258,7 +273,8 @@
 				89691B842786DFF4005674C9 /* AppDelegate.swift in Sources */,
 				F9CA34C0279F53B500C0FB0B /* Models.swift in Sources */,
 				89691B862786DFF4005674C9 /* SceneDelegate.swift in Sources */,
-				F9FA052727A2C9560076DCA0 /* VariablesCreatingViewController.swift in Sources */,
+				F9FA053B27A70A4C0076DCA0 /* VariableCreatingCell.swift in Sources */,
+				F9FA052727A2C9560076DCA0 /* VariableCreatingViewController.swift in Sources */,
 				F9279AB4278B45AA005C1071 /* FormulaCreatingViewController.swift in Sources */,
 				F9FA052927A2D04B0076DCA0 /* VariablesCreatingView.swift in Sources */,
 			);

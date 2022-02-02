@@ -8,12 +8,22 @@
 import UIKit
 
 @objc protocol FormulaCreatingProtocol {
-    @objc func addNewVariable(sender: UIButton)
+    @objc func addVariableButtonTapped(sender: UIButton)
 }
 
+protocol VariableDisplayProtocol {
+    var formula: Formula? { get set }
+    var variables: [Variable] { get set }
+    func addNewVariable(variable: Variable)
+    func removeVariable(in cell: VariableCreatingCell)
+    func scrollToBottom()
+}
 
  final class FormulaCreatingViewController: UIViewController {
 
+    var formula: Formula?
+    var variables: [Variable] = []
+     
      private lazy var formulaCreatingView: FormulaCreatingView = { FormulaCreatingView(viewController: self) }()
      
     override func viewDidLoad() {
@@ -25,28 +35,45 @@ import UIKit
          view = formulaCreatingView
      }
      
-    @objc func readFormula(sender: UIButton) {
-//        print("result:", FormulaReader.shared.getResult(formulaCreatingView.formulaTextField.text ?? ""))
+    @objc func doneButtonDidTapped(sender: UIButton) {
         FormulaReader.shared.correctInputExpression(expression: &formulaCreatingView.formulaTextField.text)
         FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "") { success, error in
-            
         }
      }
      
      private func setupGUI() {
          navigationItem.title = "Formula creating"
-         let addItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(readFormula(sender:)))
+         let addItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonDidTapped(sender:)))
          navigationItem.rightBarButtonItem = addItem
      }
-
 }
 
 extension FormulaCreatingViewController: FormulaCreatingProtocol {
-   @objc func addNewVariable(sender: UIButton) {
-       let variablesCreatingVC = VariablesCreatingViewController()
+   @objc func addVariableButtonTapped(sender: UIButton) {
+       let variablesCreatingVC = VariableCreatingViewController(variableDisplay: self)
        present(variablesCreatingVC, animated: true)
        
+    }   
+}
+
+extension FormulaCreatingViewController: VariableDisplayProtocol {
+  
+    func addNewVariable(variable: Variable) {
+        formulaCreatingView.addNewVariable(variable: variable)
     }
     
+    func removeVariable(in cell: VariableCreatingCell) {
+        formulaCreatingView.removeVariableFormTableView(cell: cell)
+    }
     
+    func scrollToBottom() {
+        formulaCreatingView.scrollToBottom()
+    }
 }
+
+extension FormulaCreatingViewController: VariableCreatingCellDelegate {
+    func removeButtonTapped(in cell: VariableCreatingCell) {
+        removeVariable(in: cell)
+    }
+}
+

@@ -11,7 +11,7 @@ struct Formula {
     let body: String
     let favourite: Bool
     let description: String?
-    let variables: [Variable]
+    var variables: [Variable]
 }
 
 struct Variable {
