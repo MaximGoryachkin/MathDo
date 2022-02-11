@@ -7,9 +7,9 @@
 
 import UIKit
 
-class StartViewController: UITableViewController {
+final class StartViewController: UITableViewController {
     
-    var formulas = Formula.getData()
+    var formulas = Array<Formula>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +17,12 @@ class StartViewController: UITableViewController {
         setNavigationBarSettings()
         view.backgroundColor = .white
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        formulas = DatabaseManager.shared.fetchFormulas()
+        tableView.reloadData()
     }
     
     @objc private func routeToFomulaCreatingVC() {
