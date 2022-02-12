@@ -14,7 +14,7 @@ struct Formula {
     var variables: [Variable]
 }
 
-struct Variable {
+struct Variable: Hashable {
     let character: Character
     let description: String?
     let value: Double?
