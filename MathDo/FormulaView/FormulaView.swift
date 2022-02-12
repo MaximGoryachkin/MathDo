@@ -110,11 +110,18 @@ extension FormulaView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "variableCell", for: indexPath)
-        
-        var content = cell.defaultContentConfiguration()
-        content.text = "\(formula.variables[indexPath.row].character) - \(formula.variables[indexPath.row].description ?? "")"
-        cell.contentConfiguration = content
+        let cell = FormulaTableViewCell(style: .default, reuseIdentifier: "variableCell")
+        cell.variableLabel.text = String(formula.variables[indexPath.row].character)
+        cell.descriptionLabel.text = formula.variables[indexPath.row].description
+        cell.valueLabel.text = String(formula.variables[indexPath.row].value ?? 0)
+//        var content = cell.defaultContentConfiguration()
+//        content.text = "\(formula.variables[indexPath.row].character) - \(formula.variables[indexPath.row].description ?? "")"
+//        content.secondaryText = "Secondary text"
+//        content.textToSecondaryTextHorizontalPadding = 120
+//        content.textToSecondaryTextVerticalPadding = 20
+//        content.prefersSideBySideTextAndSecondaryText = true
+//        content.image = UIImage(systemName: "function")
+        //cell.contentConfiguration = content
         
         return cell
     }

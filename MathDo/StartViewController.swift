@@ -63,5 +63,12 @@ class StartViewController: UITableViewController {
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
     
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let favorite = UIContextualAction(style: .normal, title: nil) { action, view, _ in
+            view.backgroundColor = .green
+        }
+        return UISwipeActionsConfiguration(actions: [favorite])
+    }
+    
 }
 

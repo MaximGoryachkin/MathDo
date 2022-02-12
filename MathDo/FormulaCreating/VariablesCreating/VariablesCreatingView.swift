@@ -93,7 +93,7 @@ final class VariablesCreatingView: UIView {
         let row = pickerView.selectedRow(inComponent: 0)
         let variableCharacter = variablesCharacters[row]
         let variableDescription = variableDescriptionTextField.text
-        let variable = Variable(character: variableCharacter, description: variableDescription)
+        let variable = Variable(character: variableCharacter, description: variableDescription, value: nil)
         variableCreatingVC.addVariable(variable: variable)
     }
     
