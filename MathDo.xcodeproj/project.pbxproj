@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		895589CF27B7C74400B46FF6 /* FormulaTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895589CE27B7C74400B46FF6 /* FormulaTableViewCell.swift */; };
 		895D8BEF278C6DF800139F2A /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895D8BEE278C6DF800139F2A /* Model.swift */; };
 		895D8BF1278F4FF500139F2A /* FormulaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895D8BF0278F4FF500139F2A /* FormulaViewController.swift */; };
 		896368C2279873C900BB6FA9 /* FormulaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896368C1279873C900BB6FA9 /* FormulaView.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		895589CE27B7C74400B46FF6 /* FormulaTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaTableViewCell.swift; sourceTree = "<group>"; };
 		895D8BEE278C6DF800139F2A /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		895D8BF0278F4FF500139F2A /* FormulaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaViewController.swift; sourceTree = "<group>"; };
 		896368C1279873C900BB6FA9 /* FormulaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaView.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			children = (
 				895D8BF0278F4FF500139F2A /* FormulaViewController.swift */,
 				896368C1279873C900BB6FA9 /* FormulaView.swift */,
+				895589CE27B7C74400B46FF6 /* FormulaTableViewCell.swift */,
 			);
 			path = FormulaView;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				F9CA34C0279F53B500C0FB0B /* Models.swift in Sources */,
 				89691B862786DFF4005674C9 /* SceneDelegate.swift in Sources */,
 				F9FA053B27A70A4C0076DCA0 /* VariableCreatingCell.swift in Sources */,
+				895589CF27B7C74400B46FF6 /* FormulaTableViewCell.swift in Sources */,
 				F9FA052727A2C9560076DCA0 /* VariableCreatingViewController.swift in Sources */,
 				F9DCC4AC27B433E600284F99 /* VariableModel+CoreDataClass.swift in Sources */,
 				F9279AB4278B45AA005C1071 /* FormulaCreatingViewController.swift in Sources */,
