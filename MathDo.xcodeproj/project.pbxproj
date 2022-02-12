@@ -71,6 +71,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		895589CD27B7C18800B46FF6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				895D8BEE278C6DF800139F2A /* Model.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		896368C02798739900BB6FA9 /* FormulaView */ = {
 			isa = PBXGroup;
 			children = (
@@ -100,6 +108,7 @@
 		89691B822786DFF4005674C9 /* MathDo */ = {
 			isa = PBXGroup;
 			children = (
+				895589CD27B7C18800B46FF6 /* Models */,
 				F9FA053327A55F330076DCA0 /* Extensions */,
 				89691B832786DFF4005674C9 /* AppDelegate.swift */,
 				89691B852786DFF4005674C9 /* SceneDelegate.swift */,
@@ -111,7 +120,6 @@
 				89691B8C2786DFF5005674C9 /* Assets.xcassets */,
 				89691B8E2786DFF5005674C9 /* LaunchScreen.storyboard */,
 				89691B912786DFF5005674C9 /* Info.plist */,
-				895D8BEE278C6DF800139F2A /* Model.swift */,
 			);
 			path = MathDo;
 			sourceTree = "<group>";
