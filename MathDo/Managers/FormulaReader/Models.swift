@@ -36,6 +36,7 @@ struct AllowedSymbols {
         }
         return listOfCharacters
     }
+    
     lazy var possibleVariablesStrings: [String] = {
         let alphabet = "abcdefghijklmnopqrstuvwxyz"
         var listOfCharacters = Array<String>()
@@ -49,6 +50,14 @@ struct AllowedSymbols {
         allowedSymbols.append(character)
     }
     
+    func getAllowedSymbols(for variables: [Variable]) -> String {
+        var allowedSymbolsWithVariables = allowedSymbols
+        variables.forEach { variable in
+            allowedSymbolsWithVariables.append(variable.character)
+        }
+        return allowedSymbolsWithVariables
+    }
+    
     func getPossibleVariables(without variables: [Variable]) -> [Character] {
         var variableCharacters = Set<Character>()
         variables.forEach { variable in
@@ -57,4 +66,5 @@ struct AllowedSymbols {
         let filtredVariableCharacters: [Character] = possibleVariables.filter { !variableCharacters.contains($0) }
         return filtredVariableCharacters
     }
+    
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol FormulaViewProtocol {
-    func presentAllert()
+    func presentSetValueAlert(for: IndexPath)
 }
 
 final class FormulaViewController: UIViewController {
@@ -33,15 +33,17 @@ final class FormulaViewController: UIViewController {
 }
 
 extension FormulaViewController: FormulaViewProtocol {
-    func presentAllert() {
+    func presentSetValueAlert(for indexPath: IndexPath) {
         let alert = UIAlertController(title: "Set the value", message: "You shuold set the value of variable", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Enter", style: .cancel, handler: nil)
-        
-        alert.addTextField { _ in
-            
+        alert.addTextField()
+        let action = UIAlertAction(title: "Enter", style: .cancel) { [weak self] _ in
+            guard let valueString = alert.textFields?.first?.text else { return }
+            let value = Double(valueString) ?? 0.0
+            self?.formulaView.addVariableValue(value ,for: indexPath)
         }
         
         alert.addAction(action)
+        
         present(alert, animated: true)
     }
 }

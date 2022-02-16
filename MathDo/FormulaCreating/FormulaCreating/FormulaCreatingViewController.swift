@@ -37,21 +37,23 @@ protocol VariableDisplayProtocol {
      }
      
     @objc func doneButtonDidTapped(sender: UIButton) {
-        FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "") { success, error in
+        FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "", variables: variables) { success, error in
             if let error = error {
                 showError(error)
             } else if success {
+                saveFormula(name: "test")
                 showSaveAlert()
             }
         }
      }
      
      private func saveFormula(name: String) {
-         FormulaReader.shared.correctInputExpression(expression: &formulaCreatingView.formulaTextField.text)
+         FormulaReader.shared.correctInputExpression(expression: &formulaCreatingView.formulaTextField.text, with: variables)
          FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "") { success, error in
              print(success)
-             formula = Formula(id: 1, name: name, body: formulaCreatingView.formulaTextField.text!, favourite: true, description: "", variables: variables)
-             DatabaseManager.shared.save(formula!)
+              formula = Formula(id: 1, name: name, body: formulaCreatingView.formulaTextField.text!, favourite: true, description: "", variables: variables)
+             guard let formula = formula else { return }
+             DatabaseManager.shared.save(formula)
          }
      }
      
