@@ -163,7 +163,8 @@ extension String {
     }
     
     func getSymbolAfter(index: String.Index) -> Character? {
-        guard index != lastIndex || index != endIndex else { return nil }
+        guard index != lastIndex && index != endIndex else { return nil }
+        
         let indexAfter = self.index(after: index)
         guard index != self.lastIndex || indexAfter != self.endIndex else { return nil }
         return self[indexAfter]

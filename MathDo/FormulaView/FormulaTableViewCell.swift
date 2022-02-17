@@ -78,11 +78,3 @@ final class FormulaTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate(constraints)
     }
 }
-//
-//  FormulaTableViewCell.swift
-//  MathDo
-//
-//  Created by Максим Горячкин on 12.02.2022.
-//
-
-import Foundation

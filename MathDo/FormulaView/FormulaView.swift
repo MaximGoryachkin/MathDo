@@ -52,6 +52,11 @@ final class FormulaView: UIView {
         print(safeAreaLayoutGuide.layoutFrame)
     }
     
+    public func addVariableValue(_ value: Double ,for indexPath: IndexPath) {
+        formula.variables[indexPath.row].value = value
+        variableTableView.reloadData()
+    }
+    
     private func setupLayout() {
         addSubview(resultView)
         addSubview(variableTableView)
@@ -85,6 +90,8 @@ final class FormulaView: UIView {
     @objc func resultButtonPressed() {
         flag.toggle()
         resultView.backgroundColor = flag ? .red : .yellow
+        print("Result:", FormulaReader.shared.getResult(formula.body, variables: formula.variables))
+        
     }
     
     private func setButtonView() {
@@ -131,7 +138,7 @@ extension FormulaView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        formulaVC.presentAllert()
+        formulaVC.presentSetValueAlert(for: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

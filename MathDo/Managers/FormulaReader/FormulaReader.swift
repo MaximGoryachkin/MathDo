@@ -18,7 +18,9 @@ final class FormulaReader {
     private init() {}
     
 //    MARK: - Formula reading methods
-    func getResult(_ formula: String) -> String {
+    func getResult(_ formula: String, variables: [Variable] = []) -> String {
+        var formula = formula
+        replaceVariablesWithNumbers(expression: &formula, variables: variables)
         let sequencedArray = getSequencedArray(expression: formula)
         let result = startCounting(for: sequencedArray)
         return result
@@ -267,10 +269,21 @@ final class FormulaReader {
         return !isContains
     }
     
+    private func replaceVariablesWithNumbers(expression: inout String, variables: [Variable]) {
+        
+        for variable in variables {
+            guard let number = variable.value else { continue }
+            expression = expression.replacingOccurrences(of: String(variable.character), with: String(number))
+        }
+    }
+    
 //    MARK: - Formula correction methods
     
-    public func correctInputExpression(expression: inout String?) {
-        findHiddenMultiplication(expression: &expression)
+    public func correctInputExpression(expression: inout String?, with variables: [Variable] = []) {
+//        findHiddenMultiplicationForClosingBrackets(expression: &expression)
+        findHiddenMultiplicationForBrackets(expression: &expression)
+        findHiddenMultiplicationForVariables(expression: &expression, variables: variables)
+        
         findExtraSignsAfterOpeningBracket(expression: &expression)
         findExtraSignBeforeClosingBracket(expression: &expression)
         
@@ -301,21 +314,81 @@ final class FormulaReader {
         expression = expression?.replacingOccurrences(of: " ", with: "")
     }
     
-    private func findHiddenMultiplication(expression: inout String?) {
+    private func findHiddenMultiplicationForBrackets(expression: inout String?, variables: [Variable] = []) {
         let operationSymbolsString = String(OperationType.getOperationSymbols())
         guard var newExpression = expression else { return }
         var openingBracketsIndices: [String.Index] {
-            newExpression.indices.filter { newExpression[$0] == "("}
+            newExpression.indices.filter { newExpression[$0] == "(" }
         }
+        var closingBracketsIndices: [String.Index] {
+            newExpression.indices.filter { newExpression[$0] == ")" }
+        }
+        
+        for numberOfIndex in 0..<closingBracketsIndices.count {
+            let indexOfExpression = closingBracketsIndices[numberOfIndex]
+            guard let symbolAfter = newExpression.getSymbolAfter(index: indexOfExpression) else { continue }
+
+            if !operationSymbolsString.contains(symbolAfter) {
+                newExpression.insert("*", at: newExpression.index(after: indexOfExpression))
+            }
+        }
+        
         for numberOfIndex in 0..<openingBracketsIndices.count {
             let indexOfExpression = openingBracketsIndices[numberOfIndex]
-            guard let symbolBefore = expression?.getSymbolBefore(index: indexOfExpression) else { continue }
+            guard let symbolBefore = newExpression.getSymbolBefore(index: indexOfExpression) else { continue }
+            
             if !operationSymbolsString.contains(symbolBefore) {
                 newExpression.insert("*", at: indexOfExpression)
             }
         }
         expression = newExpression
     }
+    
+    
+    private func findHiddenMultiplicationForVariables(expression: inout String?, variables: [Variable]) {
+        guard var newExpression = expression else { return }
+        var variablesString = ""
+        let digitsString = allowedSymbols.digits
+        variables.forEach { variable in
+            variablesString.append(variable.character)
+        }
+        var variableIndices: [String.Index] {
+            newExpression.indices.filter { variablesString.contains(newExpression[$0])   }
+        }
+        
+        for numberOfIndex in 0..<variableIndices.count {
+            let indexOfExpression = variableIndices[numberOfIndex]
+            if let symbolAfter = newExpression.getSymbolAfter(index: indexOfExpression) {
+                if variablesString.contains(symbolAfter) || digitsString.contains(symbolAfter) {
+                    newExpression.insert("*", at: newExpression.index(after: indexOfExpression) )
+                }
+            }
+            if let symbolBefore = newExpression.getSymbolBefore(index: indexOfExpression) {
+                if variablesString.contains(symbolBefore) || digitsString.contains(symbolBefore) {
+                    newExpression.insert("*", at: indexOfExpression)
+                }
+            }
+        }
+        expression = newExpression
+    }
+    
+//    private func findHiddenMultiplicationForClosingBrackets(expression: inout String?) {
+//        let operationSymbolsString = String(OperationType.getOperationSymbols())
+//        guard var newExpression = expression else { return }
+//        var closingBracketsIndices: [String.Index] {
+//            newExpression.indices.filter { newExpression[$0] == ")" }
+//        }
+//        for numberOfIndex in 0..<closingBracketsIndices.count {
+//            let indexOfExpression = closingBracketsIndices[numberOfIndex]
+//            guard let symbolAfter = expression?.getSymbolAfter(index: indexOfExpression) else { continue }
+//
+//            if !operationSymbolsString.contains(symbolAfter) {
+//                newExpression.insert("*", at: newExpression.index(after: indexOfExpression))
+//
+//            }
+//        }
+//        expression = newExpression
+//    }
     
     private func findExtraSignsAfterOpeningBracket(expression: inout String?) {
         guard let newExpression = expression else { return }
@@ -366,9 +439,9 @@ final class FormulaReader {
 
 //    MARK: - Formula verify methods
     
-    public func verifyFormulaSyntax(expression: String, completion: (_ success: Bool, _ error: Error? )->()) {
+    public func verifyFormulaSyntax(expression: String, variables: [Variable] = [], completion: (_ success: Bool, _ error: Error? )->()) {
         let failed = false
-        guard expressionHasOnlyAllowedSymbols(expression: expression) else { return
+        guard expressionHasOnlyAllowedSymbols(expression: expression, variables: variables) else { return
             completion(failed, createError(withText: "expression has illegal symbols", code: 0))
             }
         guard expressionIsNotExmpty(expression: expression) else { return
@@ -390,10 +463,11 @@ final class FormulaReader {
         NSError(domain: "", code: code, userInfo: [ NSLocalizedDescriptionKey: text])
     }
     
-    private func expressionHasOnlyAllowedSymbols(expression: String) -> Bool {
+    private func expressionHasOnlyAllowedSymbols(expression: String, variables: [Variable] = []) -> Bool {
+        let allowedSymbolsWithVariables = allowedSymbols.getAllowedSymbols(for: variables)
         var isContains = true
         expression.forEach { char in
-            isContains = allowedSymbols.allowedSymbols.contains(char) ? isContains : false
+            isContains = allowedSymbolsWithVariables.contains(char) ? isContains : false
         }
         return isContains
     }
