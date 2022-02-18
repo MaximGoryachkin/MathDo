@@ -9,6 +9,7 @@ import UIKit
 
 protocol FormulaViewProtocol {
     func presentSetValueAlert(for: IndexPath)
+    func presentErrorAlert(text: String)
 }
 
 final class FormulaViewController: UIViewController {
@@ -33,6 +34,10 @@ final class FormulaViewController: UIViewController {
 }
 
 extension FormulaViewController: FormulaViewProtocol {
+    func presentErrorAlert(text: String) {
+        showAlert(title: "Error", message: text, style: .alert)
+    }
+    
     func presentSetValueAlert(for indexPath: IndexPath) {
         let alert = UIAlertController(title: "Set the value", message: "You shuold set the value of variable", preferredStyle: .alert)
         alert.addTextField()
