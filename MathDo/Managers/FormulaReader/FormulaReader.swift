@@ -10,14 +10,14 @@ import Foundation
 
 
 final class FormulaReader {
-
-   static let shared = FormulaReader()
+    
+    static let shared = FormulaReader()
     
     var allowedSymbols = AllowedSymbols()
     
     private init() {}
     
-//    MARK: - Formula reading methods
+    //    MARK: - Formula reading methods
     func getResult(_ formula: String, variables: [Variable] = []) -> String {
         var formula = formula
         replaceVariablesWithNumbers(expression: &formula, variables: variables)
@@ -27,7 +27,7 @@ final class FormulaReader {
     }
     
     private func startCounting(for sequencedArray: [String]) -> String {
-    
+        
         var countedArray = sequencedArray
         
         sequencedArray.enumerated().forEach { i, _ in
@@ -117,7 +117,7 @@ final class FormulaReader {
                     dependedOpenBrackets += 1
                 }
                 
-                }
+            }
             
             if char == ")" {
                 closingBrackets += 1
@@ -184,7 +184,7 @@ final class FormulaReader {
             print("returned2")
             return }
         
-
+        
         print("firstOperand:", firstOperand)
         print("secondOperand:", secondOperand)
         guard let firstNumber = Double(firstOperand) else { return }
@@ -207,7 +207,7 @@ final class FormulaReader {
             result = getResultOfSubtraction(firstNumber: firstNumber, secondNumber: secondNumber)
             print("result of subtraction:", result)
         }
-
+        
         
         guard let firstIndex = prototypeExpression.getFirstOperandStartIndex(of: operation) else { return }
         print("first Index of First Operand:", expression[firstIndex])
@@ -217,7 +217,7 @@ final class FormulaReader {
         print("substring of range before:", expression[firstIndex...secondIndex])
         expression = expression.replacingCharacters(in: firstIndex...secondIndex, with: result)
         print("new expression:", expression)
-//        print("substring of range after:", expression[firstIndex...secondIndex])
+        //        print("substring of range after:", expression[firstIndex...secondIndex])
         correctExpression(expression: &expression)
         print("expression after correcting:", expression)
     }
@@ -245,7 +245,7 @@ final class FormulaReader {
     
     private func getArrayOfElements(array: [String] ,except: String) -> [String] {
         let operationsSymbols = ["+", "-", "/", "*"]
-       return operationsSymbols.filter { element in
+        return operationsSymbols.filter { element in
             element != except
         }
     }
@@ -277,10 +277,10 @@ final class FormulaReader {
         }
     }
     
-//    MARK: - Formula correction methods
+    //    MARK: - Formula correction methods
     
     public func correctInputExpression(expression: inout String?, with variables: [Variable] = []) {
-//        findHiddenMultiplicationForClosingBrackets(expression: &expression)
+        //        findHiddenMultiplicationForClosingBrackets(expression: &expression)
         findHiddenMultiplicationForBrackets(expression: &expression)
         findHiddenMultiplicationForVariables(expression: &expression, variables: variables)
         
@@ -327,7 +327,7 @@ final class FormulaReader {
         for numberOfIndex in 0..<closingBracketsIndices.count {
             let indexOfExpression = closingBracketsIndices[numberOfIndex]
             guard let symbolAfter = newExpression.getSymbolAfter(index: indexOfExpression) else { continue }
-
+            
             if !operationSymbolsString.contains(symbolAfter) {
                 newExpression.insert("*", at: newExpression.index(after: indexOfExpression))
             }
@@ -372,23 +372,23 @@ final class FormulaReader {
         expression = newExpression
     }
     
-//    private func findHiddenMultiplicationForClosingBrackets(expression: inout String?) {
-//        let operationSymbolsString = String(OperationType.getOperationSymbols())
-//        guard var newExpression = expression else { return }
-//        var closingBracketsIndices: [String.Index] {
-//            newExpression.indices.filter { newExpression[$0] == ")" }
-//        }
-//        for numberOfIndex in 0..<closingBracketsIndices.count {
-//            let indexOfExpression = closingBracketsIndices[numberOfIndex]
-//            guard let symbolAfter = expression?.getSymbolAfter(index: indexOfExpression) else { continue }
-//
-//            if !operationSymbolsString.contains(symbolAfter) {
-//                newExpression.insert("*", at: newExpression.index(after: indexOfExpression))
-//
-//            }
-//        }
-//        expression = newExpression
-//    }
+    //    private func findHiddenMultiplicationForClosingBrackets(expression: inout String?) {
+    //        let operationSymbolsString = String(OperationType.getOperationSymbols())
+    //        guard var newExpression = expression else { return }
+    //        var closingBracketsIndices: [String.Index] {
+    //            newExpression.indices.filter { newExpression[$0] == ")" }
+    //        }
+    //        for numberOfIndex in 0..<closingBracketsIndices.count {
+    //            let indexOfExpression = closingBracketsIndices[numberOfIndex]
+    //            guard let symbolAfter = expression?.getSymbolAfter(index: indexOfExpression) else { continue }
+    //
+    //            if !operationSymbolsString.contains(symbolAfter) {
+    //                newExpression.insert("*", at: newExpression.index(after: indexOfExpression))
+    //
+    //            }
+    //        }
+    //        expression = newExpression
+    //    }
     
     private func findExtraSignsAfterOpeningBracket(expression: inout String?) {
         guard let newExpression = expression else { return }
@@ -402,7 +402,7 @@ final class FormulaReader {
         }
         
         for numberOfIndex in 0..<operationsIndices.count {
-          let indexOfOperation = operationsIndices[numberOfIndex]
+            let indexOfOperation = operationsIndices[numberOfIndex]
             guard let symbolBefore = newExpression.getSymbolBefore(index: indexOfOperation) else {
                 if indexOfOperation == newExpression.startIndex {
                     expression = expression?.replacingCharacters(in: indexOfOperation...indexOfOperation, with: " ")
@@ -436,17 +436,17 @@ final class FormulaReader {
             }
         }
     }
-
-//    MARK: - Formula verify methods
+    
+    //    MARK: - Formula verify methods
     
     public func verifyFormulaSyntax(expression: String, variables: [Variable] = [], completion: (_ success: Bool, _ error: Error? )->()) {
         let failed = false
         guard expressionHasOnlyAllowedSymbols(expression: expression, variables: variables) else { return
             completion(failed, createError(withText: "expression has illegal symbols", code: 0))
-            }
+        }
         guard expressionIsNotExmpty(expression: expression) else { return
             completion(failed, createError(withText: "expression is empty", code: 1))
-            }
+        }
         guard parenthesesOrderIsCorrect(expression: expression) else { return
             completion(failed, createError(withText: "parentheses order is incorrect", code: 2))
         }

@@ -21,7 +21,7 @@ final class FormulaView: UIView {
     }()
     
     private lazy var variableTableView: UITableView = {
-        let view = UITableView()
+        let view = UITableView(frame: .zero, style: .insetGrouped)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         view.dataSource = self
@@ -120,15 +120,11 @@ extension FormulaView: UITableViewDelegate, UITableViewDataSource {
         let cell = FormulaTableViewCell(style: .default, reuseIdentifier: "variableCell")
         cell.variableLabel.text = String(formula.variables[indexPath.row].character)
         cell.descriptionLabel.text = formula.variables[indexPath.row].description
-        cell.valueLabel.text = String(formula.variables[indexPath.row].value ?? 0)
-//        var content = cell.defaultContentConfiguration()
-//        content.text = "\(formula.variables[indexPath.row].character) - \(formula.variables[indexPath.row].description ?? "")"
-//        content.secondaryText = "Secondary text"
-//        content.textToSecondaryTextHorizontalPadding = 120
-//        content.textToSecondaryTextVerticalPadding = 20
-//        content.prefersSideBySideTextAndSecondaryText = true
-//        content.image = UIImage(systemName: "function")
-        //cell.contentConfiguration = content
+        if let value = formula.variables[indexPath.row].value {
+            cell.valueLabel.text = String(value)
+        } else {
+            cell.valueLabel.text = ""
+        }
         
         return cell
     }
