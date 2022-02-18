@@ -18,40 +18,70 @@ final class FormulaReader {
     private init() {}
     
 //    MARK: - Formula reading methods
-    func getResult(_ formula: String, variables: [Variable] = []) -> String {
+    func getResult(_ formula: String, variables: [Variable] = []) throws -> String {
         var formula = formula
+        var readingError: Error?
+        verifyFormulaSyntax(expression: formula, variables: variables) { success, error in
+            guard let error = error else { return }
+            readingError = error
+        }
+        
+        if let readingError = readingError {
+            throw readingError
+        }
+        
         replaceVariablesWithNumbers(expression: &formula, variables: variables)
-        let sequencedArray = getSequencedArray(expression: formula)
-        let result = startCounting(for: sequencedArray)
-        return result
+        
+        do {
+            let sequencedArray = try getSequencedArray(expression: formula)
+            let result = try startCounting(for: sequencedArray)
+            return result
+        } catch(let error) {
+            throw error
+        }
     }
     
-    private func startCounting(for sequencedArray: [String]) -> String {
-    
+    private func startCounting(for sequencedArray: [String]) throws -> String {
         var countedArray = sequencedArray
-        
-        sequencedArray.enumerated().forEach { i, _ in
+        var result = ""
+        try sequencedArray.enumerated().forEach { i, _ in
             let expression = countedArray[i]
             print("current expression:", expression)
-            let result = operatedValue(for: expression)
-            countedArray = countedArray.map { $0.replacingOccurrences(of: "(\(expression))", with: result)
+            do {
+                result = try operatedValue(for: expression)
+                countedArray = countedArray.map { $0.replacingOccurrences(of: "(\(expression))", with: result)
+                }
+            } catch(let error) {
+                throw error
             }
         }
         print("counted array:", countedArray)
-        let result = operatedValue(for: countedArray.last!)
+        do {
+        result = try operatedValue(for: countedArray.last!)
+        } catch(let error) {
+            throw error
+        }
         print("final expression:", result)
         return result
     }
     
-    private func getSequencedArray(expression: String) -> [String] {
+    private func getSequencedArray(expression: String) throws -> [String] {
+        let recursionLimit = 1500
+        var recursionCounter = 0
         var expressions = Array<String>()
-        startFindingRecursion(expression: expression)
+        do {
+            try  startFindingRecursion(expression: expression)
+        } catch(let error) {
+            throw error
+        }
         print("expressions:", expressions)
         
-        func startFindingRecursion(expression: String) {
+        func startFindingRecursion(expression: String)  throws {
+            recursionCounter += 1
+            guard recursionCounter < recursionLimit else { throw createError(withText: "Error with reading formula or expression is difficult", code: 5) }
             let independendExpressions = getIndependedBracketsArray(expression: expression)
-            independendExpressions.forEach { indExpr in
-                startFindingRecursion(expression: indExpr)
+            try independendExpressions.forEach { indExpr in
+                try startFindingRecursion(expression: indExpr)
             }
             expressions.append(expression)
         }
@@ -60,9 +90,13 @@ final class FormulaReader {
     
     
     
-    private func operatedValue(for expression: String) -> String {
-        let countedExpression = calculateExpression(expression: expression)
-        return countedExpression
+    private func operatedValue(for expression: String) throws -> String {
+        do {
+            let countedExpression =  try calculateExpression(expression: expression)
+            return countedExpression
+        } catch(let error) {
+            throw error
+        }
     }
     
     private func getBracketsCount(expression: String) -> Int {
@@ -73,13 +107,20 @@ final class FormulaReader {
         return bracketsCount
     }
     
-    private func getDependedBracketsArray(expression: String) -> [String] {
+    private func getDependedBracketsArray(expression: String) throws -> [String] {
+        let recursionLimit = 1500
+        var recursionCounter = 0
         var expressions = Array<String>()
-        getDependedBracketsRecursion(expression: expression)
-        
-        func getDependedBracketsRecursion(expression: String) {
+        do {
+        try getDependedBracketsRecursion(expression: expression)
+        } catch(let error) {
+            throw error
+        }
+        func getDependedBracketsRecursion(expression: String) throws {
+            recursionCounter += 1
+            guard recursionCounter < recursionLimit else { throw  createError(withText: "Error with reading formula or expression is difficult", code: 7) }
             if let withinBrackets = getFirstFromBrackets(expression: expression) {
-                getDependedBracketsRecursion(expression: withinBrackets)
+                try getDependedBracketsRecursion(expression: withinBrackets)
                 expressions.append(withinBrackets)
             }
         }
@@ -147,12 +188,21 @@ final class FormulaReader {
     }
     
     
-    private func calculateExpression(expression: String) -> String {
+    private func calculateExpression(expression: String) throws -> String {
+        let recursionLimit = 1500
+        var recursionCounter = 0
         var expressionForCounting = expression
-        startCalculatingRecursion(expression: &expressionForCounting)
+        do {
+            try startCalculatingRecursion(expression: &expressionForCounting)
+        } catch(let error) {
+            throw error
+        }
         
-        func startCalculatingRecursion(expression: inout String) {
+        
+        func startCalculatingRecursion(expression: inout String) throws {
             print("start Running")
+            recursionCounter += 1
+            guard recursionCounter < recursionLimit else { throw createError(withText: "Error with reading formula or expression is difficult", code: 6) }
             let isFinished = expressionIsFinished(expression: expression)
             print(isFinished)
             if isFinished {
@@ -164,7 +214,7 @@ final class FormulaReader {
             toOperate(expression: &expression, operationType: .multiplication)
             toOperate(expression: &expression, operationType: .addition)
             toOperate(expression: &expression, operationType: .subtraction)
-            startCalculatingRecursion(expression: &expression)
+            try startCalculatingRecursion(expression: &expression)
         }
         
         return expressionForCounting
@@ -371,24 +421,6 @@ final class FormulaReader {
         }
         expression = newExpression
     }
-    
-//    private func findHiddenMultiplicationForClosingBrackets(expression: inout String?) {
-//        let operationSymbolsString = String(OperationType.getOperationSymbols())
-//        guard var newExpression = expression else { return }
-//        var closingBracketsIndices: [String.Index] {
-//            newExpression.indices.filter { newExpression[$0] == ")" }
-//        }
-//        for numberOfIndex in 0..<closingBracketsIndices.count {
-//            let indexOfExpression = closingBracketsIndices[numberOfIndex]
-//            guard let symbolAfter = expression?.getSymbolAfter(index: indexOfExpression) else { continue }
-//
-//            if !operationSymbolsString.contains(symbolAfter) {
-//                newExpression.insert("*", at: newExpression.index(after: indexOfExpression))
-//
-//            }
-//        }
-//        expression = newExpression
-//    }
     
     private func findExtraSignsAfterOpeningBracket(expression: inout String?) {
         guard let newExpression = expression else { return }
