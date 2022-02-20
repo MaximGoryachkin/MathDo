@@ -9,6 +9,49 @@ import Foundation
 
 
 
+enum FormulaError: String, Error {
+        
+    case illegalSymbolsError = "expression has illegal symbols"
+    case emptyExpressionError = "Expression is empty"
+    case parenthesesOrderError = "parentheses order is incorrect"
+    case parenthesesCountError = #"opening brackets "(" count is not conform to closing brackets ")" count"#
+    case signCollisionError = "expression has sign collision"
+    case recursionError = "Error with reading formula or expression is difficult"
+    case longNumberError = "Error with reading formula or number is too long"
+    case divisionByZeroError = "Expression has division by zero. Division by zero is impossible"
+    case resultIsNaNError = "Expression isn't number or expression has division by zero"
+    case resultIsInfinite = "Expression result is infinite or expression has division by zero"
+    func getError() -> Error {
+        switch self {
+        case .illegalSymbolsError:
+            return createError(withText: rawValue, code: 0)
+        case .emptyExpressionError:
+            return createError(withText: rawValue, code: 1)
+        case .parenthesesOrderError:
+            return createError(withText: rawValue, code: 2)
+        case .parenthesesCountError:
+            return createError(withText: rawValue, code: 3)
+        case .signCollisionError:
+            return createError(withText: rawValue, code: 4)
+        case .recursionError:
+            return createError(withText: rawValue, code: 5)
+        case .longNumberError:
+            return createError(withText: rawValue, code: 6)
+        case .divisionByZeroError:
+            return createError(withText: rawValue, code: 7)
+        case .resultIsNaNError:
+            return createError(withText: rawValue, code: 8)
+        case .resultIsInfinite:
+            return createError(withText: rawValue, code: 9)
+        }
+    }
+    
+    private func createError(withText text: String, code: Int) -> Error {
+        NSError(domain: "", code: code, userInfo: [ NSLocalizedDescriptionKey: text])
+    }
+}
+
+
 final class FormulaReader {
 
    static let shared = FormulaReader()
@@ -78,7 +121,7 @@ final class FormulaReader {
         
         func startFindingRecursion(expression: String)  throws {
             recursionCounter += 1
-            guard recursionCounter < recursionLimit else { throw createError(withText: "Error with reading formula or expression is difficult", code: 5) }
+            guard recursionCounter < recursionLimit else { throw FormulaError.recursionError.getError() }
             let independendExpressions = getIndependedBracketsArray(expression: expression)
             try independendExpressions.forEach { indExpr in
                 try startFindingRecursion(expression: indExpr)
@@ -118,7 +161,7 @@ final class FormulaReader {
         }
         func getDependedBracketsRecursion(expression: String) throws {
             recursionCounter += 1
-            guard recursionCounter < recursionLimit else { throw  createError(withText: "Error with reading formula or expression is difficult", code: 7) }
+            guard recursionCounter < recursionLimit else { throw  FormulaError.recursionError.getError()}
             if let withinBrackets = getFirstFromBrackets(expression: expression) {
                 try getDependedBracketsRecursion(expression: withinBrackets)
                 expressions.append(withinBrackets)
@@ -202,25 +245,26 @@ final class FormulaReader {
         func startCalculatingRecursion(expression: inout String) throws {
             print("start Running")
             recursionCounter += 1
-            guard recursionCounter < recursionLimit else { throw createError(withText: "Error with reading formula or number is too long", code: 6) }
+            guard recursionCounter < recursionLimit else { throw FormulaError.longNumberError.getError() }
             let isFinished = expressionIsFinished(expression: expression)
             print(isFinished)
             if isFinished {
                 print("finished")
                 return
             }
-            toOperate(expression: &expression, operationType: .division)
-            toOperate(expression: &expression, operationType: .exponentiation)
-            toOperate(expression: &expression, operationType: .multiplication)
-            toOperate(expression: &expression, operationType: .addition)
-            toOperate(expression: &expression, operationType: .subtraction)
+            
+            try toOperate(expression: &expression, operationType: .division)
+            try toOperate(expression: &expression, operationType: .exponentiation)
+            try toOperate(expression: &expression, operationType: .multiplication)
+            try toOperate(expression: &expression, operationType: .addition)
+            try toOperate(expression: &expression, operationType: .subtraction)
             try startCalculatingRecursion(expression: &expression)
         }
         
         return expressionForCounting
     }
     
-    private func toOperate(expression: inout String, operationType: OperationType) {
+    private func toOperate(expression: inout String, operationType: OperationType) throws {
         
         let operation: Character = operationType.rawValue
         correctExpression(expression: &expression)
@@ -248,7 +292,7 @@ final class FormulaReader {
             result = getResultOfMultiplication(firstNumber: firstNumber, secondNumber: secondNumber)
             print(result)
         case .division:
-            result = getResultOfDivision(firstNumber: firstNumber, secondNumber: secondNumber)
+            result = try getResultOfDivision(firstNumber: firstNumber, secondNumber: secondNumber)
             print("result of division:", result)
         case .addition:
             result = getResultOfAddition(firstNumber: firstNumber, secondNumber: secondNumber)
@@ -272,8 +316,13 @@ final class FormulaReader {
         print("expression after correcting:", expression)
     }
     
-    private func getResultOfDivision(firstNumber: Double, secondNumber: Double) -> String {
-        String(firstNumber / secondNumber)
+    private func getResultOfDivision(firstNumber: Double, secondNumber: Double) throws -> String {
+        guard !secondNumber.isZero else { throw FormulaError.divisionByZeroError.getError() }
+        let result = firstNumber / secondNumber
+    
+        guard !result.isNaN else { throw FormulaError.resultIsNaNError.getError() }
+        guard !result.isInfinite else { throw FormulaError.resultIsInfinite.getError() }
+        return String(result)
     }
     
     private func getResultOfexponentiation(firstNumber: Double, secondNumber: Double) -> String {
@@ -476,26 +525,22 @@ final class FormulaReader {
         
         guard expressionHasOnlyAllowedSymbols(expression: expression, variables: variables) else {
             let undefinedVariables = getUndefinedVariables(expression: expression, varialbes: variables)
-            completion(failed, undefinedVariables.isEmpty ? nil : undefinedVariables, createError(withText: "expression has illegal symbols", code: 0))
+            completion(failed, undefinedVariables.isEmpty ? nil : undefinedVariables, FormulaError.illegalSymbolsError.getError())
             return
             }
         guard expressionIsNotExmpty(expression: expression) else { return
-            completion(failed, nil, createError(withText: "expression is empty", code: 1))
+            completion(failed, nil, FormulaError.emptyExpressionError.getError())
             }
         guard parenthesesOrderIsCorrect(expression: expression) else { return
-            completion(failed, nil, createError(withText: "parentheses order is incorrect", code: 2))
+            completion(failed, nil, FormulaError.parenthesesOrderError.getError())
         }
         guard parenthesesCountIsCorrect(expression: expression) else { return
-            completion(failed, nil, createError(withText: #"opening brackets "(" count is not conform to closing brackets ")" count"#, code: 3))
+            completion(failed, nil, FormulaError.parenthesesCountError.getError())
         }
         guard expressionHasNotSignCollision(expression: expression) else { return
-            completion(failed, nil, createError(withText: "expression has sign collision", code: 4))
+            completion(failed, nil, FormulaError.signCollisionError.getError())
         }
         completion(!failed, nil, nil)
-    }
-    
-    private func createError(withText text: String, code: Int) -> Error {
-        NSError(domain: "", code: code, userInfo: [ NSLocalizedDescriptionKey: text])
     }
     
     private func expressionHasOnlyAllowedSymbols(expression: String, variables: [Variable] = []) -> Bool {

@@ -71,7 +71,7 @@ final class DatabaseManager {
                 guard let characterString = variableModel.character else { continue }
                 let character = Character(characterString)
                 let variableDescription = variableModel.variableDescription
-                variables.append(Variable(character: character, description: variableDescription, value: nil))
+                variables.append(Variable(character: character, description: variableDescription, value: 0))
             }
             
             formulas.append(Formula(name: name, body: body, favourite: favourite, description: description, id: id, variables: variables))
