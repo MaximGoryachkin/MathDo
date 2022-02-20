@@ -11,10 +11,11 @@ import UIKit
     @objc func addVariableButtonTapped(sender: UIButton)
 }
 
-protocol VariableDisplayProtocol {
+ protocol VariableDisplayProtocol {
     var formula: Formula? { get set }
     var variables: [Variable] { get set }
     func addNewVariable(variable: Variable)
+    func addNewVariables(variables: [Variable])
     func removeVariable(in cell: VariableCreatingCell)
     func scrollToBottom()
 }
@@ -37,11 +38,11 @@ protocol VariableDisplayProtocol {
      }
      
     @objc func doneButtonDidTapped(sender: UIButton) {
-        FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "", variables: variables) { success, error in
+        FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "", variables: variables) { success, sender, error  in
             if let error = error {
-                showError(error)
+                guard let variables = sender as? [Variable] else {showError(error); return }
+                addNewVariables(variables: variables)
             } else if success {
-                saveFormula(name: "test")
                 showSaveAlert()
             }
         }
@@ -49,9 +50,9 @@ protocol VariableDisplayProtocol {
      
      private func saveFormula(name: String) {
          FormulaReader.shared.correctInputExpression(expression: &formulaCreatingView.formulaTextField.text, with: variables)
-         FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "") { success, error in
+         FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "") { success, sender, error in
              print(success)
-              formula = Formula(id: 1, name: name, body: formulaCreatingView.formulaTextField.text!, favourite: true, description: "", variables: variables)
+              formula = Formula(name: name, body: formulaCreatingView.formulaTextField.text!, favourite: true, description: "", variables: variables)
              guard let formula = formula else { return }
              DatabaseManager.shared.save(formula)
          }
@@ -90,6 +91,12 @@ extension FormulaCreatingViewController: VariableDisplayProtocol {
   
     func addNewVariable(variable: Variable) {
         formulaCreatingView.addNewVariable(variable: variable)
+    }
+    
+    func addNewVariables(variables: [Variable]) {
+        variables.forEach { [weak self] variable in
+            self?.formulaCreatingView.addNewVariable(variable: variable)
+        }
     }
     
     func removeVariable(in cell: VariableCreatingCell) {

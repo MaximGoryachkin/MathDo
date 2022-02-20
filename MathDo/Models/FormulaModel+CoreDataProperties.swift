@@ -2,7 +2,7 @@
 //  FormulaModel+CoreDataProperties.swift
 //  MathDo
 //
-//  Created by Вячеслав Макаров on 09.02.2022.
+//  Created by Вячеслав Макаров on 19.02.2022.
 //
 //
 
@@ -20,6 +20,7 @@ extension FormulaModel {
     @NSManaged public var favourite: Bool
     @NSManaged public var formulaDescription: String?
     @NSManaged public var name: String?
+    @NSManaged public var id: URL?
     @NSManaged public var variables: Set<VariableModel>?
 
 }

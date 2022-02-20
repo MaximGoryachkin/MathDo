@@ -21,7 +21,7 @@ final class FormulaReader {
     func getResult(_ formula: String, variables: [Variable] = []) throws -> String {
         var formula = formula
         var readingError: Error?
-        verifyFormulaSyntax(expression: formula, variables: variables) { success, error in
+        verifyFormulaSyntax(expression: formula, variables: variables) { success, sender, error in
             guard let error = error else { return }
             readingError = error
         }
@@ -471,24 +471,27 @@ final class FormulaReader {
 
 //    MARK: - Formula verify methods
     
-    public func verifyFormulaSyntax(expression: String, variables: [Variable] = [], completion: (_ success: Bool, _ error: Error? )->()) {
+    public func verifyFormulaSyntax(expression: String, variables: [Variable] = [], completion: (_ success: Bool, _ sender: Any?, _ error: Error? )->()) {
         let failed = false
-        guard expressionHasOnlyAllowedSymbols(expression: expression, variables: variables) else { return
-            completion(failed, createError(withText: "expression has illegal symbols", code: 0))
+        
+        guard expressionHasOnlyAllowedSymbols(expression: expression, variables: variables) else {
+            let undefinedVariables = getUndefinedVariables(expression: expression, varialbes: variables)
+            completion(failed, undefinedVariables.isEmpty ? nil : undefinedVariables, createError(withText: "expression has illegal symbols", code: 0))
+            return
             }
         guard expressionIsNotExmpty(expression: expression) else { return
-            completion(failed, createError(withText: "expression is empty", code: 1))
+            completion(failed, nil, createError(withText: "expression is empty", code: 1))
             }
         guard parenthesesOrderIsCorrect(expression: expression) else { return
-            completion(failed, createError(withText: "parentheses order is incorrect", code: 2))
+            completion(failed, nil, createError(withText: "parentheses order is incorrect", code: 2))
         }
         guard parenthesesCountIsCorrect(expression: expression) else { return
-            completion(failed, createError(withText: #"opening brackets "(" count is not conform to closing brackets ")" count"#, code: 3))
+            completion(failed, nil, createError(withText: #"opening brackets "(" count is not conform to closing brackets ")" count"#, code: 3))
         }
         guard expressionHasNotSignCollision(expression: expression) else { return
-            completion(failed, createError(withText: "expression has sign collision", code: 4))
+            completion(failed, nil, createError(withText: "expression has sign collision", code: 4))
         }
-        completion(!failed, nil)
+        completion(!failed, nil, nil)
     }
     
     private func createError(withText text: String, code: Int) -> Error {
@@ -555,6 +558,17 @@ final class FormulaReader {
             }
         }
         return hasNotCollision
+    }
+    
+    private func getUndefinedVariables(expression: String, varialbes: [Variable]) -> [Variable] {
+        let usedVariables = varialbes.map{ $0.character }
+        var variablesOfExpression = Array<Variable>()
+        expression.forEach { char in
+            if allowedSymbols.possibleVariables.contains(char) && !usedVariables.contains(char) {
+                variablesOfExpression.append(Variable(character: char, description: nil))
+            }
+        }
+        return variablesOfExpression
     }
 }
 

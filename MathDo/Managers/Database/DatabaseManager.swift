@@ -58,7 +58,7 @@ final class DatabaseManager {
     func convertFormulaModelArrayToFormulaArray(_ formulaModels: [FormulaModel]) -> [Formula] {
         var formulas = Array<Formula>()
         formulaModels.forEach { formulaModel in
-            let id = formulaModel.id.hashValue
+            let id = formulaModel.objectID.uriRepresentation()
             let name = formulaModel.name ?? ""
             let body = formulaModel.body ?? ""
             let favourite = formulaModel.favourite
@@ -74,7 +74,7 @@ final class DatabaseManager {
                 variables.append(Variable(character: character, description: variableDescription, value: nil))
             }
             
-            formulas.append(Formula(id: id, name: name, body: body, favourite: favourite, description: description, variables: variables))
+            formulas.append(Formula(name: name, body: body, favourite: favourite, description: description, id: id, variables: variables))
             
         }
         return formulas
@@ -92,6 +92,7 @@ final class DatabaseManager {
         formulaModel.name = formula.name
         formulaModel.body = formula.body
         formulaModel.favourite = formula.favourite
+        formulaModel.id = formulaModel.objectID.uriRepresentation()
         var variablesSet = Set<VariableModel>()
         formula.variables.forEach { variable in
             let variableModel = VariableModel(entity: variablesEntityDescription, insertInto: context)
@@ -113,6 +114,21 @@ final class DatabaseManager {
         }
     }
     
+    func delete(formula: Formula, completion: ()->() = {}) {
+        let objectURI = formula.id
+        guard let objectID = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: objectURI) else { return }
+        
+        do {
+            let object = try context.existingObject(with: objectID)
+            context.delete(object)
+            try context.save()
+            completion()
+        } catch(let error) {
+            print(error.localizedDescription)
+        }
+        
+//        context.delete()
+    }
     
     
 }

@@ -65,8 +65,10 @@ final class StartViewController: UITableViewController {
     }
  
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        formulas.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
+        DatabaseManager.shared.delete(formula: formulas[indexPath.row]) {
+            formulas.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
