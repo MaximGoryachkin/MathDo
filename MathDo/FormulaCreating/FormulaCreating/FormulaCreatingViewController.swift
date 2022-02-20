@@ -42,6 +42,7 @@ import UIKit
             if let error = error {
                 guard let variables = sender as? [Variable] else {showError(error); return }
                 addNewVariables(variables: variables)
+                formulaCreatingView.showWarning(text: "Added variables")
             } else if success {
                 showSaveAlert()
             }
@@ -69,7 +70,12 @@ import UIKit
      }
      
      private func showError(_ error: Error) {
-         showAlert(title: "Wrong syntax", message: error.localizedDescription, style: .alert)
+         switch (error as NSError).code {
+         case 8:
+             formulaCreatingView.showWarning(text: error.localizedDescription)
+         default:
+             showAlert(title: "Wrong syntax", message: error.localizedDescription, style: .alert)
+         }
      }
      
      private func setupGUI() {

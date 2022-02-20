@@ -202,7 +202,7 @@ final class FormulaReader {
         func startCalculatingRecursion(expression: inout String) throws {
             print("start Running")
             recursionCounter += 1
-            guard recursionCounter < recursionLimit else { throw createError(withText: "Error with reading formula or expression is difficult", code: 6) }
+            guard recursionCounter < recursionLimit else { throw createError(withText: "Error with reading formula or number is too long", code: 6) }
             let isFinished = expressionIsFinished(expression: expression)
             print(isFinished)
             if isFinished {
@@ -562,9 +562,11 @@ final class FormulaReader {
     
     private func getUndefinedVariables(expression: String, varialbes: [Variable]) -> [Variable] {
         let usedVariables = varialbes.map{ $0.character }
+        var undefinedVariables = Array<Character>()
         var variablesOfExpression = Array<Variable>()
         expression.forEach { char in
-            if allowedSymbols.possibleVariables.contains(char) && !usedVariables.contains(char) {
+            if allowedSymbols.possibleVariables.contains(char) && !usedVariables.contains(char) && !undefinedVariables.contains(char){
+                undefinedVariables.append(char)
                 variablesOfExpression.append(Variable(character: char, description: nil))
             }
         }
