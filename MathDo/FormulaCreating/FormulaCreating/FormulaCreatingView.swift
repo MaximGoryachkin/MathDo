@@ -85,7 +85,7 @@ final class FormulaCreatingView: UIView {
         }
     }
     
-    public func removeVariableFormTableView(cell: VariableCreatingCell) {
+    public func removeVariableFromTableView(cell: VariableCreatingCell) {
         guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
         variablesTableView.performBatchUpdates {
             formulaCreatingVC.variables.remove(at: indexPath.row)
@@ -93,6 +93,17 @@ final class FormulaCreatingView: UIView {
         }
     }
     
+    public func editVariableFromTableView(cell: VariableCreatingCell, newText: String) {
+        guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
+        variablesTableView.performBatchUpdates {
+            formulaCreatingVC.variables[indexPath.row].description = newText
+            variablesTableView.reloadRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+    public func getIndexPath(of cell: VariableCreatingCell) -> IndexPath? {
+        variablesTableView.indexPath(for: cell)
+    }
     public func scrollToBottom() {
         guard formulaCreatingVC.variables.count > 0 else { return }
         let lastIndexOVariables = formulaCreatingVC.variables.count - 1

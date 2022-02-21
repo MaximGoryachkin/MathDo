@@ -21,11 +21,12 @@ extension UIViewController {
         present(alert, animated: true)
     }
     
-    func showAlertWithTextField(title: String, message: String, buttonTitle: String, style: UIAlertController.Style, placeholder: String, delegate: AlertTextFieldDelegate? = nil, completion: ((_ text: String, _ button: UIAlertAction, _ buttonTapped: Bool)->())? = nil) {
+    func showAlertWithTextField(title: String, message: String, buttonTitle: String, style: UIAlertController.Style, placeholder: String, delegate: AlertTextFieldDelegate? = nil, textFieldText: String = "", completion: ((_ text: String, _ button: UIAlertAction, _ buttonTapped: Bool)->())? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
         var alertTextField: UITextField!
         alert.addTextField { textField in
             textField.placeholder = placeholder
+            textField.text = textFieldText
             alertTextField = textField
             guard let delegate = delegate else { return }
             alertTextField.addTarget(delegate, action: #selector(delegate.textDidChange(sender:)), for: .editingChanged)

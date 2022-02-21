@@ -11,12 +11,13 @@ import UIKit
     @objc func addVariableButtonTapped(sender: UIButton)
 }
 
- protocol VariableDisplayProtocol {
+protocol VariableDisplayProtocol {
     var formula: Formula? { get set }
     var variables: [Variable] { get set }
     func addNewVariable(variable: Variable)
     func addNewVariables(variables: [Variable])
     func removeVariable(in cell: VariableCreatingCell)
+    func editVariable(in cell: VariableCreatingCell, newText: String)
     func scrollToBottom()
 }
 
@@ -94,6 +95,7 @@ extension FormulaCreatingViewController: FormulaCreatingProtocol {
 }
 
 extension FormulaCreatingViewController: VariableDisplayProtocol {
+    
   
     func addNewVariable(variable: Variable) {
         formulaCreatingView.addNewVariable(variable: variable)
@@ -105,8 +107,12 @@ extension FormulaCreatingViewController: VariableDisplayProtocol {
         }
     }
     
+    func editVariable(in cell: VariableCreatingCell, newText: String) {
+        formulaCreatingView.editVariableFromTableView(cell: cell, newText: newText)
+    }
+    
     func removeVariable(in cell: VariableCreatingCell) {
-        formulaCreatingView.removeVariableFormTableView(cell: cell)
+        formulaCreatingView.removeVariableFromTableView(cell: cell)
     }
     
     func scrollToBottom() {
@@ -115,8 +121,22 @@ extension FormulaCreatingViewController: VariableDisplayProtocol {
 }
 
 extension FormulaCreatingViewController: VariableCreatingCellDelegate {
+    
     func removeButtonTapped(in cell: VariableCreatingCell) {
         removeVariable(in: cell)
+    }
+    
+    func editButtonTapped(in cell: VariableCreatingCell) {
+        guard let indexPath = formulaCreatingView.getIndexPath(of: cell) else { return }
+        let title = "Edit"
+        let message = "Editing description of variable \(variables[indexPath.row].character)"
+        let oldDescription = variables[indexPath.row].description ?? ""
+        showAlertWithTextField(title: title, message: message, buttonTitle: "Save", style: .alert, placeholder: "Variable description", delegate: nil, textFieldText: oldDescription) { [weak self] text, button, buttonTapped in
+            if buttonTapped {
+                self?.editVariable(in: cell, newText: text)
+            }
+        }
+        
     }
 }
 
