@@ -17,6 +17,8 @@ final class FormulaCreatingView: UIView {
         formulaTextField.borderStyle = .line
         formulaTextField.placeholder = "Write your formula"
         formulaTextField.backgroundColor = .white
+        formulaTextField.autocorrectionType = .no
+        formulaTextField.autocapitalizationType = .none
         return formulaTextField
     }()
     
@@ -32,7 +34,7 @@ final class FormulaCreatingView: UIView {
     }()
     
     private lazy var variablesTableView: UITableView = {
-        let tableView = UITableView(frame: CGRect(x: 10, y: 10, width: 100, height: 100
+        let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 0, height: 0
                                                  ), style: .insetGrouped)
         tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -54,6 +56,14 @@ final class FormulaCreatingView: UIView {
         addVariableButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         addVariableButton.tintColor = .white
         return addVariableButton
+    }()
+    
+    private lazy var warningLabel: WarningLabel = {
+        let warningLabel = WarningLabel(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
+        warningLabel.textColor = .black
+        warningLabel.translatesAutoresizingMaskIntoConstraints = false
+        warningLabel.textAlignment = .center
+        return warningLabel
     }()
     
     convenience init(viewController: FormulaCreatingProtocol & VariableDisplayProtocol & VariableCreatingCellDelegate) {
@@ -92,18 +102,23 @@ final class FormulaCreatingView: UIView {
             }
     }
     
+    public func showWarning(text: String) {
+        warningLabel.highlightWarning(text: text)
+    }
+    
     private func setPrimarySettings() {
         backgroundColor = #colorLiteral(red: 0.9245480299, green: 0.9361869693, blue: 0.9359821677, alpha: 1)
         stackView.addArrangedSubview(formulaTextField)
+        stackView.addArrangedSubview(warningLabel)
         stackView.addArrangedSubview(variablesTableView)
         stackView.addArrangedSubview(addVariableButton)
         addSubview(stackView)
     }
     
     private func setupLayout() {
-        
         setStackViewSettings()
         setFormulaTextFieldSettings()
+        setWarningLabelSettings()
         setVariablesTableViewSettings()
         setAddVariableButtonSettings()
     }
@@ -119,6 +134,12 @@ final class FormulaCreatingView: UIView {
     private func setFormulaTextFieldSettings() {
         formulaTextField.heightAnchor.constraint(equalToConstant: frame.width / 7).isActive = true
         formulaTextField.widthAnchor.constraint(equalTo: stackView.widthAnchor ).isActive = true
+    }
+    
+    private func setWarningLabelSettings() {
+        warningLabel.heightAnchor.constraint(equalTo: formulaTextField.heightAnchor, multiplier: 0.3).isActive = true
+        warningLabel.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+        
     }
     
     private func setVariablesTableViewSettings() {

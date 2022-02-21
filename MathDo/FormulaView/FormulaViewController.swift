@@ -29,7 +29,6 @@ final class FormulaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = formula.name
-        
     }
 }
 

@@ -24,12 +24,22 @@ static func getOperationSymbols() -> [Character] {
 }
 
 struct AllowedSymbols {
+//    let alphabet = "abcdefghijklmnopqrstuvwxyzαβγδεζηθικλμνξοπρστυφχψω"
+    let alphabet: String = {
+        var latinCapitalizedAlphabet = getStringByUnicodeRange(from: "\u{0041}", to: "\u{005A}")
+        var latinLowerCasedAlphabet = getStringByUnicodeRange(from: "\u{0061}", to: "\u{007A}")
+        var greekAlphabetFirstPart = getStringByUnicodeRange(from: "\u{0391}", to: "\u{03A1}")
+        var greekAlphabetSecondPart = getStringByUnicodeRange(from: "\u{03A3}", to: "\u{03A9}")
+//        var greekAlphabet = getAlphabet(from: "\u{0391}", to: "\u{03C9}")
+        var alphabets = latinCapitalizedAlphabet + latinLowerCasedAlphabet + greekAlphabetFirstPart + greekAlphabetSecondPart
+        print(alphabets)
+        return alphabets
+    }()
     var allowedSymbols = "+-*/^1234567890()"
     var digits = "0123456789"
     var operations = OperationType.getOperationSymbols()
     var brackets = "()"
     var possibleVariables: [Character] {
-        let alphabet = "abcdefghijklmnopqrstuvwxyz"
         var listOfCharacters = Array<Character>()
         alphabet.forEach { char in
             listOfCharacters.append(char)
@@ -38,7 +48,6 @@ struct AllowedSymbols {
     }
     
     lazy var possibleVariablesStrings: [String] = {
-        let alphabet = "abcdefghijklmnopqrstuvwxyz"
         var listOfCharacters = Array<String>()
         alphabet.forEach { char in
             listOfCharacters.append(String(char))
@@ -65,6 +74,12 @@ struct AllowedSymbols {
         }
         let filtredVariableCharacters: [Character] = possibleVariables.filter { !variableCharacters.contains($0) }
         return filtredVariableCharacters
+    }
+    
+    private static func getStringByUnicodeRange(from: String, to: String) -> String {
+        var createdAlphabet = ""
+        createdAlphabet.append(contentsOf: (Unicode.Scalar(from)!.value  ... Unicode.Scalar(to)!.value).lazy.map { Character(Unicode.Scalar($0).unsafelyUnwrapped) })
+        return createdAlphabet
     }
     
 }
