@@ -17,6 +17,8 @@ final class FormulaCreatingView: UIView {
         formulaTextField.borderStyle = .line
         formulaTextField.placeholder = "Write your formula"
         formulaTextField.backgroundColor = .white
+        formulaTextField.autocorrectionType = .no
+        formulaTextField.autocapitalizationType = .none
         return formulaTextField
     }()
     
