@@ -62,7 +62,6 @@ final class FormulaCreatingView: UIView {
         let warningLabel = WarningLabel(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
         warningLabel.textColor = .black
         warningLabel.translatesAutoresizingMaskIntoConstraints = false
-        warningLabel.text = "TESTTESTETSTETSTETSTEST"
         warningLabel.textAlignment = .center
         return warningLabel
     }()
