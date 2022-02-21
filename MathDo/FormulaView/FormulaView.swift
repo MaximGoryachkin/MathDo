@@ -13,9 +13,11 @@ final class FormulaView: UIView {
     var formula: Formula!
     var flag = true
     
-    private lazy var resultView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .red
+    private lazy var resultView: UILabel = {
+        let view = UILabel()
+        view.text = formula.body
+        view.backgroundColor = .clear
+        view.textAlignment = .center
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
