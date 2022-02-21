@@ -43,6 +43,7 @@ final class FormulaView: UIView {
         self.init()
         formulaVC = viewController
         self.formula = formula
+        setPrimarySetting()
     }
     
     override func layoutSubviews() {
@@ -57,10 +58,13 @@ final class FormulaView: UIView {
         variableTableView.reloadData()
     }
     
-    private func setupLayout() {
+    private func setPrimarySetting() {
         addSubview(resultView)
         addSubview(variableTableView)
         addSubview(resultButtonView)
+    }
+    
+    private func setupLayout() {
         setResultView()
         setVariableTableView()
         setButtonView()

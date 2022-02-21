@@ -30,7 +30,6 @@ protocol VariableDisplayProtocol {
      private lazy var formulaCreatingView: FormulaCreatingView = { FormulaCreatingView(viewController: self) }()
      
     override func viewDidLoad() {
-        super.viewDidLoad()
         setupGUI()
     }
      
