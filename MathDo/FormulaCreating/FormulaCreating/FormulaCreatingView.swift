@@ -12,9 +12,12 @@ final class FormulaCreatingView: UIView {
 
   
     lazy var formulaTextField: UITextField  = {
+//        let formulaTextField = UITextField(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
         let formulaTextField = UITextField()
+        let bottomLine = CALayer()
         formulaTextField.translatesAutoresizingMaskIntoConstraints = false
-        formulaTextField.borderStyle = .line
+        formulaTextField.layer.masksToBounds = true
+        formulaTextField.borderStyle = .none
         formulaTextField.placeholder = "Write your formula"
         formulaTextField.backgroundColor = .white
         formulaTextField.autocorrectionType = .no
@@ -55,6 +58,7 @@ final class FormulaCreatingView: UIView {
         addVariableButton.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         addVariableButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         addVariableButton.tintColor = .white
+        addVariableButton.addTarget(formulaCreatingVC, action: #selector(formulaCreatingVC?.addVariableButtonTapped(sender:)), for: .touchUpInside)
         return addVariableButton
     }()
     
@@ -74,7 +78,7 @@ final class FormulaCreatingView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        setupLayout()
+//        setupLayout()
     }
     
     public func addNewVariable(variable: Variable) {
@@ -85,7 +89,7 @@ final class FormulaCreatingView: UIView {
         }
     }
     
-    public func removeVariableFormTableView(cell: VariableCreatingCell) {
+    public func removeVariableFromTableView(cell: VariableCreatingCell) {
         guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
         variablesTableView.performBatchUpdates {
             formulaCreatingVC.variables.remove(at: indexPath.row)
@@ -93,6 +97,17 @@ final class FormulaCreatingView: UIView {
         }
     }
     
+    public func editVariableFromTableView(cell: VariableCreatingCell, newText: String) {
+        guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
+        variablesTableView.performBatchUpdates {
+            formulaCreatingVC.variables[indexPath.row].description = newText
+            variablesTableView.reloadRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+    public func getIndexPath(of cell: VariableCreatingCell) -> IndexPath? {
+        variablesTableView.indexPath(for: cell)
+    }
     public func scrollToBottom() {
         guard formulaCreatingVC.variables.count > 0 else { return }
         let lastIndexOVariables = formulaCreatingVC.variables.count - 1
@@ -113,6 +128,7 @@ final class FormulaCreatingView: UIView {
         stackView.addArrangedSubview(variablesTableView)
         stackView.addArrangedSubview(addVariableButton)
         addSubview(stackView)
+        setupLayout()
     }
     
     private func setupLayout() {
@@ -132,7 +148,7 @@ final class FormulaCreatingView: UIView {
     }
     
     private func setFormulaTextFieldSettings() {
-        formulaTextField.heightAnchor.constraint(equalToConstant: frame.width / 7).isActive = true
+        formulaTextField.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0 / 7).isActive = true
         formulaTextField.widthAnchor.constraint(equalTo: stackView.widthAnchor ).isActive = true
     }
     
@@ -148,11 +164,10 @@ final class FormulaCreatingView: UIView {
     }
     
     private func setAddVariableButtonSettings() {
-        addVariableButton.addTarget(formulaCreatingVC, action: #selector(formulaCreatingVC?.addVariableButtonTapped(sender:)), for: .touchUpInside)
-        addVariableButton.heightAnchor.constraint(equalToConstant: frame.width / 7).isActive = true
+//        addVariableButton.addTarget(formulaCreatingVC, action: #selector(formulaCreatingVC?.addVariableButtonTapped(sender:)), for: .touchUpInside)
+        addVariableButton.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0 / 7 ).isActive = true
         addVariableButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
         addVariableButton.translatesAutoresizingMaskIntoConstraints = false
-        
     }
     
 }

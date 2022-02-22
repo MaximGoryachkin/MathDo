@@ -21,11 +21,12 @@ extension UIViewController {
         present(alert, animated: true)
     }
     
-    func showAlertWithTextField(title: String, message: String, buttonTitle: String, style: UIAlertController.Style, placeholder: String, delegate: AlertTextFieldDelegate? = nil, completion: ((_ text: String, _ button: UIAlertAction, _ buttonTapped: Bool)->())? = nil) {
+    func showAlertWithTextField(title: String, message: String, buttonTitle: String, style: UIAlertController.Style, placeholder: String, delegate: AlertTextFieldDelegate? = nil, textFieldText: String = "", completion: ((_ text: String, _ button: UIAlertAction, _ buttonTapped: Bool)->())? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
         var alertTextField: UITextField!
         alert.addTextField { textField in
             textField.placeholder = placeholder
+            textField.text = textFieldText
             alertTextField = textField
             guard let delegate = delegate else { return }
             alertTextField.addTarget(delegate, action: #selector(delegate.textDidChange(sender:)), for: .editingChanged)
@@ -71,4 +72,15 @@ extension UIColor {
         self.getRed(&r, green: &g, blue: &b, alpha: &a)
         return UIColor(red: (1 - r), green: (1 - g), blue: (1 - b), alpha: a) // Assuming you want the same alpha value.
     }
+}
+
+extension UITextField {
+        func addBottomBorder(){
+            let bottomLine = CALayer()
+            bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
+            bottomLine.backgroundColor = UIColor.red.cgColor
+            borderStyle = .none
+            layer.addSublayer(bottomLine)
+        }
+    
 }

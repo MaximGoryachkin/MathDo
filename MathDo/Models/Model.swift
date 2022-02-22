@@ -19,7 +19,7 @@ struct Formula {
 
 struct Variable: Hashable {
     let character: Character
-    let description: String?
+    var description: String?
     var value: Double? = 0
 }
 
