@@ -90,9 +90,8 @@ final class FormulaView: UIView {
     }
     
     @objc func resultButtonPressed() {
-        flag.toggle()
-        resultView.backgroundColor = flag ? .red : .yellow
-        print("Result:", FormulaReader.shared.getResult(formula.body, variables: formula.variables))
+        resultView.text = String(FormulaReader.shared.getResult(formula.body,
+                                                                variables: formula.variables))
         
     }
     
