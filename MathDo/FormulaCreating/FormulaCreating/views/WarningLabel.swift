@@ -30,6 +30,7 @@ final class WarningLabel: UILabel {
         UIView.animate(withDuration: 1, delay: 0.0, options: .curveLinear) { [weak self] in
             self?.textColor = .red
             self?.alpha = 1.0
+            self?.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         } completion: { [weak self] finished in
             self?.fadeOut()
         }
