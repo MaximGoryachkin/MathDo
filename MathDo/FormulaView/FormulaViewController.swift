@@ -30,6 +30,7 @@ final class FormulaViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = formula.name
     }
+    
 }
 
 extension FormulaViewController: FormulaViewProtocol {
@@ -39,14 +40,32 @@ extension FormulaViewController: FormulaViewProtocol {
     
     func presentSetValueAlert(for indexPath: IndexPath) {
         let alert = UIAlertController(title: "Set the value", message: "You shuold set the value of variable", preferredStyle: .alert)
-        alert.addTextField()
-        let action = UIAlertAction(title: "Enter", style: .cancel) { [weak self] _ in
+        let enterAction = UIAlertAction(title: "Enter", style: .default) { [weak self] _ in
             guard let valueString = alert.textFields?.first?.text else { return }
-            let value = Double(valueString) ?? 0.0
-            self?.formulaView.addVariableValue(value ,for: indexPath)
+            if let value = Double(valueString) {
+                self?.formulaView.formula.variables[indexPath.row].value = value
+                self?.formulaView.variableTableView.reloadRows(at: [indexPath], with: .automatic)
+            } else {
+                self?.presentErrorAlert(text: "Enter one dot between numbers, not more!")
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        alert.addAction(enterAction)
+        alert.addAction(cancelAction)
+        alert.actions.first?.isEnabled = false
+        
+        alert.addTextField { textField in
+            textField.keyboardType = .decimalPad
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification,
+                                                   object: textField,
+                                                   queue: OperationQueue.main, using: {_ in
+                let textCount = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0
+                let textIsNotEmpty = textCount > 0
+                enterAction.isEnabled = textIsNotEmpty
+            })
         }
         
-        alert.addAction(action)
         
         present(alert, animated: true)
     }

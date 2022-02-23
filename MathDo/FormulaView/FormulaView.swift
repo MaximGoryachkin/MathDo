@@ -13,19 +13,21 @@ final class FormulaView: UIView {
     var formula: Formula!
     var flag = true
     
-    private lazy var resultView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .red
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private lazy var variableTableView: UITableView = {
+    lazy var variableTableView: UITableView = {
         let view = UITableView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         view.dataSource = self
         view.register(UITableViewCell.self, forCellReuseIdentifier: "variableCell")
+        return view
+    }()
+    
+    private lazy var resultView: UILabel = {
+        let view = UILabel()
+        view.backgroundColor = .clear
+        view.textAlignment = .center
+        view.adjustsFontSizeToFitWidth = true
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -53,9 +55,9 @@ final class FormulaView: UIView {
         print(safeAreaLayoutGuide.layoutFrame)
     }
     
-    public func addVariableValue(_ value: Double ,for indexPath: IndexPath) {
+    private func addVariableValue(_ value: Double ,for indexPath: IndexPath) {
         formula.variables[indexPath.row].value = value
-        variableTableView.reloadData()
+        //variableTableView.reloadData()
     }
     
     private func setPrimarySetting() {
@@ -92,11 +94,9 @@ final class FormulaView: UIView {
     }
     
     @objc func resultButtonPressed() {
-        flag.toggle()
-        resultView.backgroundColor = flag ? .red : .yellow
         do {
         let result = try FormulaReader.shared.getResult(formula.body, variables: formula.variables)
-            print("Result:", result)
+            resultView.text = result
         } catch(let error) {
             formulaVC.presentErrorAlert(text: error.localizedDescription)
         }
@@ -129,14 +129,6 @@ extension FormulaView: UITableViewDelegate, UITableViewDataSource {
         cell.variableLabel.text = String(formula.variables[indexPath.row].character)
         cell.descriptionLabel.text = formula.variables[indexPath.row].description
         cell.valueLabel.text = String(formula.variables[indexPath.row].value ?? 0)
-//        var content = cell.defaultContentConfiguration()
-//        content.text = "\(formula.variables[indexPath.row].character) - \(formula.variables[indexPath.row].description ?? "")"
-//        content.secondaryText = "Secondary text"
-//        content.textToSecondaryTextHorizontalPadding = 120
-//        content.textToSecondaryTextVerticalPadding = 20
-//        content.prefersSideBySideTextAndSecondaryText = true
-//        content.image = UIImage(systemName: "function")
-        //cell.contentConfiguration = content
         
         return cell
     }
