@@ -11,9 +11,9 @@ import UIKit
 final class FormulaCreatingView: UIView {
 
   
-    lazy var formulaTextField: UITextField  = {
+    lazy var formulaTextField: AttributedTextField  = {
 //        let formulaTextField = UITextField(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
-        let formulaTextField = UITextField()
+        let formulaTextField = AttributedTextField(borderStyle: .bottom(borderColor: .lightGray))
         let bottomLine = CALayer()
         formulaTextField.translatesAutoresizingMaskIntoConstraints = false
         formulaTextField.layer.masksToBounds = true
@@ -44,6 +44,7 @@ final class FormulaCreatingView: UIView {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(VariableCreatingCell.self, forCellReuseIdentifier: VariableCreatingCell.nameOfClass)
+        tableView.contentInset.top -= 30
         tableView.rowHeight = 50
         tableView.separatorInset = .zero
         tableView.separatorColor = .lightGray
@@ -70,15 +71,22 @@ final class FormulaCreatingView: UIView {
         return warningLabel
     }()
     
+    private var layoutFinished = false
+    
     convenience init(viewController: FormulaCreatingProtocol & VariableDisplayProtocol & VariableCreatingCellDelegate) {
-        self.init()
+        self.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         formulaCreatingVC = viewController
         setPrimarySettings()
+//        addSubview(UITextField())
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-//        setupLayout()
+        stackView.layoutSubviews()
+        print(warningLabel.frame.height)
+        if !layoutFinished  {
+        setSecondarySettings()
+        }
     }
     
     public func addNewVariable(variable: Variable) {
@@ -129,6 +137,16 @@ final class FormulaCreatingView: UIView {
         stackView.addArrangedSubview(addVariableButton)
         addSubview(stackView)
         setupLayout()
+        layoutSubviews()
+    }
+    
+   private func setSecondarySettings() { // settings that depend on layout
+       let topMargin = warningLabel.frame.height + stackView.spacing
+       stackView.layoutMargins = .init(top: topMargin, left: 0.0, bottom: 0.0, right: 0.0)
+//
+       
+//       print(formulaTextField.layer.sublayers?.count)
+       layoutFinished = true
     }
     
     private func setupLayout() {
@@ -141,15 +159,17 @@ final class FormulaCreatingView: UIView {
     
     private func setStackViewSettings() {
         let padding = 10.0
-       stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding).isActive = true
-       stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding).isActive = true
-       stackView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
-       stackView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, constant: -padding).isActive = true
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
+        stackView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, constant: -padding).isActive = true
     }
     
     private func setFormulaTextFieldSettings() {
         formulaTextField.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0 / 7).isActive = true
         formulaTextField.widthAnchor.constraint(equalTo: stackView.widthAnchor ).isActive = true
+//        formulaTextField.addBottomBorder()
     }
     
     private func setWarningLabelSettings() {
@@ -191,4 +211,5 @@ extension FormulaCreatingView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         "Variables"
     }
+    
 }

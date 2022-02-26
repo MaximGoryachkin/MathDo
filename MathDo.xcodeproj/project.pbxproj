@@ -22,6 +22,7 @@
 		F9279ABC278F6A73005C1071 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9279ABB278F6A73005C1071 /* StringExtensions.swift */; };
 		F941FE7727C115F70008BC20 /* FormulaModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F941FE7627C115F70008BC20 /* FormulaModel+CoreDataProperties.swift */; };
 		F941FE7927C26D8E0008BC20 /* WarningLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F941FE7827C26D8E0008BC20 /* WarningLabel.swift */; };
+		F945911E27C58F950081EAA1 /* AttributedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F945911D27C58F950081EAA1 /* AttributedTextField.swift */; };
 		F9748AE627ADAE13009D85BE /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9748AE527ADAE13009D85BE /* DatabaseManager.swift */; };
 		F9748AEC27B06109009D85BE /* FormulaDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F9748AEA27B06109009D85BE /* FormulaDataModel.xcdatamodeld */; };
 		F9CA34C0279F53B500C0FB0B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CA34BF279F53B500C0FB0B /* Models.swift */; };
@@ -57,6 +58,7 @@
 		F9279ABB278F6A73005C1071 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		F941FE7627C115F70008BC20 /* FormulaModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormulaModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F941FE7827C26D8E0008BC20 /* WarningLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningLabel.swift; sourceTree = "<group>"; };
+		F945911D27C58F950081EAA1 /* AttributedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedTextField.swift; sourceTree = "<group>"; };
 		F9748AE527ADAE13009D85BE /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		F9748AEB27B06109009D85BE /* FormulaDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FormulaDataModel.xcdatamodel; sourceTree = "<group>"; };
 		F9CA34BF279F53B500C0FB0B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 			children = (
 				F9FA053A27A70A4C0076DCA0 /* VariableCreatingCell.swift */,
 				F941FE7827C26D8E0008BC20 /* WarningLabel.swift */,
+				F945911D27C58F950081EAA1 /* AttributedTextField.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				F9DCC4AD27B433E600284F99 /* VariableModel+CoreDataProperties.swift in Sources */,
 				F9E19675278A4968008FEF7A /* NavigationController.swift in Sources */,
 				F9279ABC278F6A73005C1071 /* StringExtensions.swift in Sources */,
+				F945911E27C58F950081EAA1 /* AttributedTextField.swift in Sources */,
 				F9279AB9278F69F8005C1071 /* FormulaReader.swift in Sources */,
 				F941FE7727C115F70008BC20 /* FormulaModel+CoreDataProperties.swift in Sources */,
 				F9DCC4AA27B433E600284F99 /* FormulaModel+CoreDataClass.swift in Sources */,

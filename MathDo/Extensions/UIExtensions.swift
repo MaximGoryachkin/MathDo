@@ -11,7 +11,7 @@ import UIKit
 @objc protocol AlertTextFieldDelegate {
     @objc func textDidChange(sender: UITextField)
 }
-
+@objc 
 extension UIViewController {
     
     func showAlert(title: String, message: String, buttonTitle: String = "Ok", style: UIAlertController.Style) {
@@ -74,13 +74,13 @@ extension UIColor {
     }
 }
 
-extension UITextField {
-        func addBottomBorder(){
-            let bottomLine = CALayer()
-            bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
-            bottomLine.backgroundColor = UIColor.red.cgColor
-            borderStyle = .none
-            layer.addSublayer(bottomLine)
-        }
-    
-}
+//extension UITextField {
+//        func addBottomBorder(){
+//            let bottomLine = CALayer()
+//            bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
+//            bottomLine.backgroundColor = UIColor.red.cgColor
+//            borderStyle = .none
+//            layer.addSublayer(bottomLine)
+//        }
+//    
+//}

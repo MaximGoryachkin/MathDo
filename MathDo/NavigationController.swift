@@ -7,13 +7,16 @@
 
 import UIKit
 
-class NavigationController: UINavigationController {
+final class NavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
     
     private func setupNavigationBar() {
             let navBarAppearance = UINavigationBarAppearance()
@@ -26,4 +29,5 @@ class NavigationController: UINavigationController {
             navigationBar.scrollEdgeAppearance = navBarAppearance
             navigationBar.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
+    
 }
