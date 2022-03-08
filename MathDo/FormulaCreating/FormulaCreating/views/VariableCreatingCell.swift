@@ -19,7 +19,8 @@ final class VariableCreatingCell: UITableViewCell {
     
     private lazy var variableLabel: UILabel  = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .link
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

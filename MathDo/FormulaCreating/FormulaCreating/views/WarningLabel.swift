@@ -27,17 +27,17 @@ final class WarningLabel: UILabel {
         self.text = text
         alpha = 0
         isHidden = false
-        UIView.animate(withDuration: 1, delay: 0.0, options: .curveLinear) { [weak self] in
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveLinear) { [weak self] in
             self?.textColor = .red
             self?.alpha = 1.0
-            self?.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            self?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         } completion: { [weak self] finished in
             self?.fadeOut()
         }
     }
     
     private func fadeOut(){
-        UIView.animate(withDuration: 0.3) { [weak self] in
+        UIView.animate(withDuration: 0.5) { [weak self] in
             self?.alpha = 0.0
         } completion: { [weak self] isFinished in
             if isFinished { 

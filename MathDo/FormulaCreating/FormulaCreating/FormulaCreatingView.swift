@@ -18,6 +18,8 @@ final class FormulaCreatingView: UIView {
         formulaTextField.translatesAutoresizingMaskIntoConstraints = false
         formulaTextField.layer.masksToBounds = true
         formulaTextField.borderStyle = .none
+        formulaTextField.layer.cornerRadius = 5
+        formulaTextField.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         formulaTextField.placeholder = "Write your formula"
         formulaTextField.backgroundColor = .white
         formulaTextField.autocorrectionType = .no
@@ -83,7 +85,6 @@ final class FormulaCreatingView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         stackView.layoutSubviews()
-        print(warningLabel.frame.height)
         if !layoutFinished  {
         setSecondarySettings()
         }
@@ -143,9 +144,6 @@ final class FormulaCreatingView: UIView {
    private func setSecondarySettings() { // settings that depend on layout
        let topMargin = warningLabel.frame.height + stackView.spacing
        stackView.layoutMargins = .init(top: topMargin, left: 0.0, bottom: 0.0, right: 0.0)
-//
-       
-//       print(formulaTextField.layer.sublayers?.count)
        layoutFinished = true
     }
     
