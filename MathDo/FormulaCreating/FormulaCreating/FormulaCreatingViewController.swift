@@ -80,8 +80,11 @@ protocol VariableDisplayProtocol {
      
      private func setupGUI() {
          navigationItem.title = "Formula creating"
-         let addItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonDidTapped(sender:)))
-         navigationItem.rightBarButtonItem = addItem
+         let doneItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonDidTapped(sender:)))
+         let infoItem = UIBarButtonItem(title: "info", style: .plain, target: nil, action: nil)
+         infoItem.image = UIImage(systemName: "info.circle")
+         navigationItem.rightBarButtonItem = doneItem
+         navigationItem.rightBarButtonItems?.append(infoItem)
      }
 }
 
