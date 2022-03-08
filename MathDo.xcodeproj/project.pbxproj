@@ -23,6 +23,7 @@
 		F941FE7727C115F70008BC20 /* FormulaModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F941FE7627C115F70008BC20 /* FormulaModel+CoreDataProperties.swift */; };
 		F941FE7927C26D8E0008BC20 /* WarningLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F941FE7827C26D8E0008BC20 /* WarningLabel.swift */; };
 		F945911E27C58F950081EAA1 /* AttributedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F945911D27C58F950081EAA1 /* AttributedTextField.swift */; };
+		F945912327D75E5B0081EAA1 /* SyntaxManualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F945912227D75E5B0081EAA1 /* SyntaxManualViewController.swift */; };
 		F9748AE627ADAE13009D85BE /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9748AE527ADAE13009D85BE /* DatabaseManager.swift */; };
 		F9748AEC27B06109009D85BE /* FormulaDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F9748AEA27B06109009D85BE /* FormulaDataModel.xcdatamodeld */; };
 		F9CA34C0279F53B500C0FB0B /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CA34BF279F53B500C0FB0B /* Models.swift */; };
@@ -59,6 +60,7 @@
 		F941FE7627C115F70008BC20 /* FormulaModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormulaModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F941FE7827C26D8E0008BC20 /* WarningLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningLabel.swift; sourceTree = "<group>"; };
 		F945911D27C58F950081EAA1 /* AttributedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedTextField.swift; sourceTree = "<group>"; };
+		F945912227D75E5B0081EAA1 /* SyntaxManualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxManualViewController.swift; sourceTree = "<group>"; };
 		F9748AE527ADAE13009D85BE /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		F9748AEB27B06109009D85BE /* FormulaDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FormulaDataModel.xcdatamodel; sourceTree = "<group>"; };
 		F9CA34BF279F53B500C0FB0B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 		F9279AB7278B4EE7005C1071 /* FormulaCreating */ = {
 			isa = PBXGroup;
 			children = (
+				F945912127D75E2D0081EAA1 /* SyntaxManual */,
 				F9FA052B27A2D0710076DCA0 /* FormulaCreating */,
 				F9FA052A27A2D04F0076DCA0 /* VariablesCreating */,
 			);
@@ -148,6 +151,14 @@
 				F9DCC4AF27B703AE00284F99 /* Database */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		F945912127D75E2D0081EAA1 /* SyntaxManual */ = {
+			isa = PBXGroup;
+			children = (
+				F945912227D75E5B0081EAA1 /* SyntaxManualViewController.swift */,
+			);
+			path = SyntaxManual;
 			sourceTree = "<group>";
 		};
 		F9CA34C1279F53B800C0FB0B /* FormulaReader */ = {
@@ -302,6 +313,7 @@
 			files = (
 				F9748AEC27B06109009D85BE /* FormulaDataModel.xcdatamodeld in Sources */,
 				F9FA052D27A485890076DCA0 /* HorizontalPickerView.swift in Sources */,
+				F945912327D75E5B0081EAA1 /* SyntaxManualViewController.swift in Sources */,
 				F9FA053027A498740076DCA0 /* AdvancedTextField.swift in Sources */,
 				895D8BEF278C6DF800139F2A /* Model.swift in Sources */,
 				F9FA053927A6E0070076DCA0 /* NameOfClass.swift in Sources */,

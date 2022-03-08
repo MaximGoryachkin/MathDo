@@ -66,6 +66,14 @@ final class AttributedTextField: UITextField {
         return rect.inset(by: textPadding)
     }
     
+//    public func addInfoButton() {
+//        let xPosition = self.frame.width
+//        let infoButton = UIButton(frame: CGRect(x: xPosition, y: 1, width: 100, height: 100))
+//        let infoImage = UIImage(systemName: "info.circle")
+//        infoButton.setImage(infoImage, for: .normal)
+//        addSubview(infoButton)
+//    }
+    
     private func addBottomBorder(frame: CGRect) {
         bottomLine.frame = CGRect(x: 0, y: self.frame.size.height - 1, width: self.frame.size.width, height: 1)
         bottomLine.backgroundColor = UIColor.red.cgColor
