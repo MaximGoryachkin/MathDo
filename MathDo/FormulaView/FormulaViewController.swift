@@ -29,8 +29,14 @@ final class FormulaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = formula.name
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(presentInfo))
     }
     
+    @objc func presentInfo() {
+        showAlert(title: "About formula",
+                  message: "Formula: \(formula.body)\n Description: \(formula.description ?? "Is empty")",
+                  style: .alert)
+    }
 }
 
 extension FormulaViewController: FormulaViewProtocol {

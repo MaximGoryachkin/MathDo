@@ -36,7 +36,9 @@ final class FormulaView: UIView {
         view.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         view.tintColor = .white
         view.setTitle("Get Result", for: .normal)
+        view.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         view.layer.cornerRadius = 10
+        view.addTarget(self, action: #selector(resultButtonPressed), for: .touchUpInside)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -51,13 +53,10 @@ final class FormulaView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         setupLayout()
-        print(frame)
-        print(safeAreaLayoutGuide.layoutFrame)
     }
     
     private func addVariableValue(_ value: Double ,for indexPath: IndexPath) {
         formula.variables[indexPath.row].value = value
-        //variableTableView.reloadData()
     }
     
     private func setPrimarySetting() {
@@ -103,8 +102,6 @@ final class FormulaView: UIView {
     }
     
     private func setButtonView() {
-        resultButtonView.addTarget(self, action: #selector(resultButtonPressed), for: .touchUpInside)
-        
         var constraints = [NSLayoutConstraint]()
         
         constraints.append(resultButtonView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 10))
@@ -115,11 +112,9 @@ final class FormulaView: UIView {
         
         NSLayoutConstraint.activate(constraints)
     }
-    
 }
 
 extension FormulaView: UITableViewDelegate, UITableViewDataSource {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         formula.variables.count
     }

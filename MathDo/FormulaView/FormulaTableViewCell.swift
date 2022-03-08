@@ -46,7 +46,6 @@ final class FormulaTableViewCell: UITableViewCell {
         setVariableLabelConstarints()
         setDescriptionLabelConstraints()
         setValueLabelConstraints()
-        print(contentView.frame)
     }
     
     private func setVariableLabelConstarints() {

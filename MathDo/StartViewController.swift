@@ -19,28 +19,15 @@ final class StartViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         formulas = DatabaseManager.shared.fetchFormulas()
         tableView.reloadData()
-    }
-    
-    @objc private func routeToFomulaCreatingVC() {
-        let formulaCreatingVC = FormulaCreatingViewController()
-        show(formulaCreatingVC, sender: nil)
-    }
-    
-    private func setButtonSettings() {
-        let addItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(routeToFomulaCreatingVC))
-        let backBarButtton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        
-        navigationItem.rightBarButtonItem = addItem
-        navigationItem.leftBarButtonItem = editButtonItem
-        navigationItem.backBarButtonItem = backBarButtton
-    }
-    
-    private func setNavigationBarSettings() {
-        navigationItem.title = "MathDo"
+        if !formulas.isEmpty {
+            navigationItem.leftBarButtonItem = editButtonItem
+        } else {
+            navigationItem.leftBarButtonItem = nil
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -61,6 +48,7 @@ final class StartViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let formulaVC = FormulaViewController()
         formulaVC.formula = formulas[indexPath.row]
+        formulaVC.formula.variables.sort(by: <)
         show(formulaVC, sender: nil)
     }
  
@@ -68,6 +56,9 @@ final class StartViewController: UITableViewController {
         DatabaseManager.shared.delete(formula: formulas[indexPath.row]) {
             formulas.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            if formulas.isEmpty {
+                navigationItem.leftBarButtonItem = nil
+            }
         }
     }
     
@@ -76,6 +67,23 @@ final class StartViewController: UITableViewController {
             view.backgroundColor = .green
         }
         return UISwipeActionsConfiguration(actions: [favorite])
+    }
+    
+    @objc private func routeToFomulaCreatingVC() {
+        let formulaCreatingVC = FormulaCreatingViewController()
+        show(formulaCreatingVC, sender: nil)
+    }
+    
+    private func setButtonSettings() {
+        let addItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(routeToFomulaCreatingVC))
+        let backBarButtton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        
+        navigationItem.rightBarButtonItem = addItem
+        navigationItem.backBarButtonItem = backBarButtton
+    }
+    
+    private func setNavigationBarSettings() {
+        navigationItem.title = "MathDo"
     }
     
 }
