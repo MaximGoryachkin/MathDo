@@ -18,6 +18,7 @@ extension VariableModel {
 
     @NSManaged public var character: String?
     @NSManaged public var variableDescription: String?
+    @NSManaged public var id: URL?
 
 }
 

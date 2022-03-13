@@ -30,7 +30,6 @@ final class DatabaseManager {
     
     func fetchData() -> [FormulaModel] {
         let fetchRequest = FormulaModel.fetchRequest()
-        let context = persistentContainer.viewContext
         do {
             let formulaList = try context.fetch(fetchRequest)
             return formulaList
@@ -42,7 +41,6 @@ final class DatabaseManager {
     
     func fetchFormulas() -> [Formula] {
         let fetchRequest = FormulaModel.fetchRequest()
-        let context = persistentContainer.viewContext
         do {
             let formulaList = try context.fetch(fetchRequest)
             let formulas = convertFormulaModelArrayToFormulaArray(formulaList)
@@ -52,8 +50,23 @@ final class DatabaseManager {
             print(error.localizedDescription)
             return []
         }
-        
     }
+    
+    func fetchFormula(by id: URL) -> Formula? {
+        guard let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: id) else { return nil}
+        guard let object =  context.object(with: objectId) as? FormulaModel else { return nil}
+        
+        let variables = convertVariableModelSetToVariableArray(object.variables)
+        
+        return Formula(name: object.name ?? "", body: object.body ?? "", favourite: object.favourite, description: object.description, id: id, variables: variables)
+    }
+    
+    func variableIsExist(id: URL) -> Bool {
+        guard let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: id) else { return false}
+        guard context.object(with: objectId) is VariableModel else { return false}
+        return true
+    }
+    
     
     func convertFormulaModelArrayToFormulaArray(_ formulaModels: [FormulaModel]) -> [Formula] {
         var formulas = Array<Formula>()
@@ -64,15 +77,17 @@ final class DatabaseManager {
             let favourite = formulaModel.favourite
             let description = formulaModel.formulaDescription
             
-            var variables = Array<Variable>()
-            guard let variableModels = formulaModel.variables else { return }
-            
-            for variableModel in variableModels {
-                guard let characterString = variableModel.character else { continue }
-                let character = Character(characterString)
-                let variableDescription = variableModel.variableDescription
-                variables.append(Variable(character: character, description: variableDescription, value: 0))
-            }
+            let variables = convertVariableModelSetToVariableArray(formulaModel.variables)
+//
+//            var variables = Array<Variable>()
+//            guard let variableModels = formulaModel.variables else { return }
+//
+//            for variableModel in variableModels {
+//                guard let characterString = variableModel.character else { continue }
+//                let character = Character(characterString)
+//                let variableDescription = variableModel.variableDescription
+//                variables.append(Variable(character: character, description: variableDescription, value: 0))
+//            }
             
             formulas.append(Formula(name: name, body: body, favourite: favourite, description: description, id: id, variables: variables))
             
@@ -80,13 +95,52 @@ final class DatabaseManager {
         return formulas
     }
     
+    func convertVariableModelSetToVariableArray(_ variableModels: Set<VariableModel>?) -> [Variable] {
+        guard let variableModels = variableModels else { return [] }
+        var variables = Array<Variable>()
+        for variableModel in variableModels {
+            guard let characterString = variableModel.character else { continue }
+            guard let id = variableModel.id else { continue }
+            let character = Character(characterString)
+            let variableDescription = variableModel.variableDescription
+            variables.append(Variable(character: character, description: variableDescription, value: 0, id: id))
+        }
+        return variables
+    }
+    
+    func convertVariableArrayToVariableModelSet(for variableModels: inout Set<VariableModel>, variables: Array<Variable>?)  {
+        guard let variables = variables else { return }
+        
+        for variable in variables {
+            guard variable.id == nil else { setChangesInVariableModel(variable, for: &variableModels); continue }
+            createVariableModelFromVariable(variable, for: &variableModels)
+        }
+
+    }
+    
+    func createVariableModelFromVariable(_ variable: Variable, for variableModels: inout Set<VariableModel>) {
+        guard let variablesEntityDescription = NSEntityDescription.entity(forEntityName: "VariableModel", in: context) else { return }
+        let variableModel = VariableModel(entity: variablesEntityDescription, insertInto: context)
+        let char = String(variable.character)
+        variableModel.id = variableModel.objectID.uriRepresentation()
+        variableModel.character = char
+        variableModel.variableDescription = variable.description
+        variableModels.insert(variableModel)
+    }
+    
+    func setChangesInVariableModel(_ variable: Variable, for variableModels: inout Set<VariableModel>) {
+        variableModels.forEach { variableModel in
+            if variableModel.id == variable.id {
+                variableModel.variableDescription = variable.description
+            }
+        }
+    }
+    
     func save(_ formula: Formula, completion: @escaping (FormulaModel)->() = {FormulaModel in }) {
         guard let formulaEntityDescription = NSEntityDescription.entity(forEntityName: "FormulaModel", in: context) else {
             return
         }
-        guard let variablesEntityDescription = NSEntityDescription.entity(forEntityName: "VariableModel", in: context) else {
-            return
-        }
+        
         guard let formulaModel = NSManagedObject(entity: formulaEntityDescription, insertInto: context) as? FormulaModel else { return }
         
         formulaModel.name = formula.name
@@ -95,10 +149,7 @@ final class DatabaseManager {
         formulaModel.id = formulaModel.objectID.uriRepresentation()
         var variablesSet = Set<VariableModel>()
         formula.variables.forEach { variable in
-            let variableModel = VariableModel(entity: variablesEntityDescription, insertInto: context)
-            variableModel.character = String(variable.character)
-            variableModel.variableDescription = variable.description
-            variablesSet.insert(variableModel)
+            createVariableModelFromVariable(variable, for: &variablesSet)
         }
         
         formulaModel.variables = variablesSet
@@ -114,6 +165,22 @@ final class DatabaseManager {
         }
     }
     
+    func save(_ formula: Formula, in id: URL) {
+        guard let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: id) else { return }
+        guard let object =  context.object(with: objectId) as? FormulaModel else { return }
+        object.name = formula.name
+        object.body = formula.body
+        object.formulaDescription = formula.description
+        convertVariableArrayToVariableModelSet(for: &object.variables!, variables: formula.variables)
+//        print("variables:")
+//        print(object.variables)
+        do {
+            try context.save()
+        } catch(let error) {
+            print(error.localizedDescription)
+        }
+    }
+    
     func delete(formula: Formula, completion: ()->() = {}) {
         let objectURI = formula.id
         guard let objectID = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: objectURI) else { return }
@@ -126,11 +193,7 @@ final class DatabaseManager {
         } catch(let error) {
             print(error.localizedDescription)
         }
-        
-//        context.delete()
     }
-    
-    
 }
 
 

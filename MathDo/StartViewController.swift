@@ -53,19 +53,25 @@ final class StartViewController: UITableViewController {
     }
  
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        DatabaseManager.shared.delete(formula: formulas[indexPath.row]) {
-            formulas.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            if formulas.isEmpty {
-                navigationItem.leftBarButtonItem = nil
+        if editingStyle == .delete {
+            DatabaseManager.shared.delete(formula: formulas[indexPath.row]) {
+                formulas.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                if formulas.isEmpty {
+                    navigationItem.leftBarButtonItem = nil
+                }
             }
         }
     }
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let favorite = UIContextualAction(style: .normal, title: nil) { action, view, _ in
-            view.backgroundColor = .green
+        let favorite = UIContextualAction(style: .normal, title: nil) { [weak self] action, view, _ in
+            view.backgroundColor = .gray
+            guard let id = self?.formulas[indexPath.row].id else { return }
+            self?.show(FormulaCreatingViewController(savingType: .editing(id: id)), sender: nil)
         }
+        favorite.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        favorite.title = "Edit"
         return UISwipeActionsConfiguration(actions: [favorite])
     }
     

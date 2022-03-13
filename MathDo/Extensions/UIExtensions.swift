@@ -14,10 +14,12 @@ import UIKit
 @objc 
 extension UIViewController {
     
-    func showAlert(title: String, message: String, buttonTitle: String = "Ok", style: UIAlertController.Style) {
+    func showAlert(title: String, message: String, buttonTitle: String = "Ok", secondButtonTitle: String = "Cancel", style: UIAlertController.Style, action: @escaping (UIAlertAction)->() = { _ in  }) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
-        let okAction = UIAlertAction(title: buttonTitle, style: .default, handler: nil)
+        let okAction = UIAlertAction(title: buttonTitle, style: .destructive, handler: action)
+        let cancelAction = UIAlertAction(title: secondButtonTitle, style: .cancel, handler: nil)
         alert.addAction(okAction)
+        alert.addAction(cancelAction)
         present(alert, animated: true)
     }
     

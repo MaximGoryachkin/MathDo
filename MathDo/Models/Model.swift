@@ -21,11 +21,12 @@ struct Variable: Hashable {
     let character: Character
     var description: String?
     var value: Double? = 0
+    var id: URL?
 }
 
-enum CreatingType {
+enum SavingType {
     case creating
-    case editing(id: Int)
+    case editing(id: URL)
 }
 
 extension Formula {

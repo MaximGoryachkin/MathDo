@@ -10,11 +10,12 @@
     </entity>
     <entity name="VariableModel" representedClassName=".VariableModel" syncable="YES">
         <attribute name="character" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="URI"/>
         <attribute name="variableDescription" optional="YES" attributeType="String"/>
         <relationship name="formula" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FormulaModel" inverseName="variables" inverseEntity="FormulaModel"/>
     </entity>
     <elements>
         <element name="FormulaModel" positionX="-18" positionY="27" width="128" height="119"/>
-        <element name="VariableModel" positionX="36" positionY="81" width="128" height="74"/>
+        <element name="VariableModel" positionX="36" positionY="81" width="128" height="89"/>
     </elements>
 </model>

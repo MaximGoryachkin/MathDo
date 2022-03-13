@@ -21,21 +21,27 @@ protocol VariableDisplayProtocol {
     func scrollToBottom()
 }
 
- final class FormulaCreatingViewController: UIViewController {
-
+final class FormulaCreatingViewController: UIViewController {
+    
     var formula: Formula?
     var variables: [Variable] = []
     var saveAction: UIAlertAction?
-     
-     private lazy var formulaCreatingView: FormulaCreatingView = { FormulaCreatingView(viewController: self) }()
-     
+    private var savingType = SavingType.creating
+    
+    private lazy var formulaCreatingView: FormulaCreatingView = { FormulaCreatingView(viewController: self) }()
+    
+    convenience init(savingType: SavingType) {
+        self.init()
+        self.savingType = savingType
+    }
+    
     override func viewDidLoad() {
         setupGUI()
     }
-     
-     override func loadView() {
-         view = formulaCreatingView
-     }
+    
+    override func loadView() {
+        view = formulaCreatingView
+    }
      
     @objc func doneButtonDidTapped(sender: UIButton) {
         FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "", variables: variables) { success, sender, error  in
@@ -47,27 +53,59 @@ protocol VariableDisplayProtocol {
                 showSaveAlert()
             }
         }
+        
+        
+//        DatabaseManager.shared.save(in: id)
      }
+    
+    @objc func cancelButtonDidTapped() {
+//        self.dismiss(animated: true)
+        showAlert(title: "Are you sure?", message: "Do you want cancel editing?", buttonTitle: "Yes", secondButtonTitle: "No", style: .actionSheet) { [weak self] action in
+            self?.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    private func loadFormula(id: URL) {
+        guard let formula = DatabaseManager.shared.fetchFormula(by: id) else {
+            return
+        }
+        self.formula = formula
+        variables = formula.variables
+        formulaCreatingView.loadExistedFormula(formula)
+        navigationItem.title = formula.name
+        
+        
+//        variables.forEach { variable in
+//            print("variable ID:", variable.id)
+//        }
+    }
      
-     private func saveFormula(name: String) {
-         FormulaReader.shared.correctInputExpression(expression: &formulaCreatingView.formulaTextField.text, with: variables)
-         FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "") { success, sender, error in
-             print(success)
-              formula = Formula(name: name, body: formulaCreatingView.formulaTextField.text!, favourite: true, description: "", variables: variables)
-             guard let formula = formula else { return }
-             DatabaseManager.shared.save(formula)
-         }
-     }
+    private func saveFormula(name: String) {
+        FormulaReader.shared.correctInputExpression(expression: &formulaCreatingView.formulaTextField.text, with: variables)
+        FormulaReader.shared.verifyFormulaSyntax(expression: formulaCreatingView.formulaTextField.text ?? "") { success, sender, error in
+            print(success)
+            formula = Formula(name: name, body: formulaCreatingView.formulaTextField.text!, favourite: true, description: "", variables: variables)
+            guard let formula = formula else { return }
+            switch savingType {
+            case .creating:
+                DatabaseManager.shared.save(formula)
+            case .editing(let id):
+                DatabaseManager.shared.save(formula, in: id)
+            }
+        }
+    }
+    
      
-     private func showSaveAlert() {
-         showAlertWithTextField(title: "Save formula", message: "", buttonTitle: "Save", style: .alert, placeholder: "formula name", delegate: self) { [weak self] text, action, buttonTapped  in
-             action.isEnabled = false
-             self?.saveAction = action
-             if buttonTapped {
-             self?.saveFormula(name: text)
-             }
-         }
-     }
+    private func showSaveAlert() {
+        showAlertWithTextField(title: "Save formula", message: "", buttonTitle: "Save", style: .alert, placeholder: "formula name", delegate: self) { [weak self] text, action, buttonTapped  in
+            action.isEnabled = false
+            self?.saveAction = action
+            if buttonTapped {
+                self?.saveFormula(name: text)
+                self?.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
      
      private func showError(_ error: Error) {
          switch (error as NSError).code {
@@ -78,9 +116,23 @@ protocol VariableDisplayProtocol {
          }
      }
      
+    
      private func setupGUI() {
          navigationItem.title = "Formula creating"
-         let doneItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonDidTapped(sender:)))
+         var doneButtonTitle: String
+         switch savingType {
+         case .creating:
+             doneButtonTitle = "Done"
+         case .editing(let id):
+             doneButtonTitle = "Save"
+             navigationItem.hidesBackButton = true
+             let cancelItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelButtonDidTapped))
+             navigationItem.leftBarButtonItem = cancelItem
+             loadFormula(id: id)
+         }
+         
+         
+         let doneItem = UIBarButtonItem(title: doneButtonTitle, style: .done, target: self, action: #selector(doneButtonDidTapped(sender:)))
          let infoItem = UIBarButtonItem(title: "info", style: .plain, target: nil, action: nil)
          infoItem.image = UIImage(systemName: "info.circle")
          navigationItem.rightBarButtonItem = doneItem
@@ -92,7 +144,6 @@ extension FormulaCreatingViewController: FormulaCreatingProtocol {
    @objc func addVariableButtonTapped(sender: UIButton) {
        let variablesCreatingVC = VariableCreatingViewController(variableDisplay: self)
        present(variablesCreatingVC, animated: true)
-       
     }   
 }
 
@@ -138,7 +189,7 @@ extension FormulaCreatingViewController: VariableCreatingCellDelegate {
                 self?.editVariable(in: cell, newText: text)
             }
         }
-        
+
     }
 }
 

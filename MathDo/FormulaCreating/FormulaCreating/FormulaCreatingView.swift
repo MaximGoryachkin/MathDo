@@ -89,6 +89,10 @@ final class FormulaCreatingView: UIView {
         }
     }
     
+    public func loadExistedFormula(_ formula: Formula) {
+        formulaTextField.text = formula.body
+    }
+    
     public func addNewVariable(variable: Variable) {
         variablesTableView.performBatchUpdates {
             formulaCreatingVC.variables.append(variable)
