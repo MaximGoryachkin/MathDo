@@ -10,7 +10,7 @@ import UIKit
 final class FormulaView: UIView {
     
     var formulaVC: FormulaViewProtocol!
-    var formula: Formula!
+    var formula: FormulaModel!
     var flag = true
     
     lazy var variableTableView: UITableView = {
@@ -43,10 +43,10 @@ final class FormulaView: UIView {
         return view
     }()
     
-    convenience init(viewController: FormulaViewProtocol, formula: Formula) {
+    convenience init(viewController: FormulaViewProtocol, formula: inout FormulaModel) {
         self.init()
         formulaVC = viewController
-        self.formula = formula
+//        self.formula = formula
         setPrimarySetting()
     }
     
@@ -55,8 +55,13 @@ final class FormulaView: UIView {
         setupLayout()
     }
     
+    public func refreshFormula(){
+        variableTableView.reloadData()
+    }
+    
     private func addVariableValue(_ value: Double ,for indexPath: IndexPath) {
-        formula.variables[indexPath.row].value = value
+        guard let variables = formula.variables?.array as? [VariableModel] else { return }
+        variables[indexPath.row].variableValue = value
     }
     
     private func setPrimarySetting() {
@@ -94,7 +99,9 @@ final class FormulaView: UIView {
     
     @objc func resultButtonPressed() {
         do {
-        let result = try FormulaReader.shared.getResult(formula.body, variables: formula.variables)
+            guard let variables = formulaVC.formula.variables?.array as? [VariableModel] else { return }
+            guard let body = formulaVC.formula.body else { return }
+            let result = try FormulaReader.shared.getResult(body, variables: variables)
             resultView.text = result
         } catch(let error) {
             formulaVC.presentErrorAlert(text: error.localizedDescription)
@@ -116,15 +123,15 @@ final class FormulaView: UIView {
 
 extension FormulaView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        formula.variables.count
+        formulaVC.formula.variables?.array.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = FormulaTableViewCell(style: .default, reuseIdentifier: "variableCell")
-        cell.variableLabel.text = String(formula.variables[indexPath.row].character)
-        cell.descriptionLabel.text = formula.variables[indexPath.row].description
-        cell.valueLabel.text = String(formula.variables[indexPath.row].value ?? 0)
-        
+        guard let variable = formulaVC.formula.variables?.array[indexPath.row] as? VariableModel else { return UITableViewCell()}
+        cell.variableLabel.text = variable.character
+        cell.descriptionLabel.text = variable.variableDescription
+        cell.valueLabel.text = String(variable.variableValue )
         return cell
     }
     

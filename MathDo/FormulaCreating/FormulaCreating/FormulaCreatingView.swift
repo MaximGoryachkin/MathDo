@@ -89,22 +89,37 @@ final class FormulaCreatingView: UIView {
         }
     }
     
-    public func loadExistedFormula(_ formula: Formula) {
+    public func loadExistedFormula(_ formula: FormulaModel) {
         formulaTextField.text = formula.body
     }
     
-    public func addNewVariable(variable: Variable) {
+    public func addNewVariable(variable: VariableModel) {
         variablesTableView.performBatchUpdates {
-            formulaCreatingVC.variables.append(variable)
-            let indexPath = IndexPath.init(row: formulaCreatingVC.variables.count - 1, section: .zero)
+            guard let lastIndex = formulaCreatingVC.variables?.array.endIndex else { return }
+//            formulaCreatingVC.variables?.insert(variable, at: lastIndex)
+            let mutableVariables = formulaCreatingVC.variables?.mutableCopy() as! NSMutableOrderedSet
+            mutableVariables.add(variable)
+            formulaCreatingVC.variables = mutableVariables.copy() as? NSOrderedSet
+            let indexPath = IndexPath.init(row: lastIndex, section: .zero)
             variablesTableView.insertRows(at: [indexPath], with: .automatic)
         }
+    }
+    
+    public func addNewVariable(temporaryVariable: VariableTemporaryModel) {
+        let context = DatabaseManager.shared.getContext()
+        let variableModel = VariableModel(context: context)
+        variableModel.character = String(temporaryVariable.character)
+        addNewVariable(variable: variableModel)
     }
     
     public func removeVariableFromTableView(cell: VariableCreatingCell) {
         guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
         variablesTableView.performBatchUpdates {
-            formulaCreatingVC.variables.remove(at: indexPath.row)
+            guard let variable = formulaCreatingVC.variables?[indexPath.row] as? VariableModel else { return }
+            DatabaseManager.shared.delete(variable: variable)
+            let mutableVariables = formulaCreatingVC.variables?.mutableCopy() as! NSMutableOrderedSet
+            mutableVariables.removeObject(at: indexPath.row)
+            formulaCreatingVC.variables = mutableVariables.copy() as? NSOrderedSet
             variablesTableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
@@ -112,7 +127,8 @@ final class FormulaCreatingView: UIView {
     public func editVariableFromTableView(cell: VariableCreatingCell, newText: String) {
         guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
         variablesTableView.performBatchUpdates {
-            formulaCreatingVC.variables[indexPath.row].description = newText
+           guard let variable = formulaCreatingVC.variables?.array[indexPath.row] as? VariableModel else { return }
+            variable.variableDescription = newText
             variablesTableView.reloadRows(at: [indexPath], with: .fade)
         }
     }
@@ -121,10 +137,11 @@ final class FormulaCreatingView: UIView {
         variablesTableView.indexPath(for: cell)
     }
     public func scrollToBottom() {
-        guard formulaCreatingVC.variables.count > 0 else { return }
-        let lastIndexOVariables = formulaCreatingVC.variables.count - 1
+        guard let variablesCount = formulaCreatingVC.variables?.array.count else { return }
+        guard variablesCount > 0 else { return }
+        guard let lastIndexOfVariables = formulaCreatingVC.variables?.array.indices.last else { return }
             DispatchQueue.main.async { [weak self] in
-                let indexPath = IndexPath(row: lastIndexOVariables, section: .zero)
+                let indexPath = IndexPath(row: lastIndexOfVariables, section: .zero)
                 self?.variablesTableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
             }
     }
@@ -198,14 +215,17 @@ final class FormulaCreatingView: UIView {
 extension FormulaCreatingView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        formulaCreatingVC.variables.count
+        formulaCreatingVC.variables?.array.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: VariableCreatingCell.nameOfClass, for: indexPath) as? VariableCreatingCell else { return UITableViewCell() }
-        let variableCharacter = formulaCreatingVC.variables[indexPath.row].character
-        let variableDescription = formulaCreatingVC.variables[indexPath.row].description
-        cell.setVariable(character: variableCharacter, description: variableDescription)
+        
+        guard let variable = formulaCreatingVC.variables?.array[indexPath.row] as? VariableModel else { return UITableViewCell()}
+        let variableCharacter = variable.character
+        let variableDescription = variable.variableDescription
+        cell.setVariable(character: Character(variableCharacter), description: variableDescription)
         cell.delegate = formulaCreatingVC
         return cell
     }

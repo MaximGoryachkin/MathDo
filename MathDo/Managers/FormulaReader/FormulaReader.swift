@@ -61,7 +61,7 @@ final class FormulaReader {
     private init() {}
     
 //    MARK: - Formula reading methods
-    func getResult(_ formula: String, variables: [Variable] = []) throws -> String {
+    func getResult(_ formula: String, variables: [VariableModel] = []) throws -> String {
         var formula = formula
         var readingError: Error?
         verifyFormulaSyntax(expression: formula, variables: variables) { success, sender, error in
@@ -368,17 +368,21 @@ final class FormulaReader {
         return !isContains
     }
     
-    private func replaceVariablesWithNumbers(expression: inout String, variables: [Variable]) {
+    private func replaceVariablesWithNumbers(expression: inout String, variables: [VariableModel]) {
         
         for variable in variables {
-            guard let number = variable.value else { continue }
+            let number = variable.variableValue
             expression = expression.replacingOccurrences(of: String(variable.character), with: String(number))
         }
     }
     
 //    MARK: - Formula correction methods
     
-    public func correctInputExpression(expression: inout String?, with variables: [Variable] = []) {
+    public func correctInputExpression(expression: inout String?, with variables: NSOrderedSet?) {
+        guard let variables = variables?.array as? [VariableModel] else {
+            return
+        }
+
 //        findHiddenMultiplicationForClosingBrackets(expression: &expression)
         findHiddenMultiplicationForBrackets(expression: &expression)
         findHiddenMultiplicationForVariables(expression: &expression, variables: variables)
@@ -413,7 +417,7 @@ final class FormulaReader {
         expression = expression?.replacingOccurrences(of: " ", with: "")
     }
     
-    private func findHiddenMultiplicationForBrackets(expression: inout String?, variables: [Variable] = []) {
+    private func findHiddenMultiplicationForBrackets(expression: inout String?, variables: [VariableModel] = []) {
         let operationSymbolsString = String(OperationType.getOperationSymbols())
         guard var newExpression = expression else { return }
         var openingBracketsIndices: [String.Index] {
@@ -444,7 +448,7 @@ final class FormulaReader {
     }
     
     
-    private func findHiddenMultiplicationForVariables(expression: inout String?, variables: [Variable]) {
+    private func findHiddenMultiplicationForVariables(expression: inout String?, variables: [VariableModel]) {
         guard var newExpression = expression else { return }
         var variablesString = ""
         let digitsString = allowedSymbols.digits
@@ -520,11 +524,11 @@ final class FormulaReader {
 
 //    MARK: - Formula verify methods
     
-    public func verifyFormulaSyntax(expression: String, variables: [Variable] = [], completion: (_ success: Bool, _ sender: Any?, _ error: Error? )->()) {
+    public func verifyFormulaSyntax(expression: String, variables: [VariableModel] = [], completion: (_ success: Bool, _ sender: Any?, _ error: Error? )->()) {
         let failed = false
         
         guard expressionHasOnlyAllowedSymbols(expression: expression, variables: variables) else {
-            let undefinedVariables = getUndefinedVariables(expression: expression, varialbes: variables)
+            let undefinedVariables = getUndefinedVariables(expression: expression, variables: variables)
             completion(failed, undefinedVariables.isEmpty ? nil : undefinedVariables, FormulaError.illegalSymbolsError.getError())
             return
             }
@@ -543,7 +547,7 @@ final class FormulaReader {
         completion(!failed, nil, nil)
     }
     
-    private func expressionHasOnlyAllowedSymbols(expression: String, variables: [Variable] = []) -> Bool {
+    private func expressionHasOnlyAllowedSymbols(expression: String, variables: [VariableModel] = []) -> Bool {
         let allowedSymbolsWithVariables = allowedSymbols.getAllowedSymbols(for: variables)
         var isContains = true
         expression.forEach { char in
@@ -605,14 +609,15 @@ final class FormulaReader {
         return hasNotCollision
     }
     
-    private func getUndefinedVariables(expression: String, varialbes: [Variable]) -> [Variable] {
-        let usedVariables = varialbes.map{ $0.character }
+    private func getUndefinedVariables(expression: String, variables: [VariableModel]) -> [VariableTemporaryModel] {
+        let usedVariables = variables.map{ $0.character }
         var undefinedVariables = Array<Character>()
-        var variablesOfExpression = Array<Variable>()
+        var variablesOfExpression = Array<VariableTemporaryModel>()
         expression.forEach { char in
-            if allowedSymbols.possibleVariables.contains(char) && !usedVariables.contains(char) && !undefinedVariables.contains(char){
+            if allowedSymbols.possibleVariables.contains(char) && !usedVariables.contains(String(char)) && !undefinedVariables.contains(char) {
                 undefinedVariables.append(char)
-                variablesOfExpression.append(Variable(character: char, description: nil))
+                let variableModel = VariableTemporaryModel(character: char)
+                variablesOfExpression.append(variableModel)
             }
         }
         return variablesOfExpression

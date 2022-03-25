@@ -93,13 +93,18 @@ final class VariablesCreatingView: UIView {
         let row = pickerView.selectedRow(inComponent: 0)
         let variableCharacter = variablesCharacters[row]
         let variableDescription = variableDescriptionTextField.text
-        let variable = Variable(character: variableCharacter, description: variableDescription, value: nil)
+        let context = DatabaseManager.shared.getContext()
+        let variable = VariableModel(context: context)
+        variable.character = String(variableCharacter)
+        variable.variableDescription = variableDescription
+//        let variable = VariableModel(character: variableCharacter, description: variableDescription, value: nil)
         variableCreatingVC.addVariable(variable: variable)
     }
     
     private func setPrimarySettings() {
-        let usedVariables = variableCreatingVC.variableDisplay.variables
+        guard let usedVariables = variableCreatingVC.variableDisplay.variables else { return }
         variablesCharacters = FormulaReader.shared.allowedSymbols.getPossibleVariables(without: usedVariables)
+        
         backgroundColor = .white
         addSubview(pickerView)
         addSubview(titleLabel)

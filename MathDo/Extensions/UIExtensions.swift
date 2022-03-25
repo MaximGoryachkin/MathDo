@@ -23,7 +23,7 @@ extension UIViewController {
         present(alert, animated: true)
     }
     
-    func showAlertWithTextField(title: String, message: String, buttonTitle: String, style: UIAlertController.Style, placeholder: String, delegate: AlertTextFieldDelegate? = nil, textFieldText: String = "", completion: ((_ text: String, _ button: UIAlertAction, _ buttonTapped: Bool)->())? = nil) {
+    func showAlertWithTextField(title: String, message: String, buttonTitle: String, style: UIAlertController.Style, placeholder: String, delegate: AlertTextFieldDelegate? = nil, textFieldText: String = "", completion: ((_ text: String, _ button: UIAlertAction, _ buttonTapped: Bool, _ textField: UITextField)->())? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
         var alertTextField: UITextField!
         alert.addTextField { textField in
@@ -32,15 +32,16 @@ extension UIViewController {
             alertTextField = textField
             guard let delegate = delegate else { return }
             alertTextField.addTarget(delegate, action: #selector(delegate.textDidChange(sender:)), for: .editingChanged)
+            alertTextField.addTarget(delegate, action: #selector(delegate.textDidChange(sender:)), for: .editingDidBegin)
         }
         let saveAction = UIAlertAction(title: buttonTitle, style: .default) { saveAction in
             guard let text = alertTextField.text else { return }
-            completion?(text, saveAction, true)
+            completion?(text, saveAction, true, alertTextField)
         }
         let cancelAction = UIAlertAction(title: "cancel", style: .cancel)
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
-        completion?(alertTextField.text ?? "", saveAction, false)
+        completion?(alertTextField.text ?? "", saveAction, false, alertTextField)
         present(alert, animated: true)
     }
     

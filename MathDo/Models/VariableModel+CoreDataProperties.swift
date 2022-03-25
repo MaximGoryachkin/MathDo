@@ -16,9 +16,10 @@ extension VariableModel {
         return NSFetchRequest<VariableModel>(entityName: "VariableModel")
     }
 
-    @NSManaged public var character: String?
+    @NSManaged public var character: String
     @NSManaged public var variableDescription: String?
     @NSManaged public var id: URL?
+    @NSManaged public var variableValue: Double
 
 }
 

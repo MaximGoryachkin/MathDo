@@ -13,14 +13,14 @@ import UIKit
 }
 
 protocol VariableCreatingProtocol {
-    var variable: Variable? {get set}
+    var variable: VariableModel? {get set}
     var variableDisplay: VariableDisplayProtocol! { get set }
-    func addVariable(variable: Variable)
+    func addVariable(variable: VariableModel)
 }
 
 final class VariableCreatingViewController: UIViewController {
     
-    var variable: Variable?
+    var variable: VariableModel?
     
     var variableDisplay: VariableDisplayProtocol!
     
@@ -49,7 +49,7 @@ extension VariableCreatingViewController: VariableCreatingCancelProtocol {
 }
 
 extension VariableCreatingViewController: VariableCreatingProtocol {
-    func addVariable(variable: Variable) {
+    func addVariable(variable: VariableModel) {
         dismiss(animated: true) { [weak self] in
             self?.variableDisplay.addNewVariable(variable: variable)
             self?.variableDisplay.scrollToBottom()
