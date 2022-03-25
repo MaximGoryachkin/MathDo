@@ -77,7 +77,8 @@ final class FormulaReader {
         
         do {
             let sequencedArray = try getSequencedArray(expression: formula)
-            let result = try startCounting(for: sequencedArray)
+            var result = try startCounting(for: sequencedArray)
+            correctResult(result: &result)
             return result
         } catch(let error) {
             throw error
@@ -375,6 +376,25 @@ final class FormulaReader {
             expression = expression.replacingOccurrences(of: String(variable.character), with: String(number))
         }
     }
+//    MARK: Result correction methods
+    private func correctResult(result: inout String) {
+        replaceMinusWordWithSign(result: &result)
+        formatResult(result: &result)
+    }
+    
+    private func replaceMinusWordWithSign(result: inout String) {
+        result = result.replacingOccurrences(of: "minus", with: "-")
+    }
+    
+    private func formatResult(result: inout String) {
+        guard let resultDouble = Double(result) else { return }
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        let number = NSNumber(value: resultDouble)
+        guard let numberString = numberFormatter.string(from: number) else { return }
+        result = numberString
+    }
+    
     
 //    MARK: - Formula correction methods
     
