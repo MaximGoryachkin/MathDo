@@ -12,13 +12,12 @@ class SyntaxManualViewController: UIViewController {
     
     private lazy var webView: WKWebView = {
         let view = WKWebView()
-        view.backgroundColor = .systemBlue
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         view.addSubview(webView)
         setWebView()
@@ -28,15 +27,14 @@ class SyntaxManualViewController: UIViewController {
         let url = URL(fileURLWithPath: htmlPath)
         let request = URLRequest(url: url)
         webView.load(request)
-        
     }
+
     
     private func setWebView() {
         var constraints = [NSLayoutConstraint]()
-        constraints.append(webView.leadingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10))
-        constraints.append(webView.trailingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(webView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor))
-        constraints.append(webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10))
+        constraints.append(webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        constraints.append(webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor))
         constraints.append(webView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor))
         
         NSLayoutConstraint.activate(constraints)
