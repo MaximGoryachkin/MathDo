@@ -16,6 +16,7 @@
 		89691B882786DFF4005674C9 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89691B872786DFF4005674C9 /* StartViewController.swift */; };
 		89691B8D2786DFF5005674C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89691B8C2786DFF5005674C9 /* Assets.xcassets */; };
 		89691B902786DFF5005674C9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89691B8E2786DFF5005674C9 /* LaunchScreen.storyboard */; };
+		89883F6227F842D0007804F5 /* FormulaTable.html in Resources */ = {isa = PBXBuildFile; fileRef = 89883F6127F842D0007804F5 /* FormulaTable.html */; };
 		F9279AB4278B45AA005C1071 /* FormulaCreatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9279AB3278B45AA005C1071 /* FormulaCreatingViewController.swift */; };
 		F9279AB6278B4EE3005C1071 /* FormulaCreatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9279AB5278B4EE3005C1071 /* FormulaCreatingView.swift */; };
 		F9279AB9278F69F8005C1071 /* FormulaReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9279AB8278F69F8005C1071 /* FormulaReader.swift */; };
@@ -53,6 +54,7 @@
 		89691B8C2786DFF5005674C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89691B8F2786DFF5005674C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89691B912786DFF5005674C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89883F6127F842D0007804F5 /* FormulaTable.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = FormulaTable.html; sourceTree = "<group>"; };
 		F9279AB3278B45AA005C1071 /* FormulaCreatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaCreatingViewController.swift; sourceTree = "<group>"; };
 		F9279AB5278B4EE3005C1071 /* FormulaCreatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaCreatingView.swift; sourceTree = "<group>"; };
 		F9279AB8278F69F8005C1071 /* FormulaReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaReader.swift; sourceTree = "<group>"; usesTabs = 0; };
@@ -157,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				F998545427F6E79B0035F33F /* SyntaxManualViewController.swift */,
+				89883F6127F842D0007804F5 /* FormulaTable.html */,
 			);
 			path = SyntaxManual;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 			files = (
 				89691B902786DFF5005674C9 /* LaunchScreen.storyboard in Resources */,
 				89691B8D2786DFF5005674C9 /* Assets.xcassets in Resources */,
+				89883F6227F842D0007804F5 /* FormulaTable.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
