@@ -116,11 +116,11 @@ final class FormulaCreatingView: UIView {
         guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
         variablesTableView.performBatchUpdates {
             guard let variable = formulaCreatingVC.variables?[indexPath.row] as? VariableModel else { return }
-            DatabaseManager.shared.delete(variable: variable)
             let mutableVariables = formulaCreatingVC.variables?.mutableCopy() as! NSMutableOrderedSet
             mutableVariables.removeObject(at: indexPath.row)
             formulaCreatingVC.variables = mutableVariables.copy() as? NSOrderedSet
             variablesTableView.deleteRows(at: [indexPath], with: .automatic)
+            DatabaseManager.shared.delete(variable: variable)
         }
     }
     
