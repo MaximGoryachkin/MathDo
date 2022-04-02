@@ -37,7 +37,8 @@ final class FormulaViewController: UIViewController {
         super.viewDidAppear(true)
         loadFormula()
         formulaView.refreshFormula()
-//        setupGUI()
+        let editButton = navigationItem.rightBarButtonItems?.last
+        editButton?.isEnabled = true
     }
     
     @objc func presentInfo() {
@@ -50,11 +51,13 @@ final class FormulaViewController: UIViewController {
         sender.isEnabled = false
        
         show(FormulaCreatingViewController(savingType: .editing(formula: formula)), sender: nil)
+        
     }
     
     private func setupGUI() {
         navigationItem.title = formula.name
         let editItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped(sender:)))
+        editItem.isEnabled = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(presentInfo))
         navigationItem.rightBarButtonItems?.append(editItem)
     }
