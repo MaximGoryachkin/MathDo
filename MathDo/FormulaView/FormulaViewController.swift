@@ -42,9 +42,18 @@ final class FormulaViewController: UIViewController {
     }
     
     @objc func presentInfo() {
-        showAlert(title: "About formula",
-                  message: "Formula: \(formula.body ?? "")\n Description: \(formula.description)",
-                  style: .alert)
+//        showAlert(title: "About formula",
+//                  message: "Formula: \(formula.body ?? "")\n Description: \(formula.description)",
+//                  style: .alert)
+        
+        let formulaInfoVC = FormulaInfoViewController(formula: formula)
+        if let presentationController = formulaInfoVC.presentationController as? UISheetPresentationController  {
+            presentationController.detents = [.medium()]
+        }
+        formulaInfoVC.modalPresentationStyle = .custom
+        present(formulaInfoVC, animated: true)
+        
+    
     }
     
     @objc func editTapped(sender: UIButton) {

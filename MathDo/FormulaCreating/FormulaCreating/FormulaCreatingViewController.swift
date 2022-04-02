@@ -79,8 +79,6 @@ final class FormulaCreatingViewController: UIViewController {
         syntaxManualVC.modalPresentationStyle = .custom
         present(syntaxManualVC, animated: true)
         
-       
-        
     }
     
     private func loadFormula(formula: FormulaModel) {

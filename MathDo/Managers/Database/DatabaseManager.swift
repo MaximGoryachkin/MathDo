@@ -90,19 +90,30 @@ final class DatabaseManager {
         }
     }
     
+//    func delete(variable: VariableModel, completion: ()->() = {}) {
+//        guard let objectURI = variable.id else { return }
+//        guard let objectID = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: objectURI) else { return }
+//
+//        do {
+//            let object = try context.existingObject(with: objectID)
+//            context.delete(object)
+//            try context.save()
+//            completion()
+//        } catch(let error) {
+//            print(error.localizedDescription)
+//        }
+//    }
+//
     func delete(variable: VariableModel, completion: ()->() = {}) {
-        guard let objectURI = variable.id else { return }
-        guard let objectID = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: objectURI) else { return }
-        
-        do {
-            let object = try context.existingObject(with: objectID)
-            context.delete(object)
-            try context.save()
-            completion()
-        } catch(let error) {
-            print(error.localizedDescription)
-        }
-    }
+             do {
+                 context.delete(variable)
+
+                 try context.save()
+                 completion()
+             } catch(let error) {
+                 print(error.localizedDescription)
+             }
+         }
     
 }
 
