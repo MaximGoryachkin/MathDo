@@ -8,17 +8,18 @@
 import UIKit
 
 protocol FormulaViewProtocol {
+    var formula: FormulaModel! {get set}
     func presentSetValueAlert(for: IndexPath)
     func presentErrorAlert(text: String)
 }
 
 final class FormulaViewController: UIViewController {
     
-    var formula: Formula!
+    var formula: FormulaModel!
     let label = UILabel(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
     
     lazy var formulaView = {
-        FormulaView(viewController: self, formula: formula)
+        FormulaView(viewController: self, formula: &formula)
     }()
     
     override func loadView() {
@@ -28,14 +29,39 @@ final class FormulaViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = formula.name
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(presentInfo))
+//        loadFormula()
+        setupGUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        loadFormula()
+        formulaView.refreshFormula()
+//        setupGUI()
     }
     
     @objc func presentInfo() {
         showAlert(title: "About formula",
-                  message: "Formula: \(formula.body)\n Description: \(formula.description ?? "Is empty")",
+                  message: "Formula: \(formula.body ?? "")\n Description: \(formula.description)",
                   style: .alert)
+    }
+    
+    @objc func editTapped(sender: UIButton) {
+        sender.isEnabled = false
+       
+        show(FormulaCreatingViewController(savingType: .editing(formula: formula)), sender: nil)
+    }
+    
+    private func setupGUI() {
+        navigationItem.title = formula.name
+        let editItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped(sender:)))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(presentInfo))
+        navigationItem.rightBarButtonItems?.append(editItem)
+    }
+    
+    private func loadFormula() {
+        let id = formula.objectID.uriRepresentation()
+        formula = DatabaseManager.shared.fetchFormula(by: id)
     }
 }
 
@@ -49,7 +75,8 @@ extension FormulaViewController: FormulaViewProtocol {
         let enterAction = UIAlertAction(title: "Enter", style: .default) { [weak self] _ in
             guard let valueString = alert.textFields?.first?.text else { return }
             if let value = Double(valueString) {
-                self?.formulaView.formula.variables[indexPath.row].value = value
+                let variables = self?.formula.variables?.array as? [VariableModel]
+                variables?[indexPath.row].variableValue = value
                 self?.formulaView.variableTableView.reloadRows(at: [indexPath], with: .automatic)
             } else {
                 self?.presentErrorAlert(text: "Enter one dot between numbers, not more!")

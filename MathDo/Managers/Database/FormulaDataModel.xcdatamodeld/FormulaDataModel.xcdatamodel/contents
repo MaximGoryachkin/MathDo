@@ -6,15 +6,17 @@
         <attribute name="formulaDescription" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="URI"/>
         <attribute name="name" attributeType="String"/>
-        <relationship name="variables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="VariableModel" inverseName="formula" inverseEntity="VariableModel"/>
+        <relationship name="variables" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="VariableModel" inverseName="formula" inverseEntity="VariableModel"/>
     </entity>
     <entity name="VariableModel" representedClassName=".VariableModel" syncable="YES">
         <attribute name="character" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="URI"/>
         <attribute name="variableDescription" optional="YES" attributeType="String"/>
+        <attribute name="variableValue" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="formula" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FormulaModel" inverseName="variables" inverseEntity="FormulaModel"/>
     </entity>
     <elements>
         <element name="FormulaModel" positionX="-18" positionY="27" width="128" height="119"/>
-        <element name="VariableModel" positionX="36" positionY="81" width="128" height="74"/>
+        <element name="VariableModel" positionX="36" positionY="81" width="128" height="104"/>
     </elements>
 </model>

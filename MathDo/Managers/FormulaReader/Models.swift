@@ -59,7 +59,7 @@ struct AllowedSymbols {
         allowedSymbols.append(character)
     }
     
-    func getAllowedSymbols(for variables: [Variable]) -> String {
+    func getAllowedSymbols(for variables: [VariableModel]) -> String {
         var allowedSymbolsWithVariables = allowedSymbols
         variables.forEach { variable in
             allowedSymbolsWithVariables.append(variable.character)
@@ -67,10 +67,11 @@ struct AllowedSymbols {
         return allowedSymbolsWithVariables
     }
     
-    func getPossibleVariables(without variables: [Variable]) -> [Character] {
+    func getPossibleVariables(without variables: NSOrderedSet) -> [Character] {
+        guard let variables = variables.array as? [VariableModel] else { return [] }
         var variableCharacters = Set<Character>()
         variables.forEach { variable in
-            variableCharacters.insert(variable.character)
+            variableCharacters.insert(Character(variable.character))
         }
         let filtredVariableCharacters: [Character] = possibleVariables.filter { !variableCharacters.contains($0) }
         return filtredVariableCharacters

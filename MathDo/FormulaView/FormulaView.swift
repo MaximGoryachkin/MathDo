@@ -10,7 +10,7 @@ import UIKit
 final class FormulaView: UIView {
     
     var formulaVC: FormulaViewProtocol!
-    var formula: Formula!
+    var formula: FormulaModel!
     var flag = true
     
     lazy var variableTableView: UITableView = {
@@ -26,8 +26,11 @@ final class FormulaView: UIView {
         let view = UILabel()
         view.backgroundColor = .clear
         view.textAlignment = .center
-        view.adjustsFontSizeToFitWidth = true
+        view.font = UIFont(name: "Avenir", size: 100)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.adjustsFontSizeToFitWidth = true
+        view.minimumScaleFactor = 0.1
+        view.clipsToBounds = true
         return view
     }()
     
@@ -43,10 +46,10 @@ final class FormulaView: UIView {
         return view
     }()
     
-    convenience init(viewController: FormulaViewProtocol, formula: Formula) {
+    convenience init(viewController: FormulaViewProtocol, formula: inout FormulaModel) {
         self.init()
         formulaVC = viewController
-        self.formula = formula
+//        self.formula = formula
         setPrimarySetting()
     }
     
@@ -55,29 +58,37 @@ final class FormulaView: UIView {
         setupLayout()
     }
     
+    public func refreshFormula(){
+        variableTableView.reloadData()
+    }
+    
     private func addVariableValue(_ value: Double ,for indexPath: IndexPath) {
-        formula.variables[indexPath.row].value = value
+        guard let variables = formula.variables?.array as? [VariableModel] else { return }
+        variables[indexPath.row].variableValue = value
     }
     
     private func setPrimarySetting() {
         addSubview(resultView)
         addSubview(variableTableView)
         addSubview(resultButtonView)
+        setResultView()
+        setVariableTableView()
+//        setButtonView()
     }
     
     private func setupLayout() {
-        setResultView()
-        setVariableTableView()
+//        setResultView()
+//        setVariableTableView()
         setButtonView()
     }
     
     private func setResultView() {
         var constraints = [NSLayoutConstraint]()
-        
-        constraints.append(resultView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(resultView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(resultView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor))
-        constraints.append(resultView.heightAnchor.constraint(equalToConstant: safeAreaLayoutGuide.layoutFrame.height / 4))
+        constraints.append(resultView.leadingAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor, constant: 10))
+        constraints.append(resultView.trailingAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(resultView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor))
+        constraints.append(resultView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10))
+        constraints.append(resultView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 0.25))
         
         NSLayoutConstraint.activate(constraints)
     }
@@ -94,7 +105,9 @@ final class FormulaView: UIView {
     
     @objc func resultButtonPressed() {
         do {
-        let result = try FormulaReader.shared.getResult(formula.body, variables: formula.variables)
+            guard let variables = formulaVC.formula.variables?.array as? [VariableModel] else { return }
+            guard let body = formulaVC.formula.body else { return }
+            let result = try FormulaReader.shared.getResult(body, variables: variables)
             resultView.text = result
         } catch(let error) {
             formulaVC.presentErrorAlert(text: error.localizedDescription)
@@ -116,15 +129,15 @@ final class FormulaView: UIView {
 
 extension FormulaView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        formula.variables.count
+        formulaVC.formula.variables?.array.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = FormulaTableViewCell(style: .default, reuseIdentifier: "variableCell")
-        cell.variableLabel.text = String(formula.variables[indexPath.row].character)
-        cell.descriptionLabel.text = formula.variables[indexPath.row].description
-        cell.valueLabel.text = String(formula.variables[indexPath.row].value ?? 0)
-        
+        guard let variable = formulaVC.formula.variables?.array[indexPath.row] as? VariableModel else { return UITableViewCell()}
+        cell.variableLabel.text = variable.character
+        cell.descriptionLabel.text = variable.variableDescription
+        cell.valueLabel.text = String(variable.variableValue )
         return cell
     }
     
