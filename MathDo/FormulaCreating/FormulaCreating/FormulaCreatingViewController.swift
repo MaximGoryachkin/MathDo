@@ -111,6 +111,7 @@ final class FormulaCreatingViewController: UIViewController {
                 
             case .editing(let formula):
                 formula.name = name
+                formula.body = formulaCreatingView.formulaTextField.text!
                 formula.variables = variables
                 
                 DatabaseManager.shared.save(formula)
@@ -123,7 +124,7 @@ final class FormulaCreatingViewController: UIViewController {
         showAlertWithTextField(title: "Save formula", message: "", buttonTitle: "Save", style: .alert, placeholder: "formula name", delegate: self) { [weak self] text, action, buttonTapped, textField   in
             action.isEnabled = false
             self?.saveAction = action
-//            textField.text = self?.formula?.name
+            textField.text = self?.formula?.name
             if buttonTapped {
                 self?.saveFormula(name: text)
                 self?.navigationController?.popViewController(animated: true)
