@@ -26,8 +26,11 @@ final class FormulaView: UIView {
         let view = UILabel()
         view.backgroundColor = .clear
         view.textAlignment = .center
-        view.adjustsFontSizeToFitWidth = true
+        view.font = UIFont(name: "Avenir", size: 100)
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.adjustsFontSizeToFitWidth = true
+        view.minimumScaleFactor = 0.1
+        view.clipsToBounds = true
         return view
     }()
     
@@ -68,21 +71,24 @@ final class FormulaView: UIView {
         addSubview(resultView)
         addSubview(variableTableView)
         addSubview(resultButtonView)
+        setResultView()
+        setVariableTableView()
+//        setButtonView()
     }
     
     private func setupLayout() {
-        setResultView()
-        setVariableTableView()
+//        setResultView()
+//        setVariableTableView()
         setButtonView()
     }
     
     private func setResultView() {
         var constraints = [NSLayoutConstraint]()
-        
-        constraints.append(resultView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor))
-        constraints.append(resultView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor))
-        constraints.append(resultView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor))
-        constraints.append(resultView.heightAnchor.constraint(equalToConstant: safeAreaLayoutGuide.layoutFrame.height / 4))
+        constraints.append(resultView.leadingAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor, constant: 10))
+        constraints.append(resultView.trailingAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(resultView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor))
+        constraints.append(resultView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10))
+        constraints.append(resultView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor, multiplier: 0.25))
         
         NSLayoutConstraint.activate(constraints)
     }

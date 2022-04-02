@@ -100,19 +100,19 @@ extension String {
         let operationsSymbols: [Character] = ["+", "-", "/", "*", "^", "!"]
         guard let operationIndex = self.firstIndex(of: operation) else { return nil }
         
-        func startFindingIndexRecursion(index: String.Index) -> String.Index {
+        func startFindingIndexRecursion(index: String.Index, isFirst: Bool) -> String.Index {
             guard lastIndex != index else { return index }
+            
             let indexAfter = self.index(after: index)
             let charAfter = self[indexAfter]
-            if operationsSymbols.contains(charAfter){
+            if operationsSymbols.contains(charAfter) && !isFirst {
                 return index
             } else {
-                return startFindingIndexRecursion(index: indexAfter)
+                return startFindingIndexRecursion(index: indexAfter, isFirst: false)
             }
         }
         
-        return startFindingIndexRecursion(index: operationIndex)
-        
+        return startFindingIndexRecursion(index: operationIndex, isFirst: true)
         }
     
     func getFirstOperand(of operation: Character) -> String? {
@@ -142,8 +142,10 @@ extension String {
     func getSecondOperand(of operation: Character) -> String? {
         guard let operationIndex = self.firstIndex(of: operation) else { return nil }
         guard let secondIndex = self.getSecondOperandLastIndex(of: operation) else { return nil }
+        print("operation:", operation)
         let firstIndex = self.index(after: operationIndex)
-        let secondOperand = String(self[firstIndex...secondIndex] )
+        let secondOperand = String(self[firstIndex...secondIndex])
+        
         if secondOperand.contains("minus") {
             return secondOperand.replacingOccurrences(of: "minus", with: "-")
         }

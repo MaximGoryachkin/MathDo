@@ -9,7 +9,6 @@ import UIKit
 
 final class StartViewController: UITableViewController {
     
-//    var formulas = Array<Formula>()
     var formulas = Array<FormulaModel>()
 
     override func viewDidLoad() {
@@ -49,7 +48,6 @@ final class StartViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let formulaVC = FormulaViewController()
         formulaVC.formula = formulas[indexPath.row]
-//        formulaVC.formula.variables.sort(by: <)
         show(formulaVC, sender: nil)
     }
  

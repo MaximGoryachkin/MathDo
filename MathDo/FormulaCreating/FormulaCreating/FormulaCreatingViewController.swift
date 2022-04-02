@@ -65,15 +65,25 @@ final class FormulaCreatingViewController: UIViewController {
      }
     
     @objc func cancelButtonDidTapped() {
-//        self.dismiss(animated: true)
         showAlert(title: "Are you sure?", message: "Do you want cancel editing?", buttonTitle: "Yes", secondButtonTitle: "No", style: .actionSheet) { [weak self] action in
             DatabaseManager.shared.cancelAllChanges()
             self?.navigationController?.popViewController(animated: true)
         }
     }
     
+    @objc func infoButtonDidTapped() {
+        let syntaxManualVC = SyntaxManualViewController()
+        if let presentationController = syntaxManualVC.presentationController as? UISheetPresentationController  {
+            presentationController.detents = [.medium()]
+        }
+        syntaxManualVC.modalPresentationStyle = .custom
+        present(syntaxManualVC, animated: true)
+        
+       
+        
+    }
+    
     private func loadFormula(formula: FormulaModel) {
-//        self.formula = formula
         guard let variables = formula.variables else { return }
         self.variables = variables
         formulaCreatingView.loadExistedFormula(formula)
@@ -102,10 +112,6 @@ final class FormulaCreatingViewController: UIViewController {
             case .editing(let formula):
                 formula.name = name
                 formula.variables = variables
-//                formula.variables = variables
-//                let orderedSet = variables! as NSOrderedSet
-//                formula.variables = variables
-//                let variableModel = VariableModel(context: DatabaseManager.shared.getContext())
                 
                 DatabaseManager.shared.save(formula)
             }
@@ -151,7 +157,7 @@ final class FormulaCreatingViewController: UIViewController {
          
          
          let doneItem = UIBarButtonItem(title: doneButtonTitle, style: .done, target: self, action: #selector(doneButtonDidTapped(sender:)))
-         let infoItem = UIBarButtonItem(title: "info", style: .plain, target: nil, action: nil)
+         let infoItem = UIBarButtonItem(title: "info", style: .plain, target: self, action: #selector(infoButtonDidTapped))
          infoItem.image = UIImage(systemName: "info.circle")
          navigationItem.rightBarButtonItem = doneItem
          navigationItem.rightBarButtonItems?.append(infoItem)

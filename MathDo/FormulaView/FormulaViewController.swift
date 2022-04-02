@@ -42,7 +42,7 @@ final class FormulaViewController: UIViewController {
     
     @objc func presentInfo() {
         showAlert(title: "About formula",
-                  message: "Formula: \(formula.body)\n Description: \(formula.description ?? "Is empty")",
+                  message: "Formula: \(formula.body ?? "")\n Description: \(formula.description)",
                   style: .alert)
     }
     
