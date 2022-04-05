@@ -63,6 +63,7 @@ final class DatabaseManager {
     
     func cancelAllChanges() {
         context.rollback()
+        
     }
     
     func save(_ formula: FormulaModel, in id: URL) {

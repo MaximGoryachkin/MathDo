@@ -11,6 +11,7 @@ protocol FormulaViewProtocol {
     var formula: FormulaModel! {get set}
     func presentSetValueAlert(for: IndexPath)
     func presentErrorAlert(text: String)
+    func presentInfo()
 }
 
 final class FormulaViewController: UIViewController {
@@ -41,6 +42,11 @@ final class FormulaViewController: UIViewController {
         editButton?.isEnabled = true
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        FormulaReader.shared.removeSteps()
+    }
+    
     @objc func presentInfo() {
 //        showAlert(title: "About formula",
 //                  message: "Formula: \(formula.body ?? "")\n Description: \(formula.description)",
@@ -48,7 +54,7 @@ final class FormulaViewController: UIViewController {
         
         let formulaInfoVC = FormulaInfoViewController(formula: formula)
         if let presentationController = formulaInfoVC.presentationController as? UISheetPresentationController  {
-            presentationController.detents = [.medium()]
+            presentationController.detents = [.medium(), .large()]
         }
         formulaInfoVC.modalPresentationStyle = .custom
         present(formulaInfoVC, animated: true)

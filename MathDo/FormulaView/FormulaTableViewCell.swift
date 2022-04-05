@@ -36,8 +36,19 @@ final class FormulaTableViewCell: UITableViewCell {
         return label
     }()
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setPrimarySettings()
+    }
+    
+  
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
+    private func setPrimarySettings() {
         backgroundColor = .white
         selectionStyle = .default
         addSubview(variableLabel)
@@ -51,8 +62,9 @@ final class FormulaTableViewCell: UITableViewCell {
     private func setVariableLabelConstarints() {
         var constraints = [NSLayoutConstraint]()
         
-        constraints.append(variableLabel.widthAnchor.constraint(equalToConstant: contentView.frame.height))
-        constraints.append(variableLabel.heightAnchor.constraint(equalToConstant: contentView.frame.height))
+        constraints.append(variableLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.17))
+        constraints.append(variableLabel.heightAnchor.constraint(equalTo: heightAnchor))
+        constraints.append(variableLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor))
         
         NSLayoutConstraint.activate(constraints)
     }
@@ -61,8 +73,8 @@ final class FormulaTableViewCell: UITableViewCell {
         var constraints = [NSLayoutConstraint]()
         
         constraints.append(descriptionLabel.leadingAnchor.constraint(equalTo: variableLabel.trailingAnchor, constant: 5))
-        constraints.append(descriptionLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: contentView.frame.width / 3))
-        constraints.append(descriptionLabel.heightAnchor.constraint(equalToConstant: contentView.frame.height))
+        constraints.append(descriptionLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor))
+        constraints.append( descriptionLabel.trailingAnchor.constraint(equalTo: valueLabel.leadingAnchor))
         
         NSLayoutConstraint.activate(constraints)
     }
@@ -70,7 +82,7 @@ final class FormulaTableViewCell: UITableViewCell {
     private func setValueLabelConstraints() {
         var constraints = [NSLayoutConstraint]()
         
-        constraints.append(valueLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -15))
+        constraints.append(valueLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15))
         constraints.append(valueLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: contentView.frame.height))
         constraints.append(valueLabel.heightAnchor.constraint(equalToConstant: contentView.frame.height))
         

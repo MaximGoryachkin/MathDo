@@ -31,6 +31,9 @@ final class FormulaView: UIView {
         view.adjustsFontSizeToFitWidth = true
         view.minimumScaleFactor = 0.1
         view.clipsToBounds = true
+        view.isUserInteractionEnabled = true
+        let guestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(resultLabelTapped(sender:)))
+        view.addGestureRecognizer(guestureRecognizer)
         return view
     }()
     
@@ -103,7 +106,7 @@ final class FormulaView: UIView {
         NSLayoutConstraint.activate(constraints)
     }
     
-    @objc func resultButtonPressed() {
+    @objc private func resultButtonPressed() {
         do {
             guard let variables = formulaVC.formula.variables?.array as? [VariableModel] else { return }
             guard let body = formulaVC.formula.body else { return }
@@ -112,6 +115,10 @@ final class FormulaView: UIView {
         } catch(let error) {
             formulaVC.presentErrorAlert(text: error.localizedDescription)
         }
+    }
+    
+    @objc private func resultLabelTapped(sender: UIGestureRecognizer) {
+        formulaVC.presentInfo()
     }
     
     private func setButtonView() {
