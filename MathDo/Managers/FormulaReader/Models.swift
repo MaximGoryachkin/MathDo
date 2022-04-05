@@ -8,9 +8,9 @@
 import Foundation
 
 enum OperationType: Character, CaseIterable {
+    case division = "/"
     case exponentiation = "^"
     case multiplication = "*"
-    case division = "/"
     case addition = "+"
     case subtraction = "-"
 

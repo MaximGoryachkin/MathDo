@@ -45,6 +45,11 @@ final class FormulaCreatingViewController: UIViewController {
         setupGUI()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        DatabaseManager.shared.cancelAllChanges()
+    }
+    
     override func loadView() {
         view = formulaCreatingView
     }
@@ -66,7 +71,6 @@ final class FormulaCreatingViewController: UIViewController {
     
     @objc func cancelButtonDidTapped() {
         showAlert(title: "Are you sure?", message: "Do you want cancel editing?", buttonTitle: "Yes", secondButtonTitle: "No", style: .actionSheet) { [weak self] action in
-            DatabaseManager.shared.cancelAllChanges()
             self?.navigationController?.popViewController(animated: true)
         }
     }

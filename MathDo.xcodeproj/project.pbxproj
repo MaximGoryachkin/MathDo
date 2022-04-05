@@ -33,6 +33,7 @@
 		F9DCC4AC27B433E600284F99 /* VariableModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DCC4A827B433E600284F99 /* VariableModel+CoreDataClass.swift */; };
 		F9DCC4AD27B433E600284F99 /* VariableModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DCC4A927B433E600284F99 /* VariableModel+CoreDataProperties.swift */; };
 		F9E19675278A4968008FEF7A /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E19674278A4968008FEF7A /* NavigationController.swift */; };
+		F9F736B027FC36C600562A22 /* FormatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F736AF27FC36C600562A22 /* FormatManager.swift */; };
 		F9FA052727A2C9560076DCA0 /* VariableCreatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052627A2C9560076DCA0 /* VariableCreatingViewController.swift */; };
 		F9FA052927A2D04B0076DCA0 /* VariablesCreatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052827A2D04B0076DCA0 /* VariablesCreatingView.swift */; };
 		F9FA052D27A485890076DCA0 /* HorizontalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */; };
@@ -72,6 +73,7 @@
 		F9DCC4A827B433E600284F99 /* VariableModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VariableModel+CoreDataClass.swift"; sourceTree = "<group>"; };
 		F9DCC4A927B433E600284F99 /* VariableModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VariableModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F9E19674278A4968008FEF7A /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		F9F736AF27FC36C600562A22 /* FormatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatManager.swift; sourceTree = "<group>"; };
 		F9FA052627A2C9560076DCA0 /* VariableCreatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableCreatingViewController.swift; sourceTree = "<group>"; };
 		F9FA052827A2D04B0076DCA0 /* VariablesCreatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariablesCreatingView.swift; sourceTree = "<group>"; };
 		F9FA052C27A485890076DCA0 /* HorizontalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalPickerView.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		F9279ABA278F6A63005C1071 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				F9F736B127FC36D100562A22 /* FormatManager */,
 				F9CA34C1279F53B800C0FB0B /* FormulaReader */,
 				F9DCC4AF27B703AE00284F99 /* Database */,
 			);
@@ -195,6 +198,14 @@
 				F9748AEA27B06109009D85BE /* FormulaDataModel.xcdatamodeld */,
 			);
 			path = Database;
+			sourceTree = "<group>";
+		};
+		F9F736B127FC36D100562A22 /* FormatManager */ = {
+			isa = PBXGroup;
+			children = (
+				F9F736AF27FC36C600562A22 /* FormatManager.swift */,
+			);
+			path = FormatManager;
 			sourceTree = "<group>";
 		};
 		F9FA052A27A2D04F0076DCA0 /* VariablesCreating */ = {
@@ -336,6 +347,7 @@
 				F945911E27C58F950081EAA1 /* AttributedTextField.swift in Sources */,
 				F9279AB9278F69F8005C1071 /* FormulaReader.swift in Sources */,
 				F941FE7727C115F70008BC20 /* FormulaModel+CoreDataProperties.swift in Sources */,
+				F9F736B027FC36C600562A22 /* FormatManager.swift in Sources */,
 				F9DCC4AA27B433E600284F99 /* FormulaModel+CoreDataClass.swift in Sources */,
 				F9FA053227A553250076DCA0 /* VariableView.swift in Sources */,
 				89691B842786DFF4005674C9 /* AppDelegate.swift in Sources */,

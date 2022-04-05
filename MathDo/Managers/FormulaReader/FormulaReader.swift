@@ -58,12 +58,15 @@ final class FormulaReader {
     
     var allowedSymbols = AllowedSymbols()
     
+    private var steps = Array<String>()
+    
     private init() {}
     
 //    MARK: - Formula reading methods
     func getResult(_ formula: String, variables: [VariableModel] = []) throws -> String {
         var formula = formula
         var readingError: Error?
+        steps.removeAll()
         verifyFormulaSyntax(expression: formula, variables: variables) { success, sender, error in
             guard let error = error else { return }
             readingError = error
@@ -79,6 +82,7 @@ final class FormulaReader {
             let sequencedArray = try getSequencedArray(expression: formula)
             var result = try startCounting(for: sequencedArray)
             correctResult(result: &result)
+            steps.append("result is \(result)")
             return result
         } catch(let error) {
             throw error
@@ -100,14 +104,24 @@ final class FormulaReader {
             }
         }
         print("counted array:", countedArray)
-        do {
-        result = try operatedValue(for: countedArray.last!)
-        } catch(let error) {
-            throw error
-        }
+//        do {
+//      result = try operatedValue(for: countedArray.last!)
+//        } catch(let error) {
+//            throw error
+//        }
         print("final expression:", result)
         return result
     }
+    
+    func getSteps() -> [String] {
+       steps
+    }
+    
+    func removeSteps() {
+        steps.removeAll()
+    }
+    
+    
     
     private func getSequencedArray(expression: String) throws -> [String] {
         let recursionLimit = 1500
@@ -245,6 +259,7 @@ final class FormulaReader {
         
         func startCalculatingRecursion(expression: inout String) throws {
             print("start Running")
+            print("___________________COUNT:", recursionCounter)
             recursionCounter += 1
             guard recursionCounter < recursionLimit else { throw FormulaError.longNumberError.getError() }
             let isFinished = expressionIsFinished(expression: expression)
@@ -254,11 +269,14 @@ final class FormulaReader {
                 return
             }
             
-            try toOperate(expression: &expression, operationType: .division)
-            try toOperate(expression: &expression, operationType: .exponentiation)
-            try toOperate(expression: &expression, operationType: .multiplication)
-            try toOperate(expression: &expression, operationType: .addition)
-            try toOperate(expression: &expression, operationType: .subtraction)
+           try OperationType.allCases.forEach { operation in
+                            try toOperate(expression: &expression, operationType: operation)
+            }
+//            try toOperate(expression: &expression, operationType: .division)
+//            try toOperate(expression: &expression, operationType: .exponentiation)
+//            try toOperate(expression: &expression, operationType: .multiplication)
+//            try toOperate(expression: &expression, operationType: .addition)
+//            try toOperate(expression: &expression, operationType: .subtraction)
             try startCalculatingRecursion(expression: &expression)
         }
         
@@ -303,7 +321,6 @@ final class FormulaReader {
             print("result of subtraction:", result)
         }
 
-        
         guard let firstIndex = prototypeExpression.getFirstOperandStartIndex(of: operation) else { return }
         print("first Index of First Operand:", expression[firstIndex])
         guard let secondIndex = prototypeExpression.getSecondOperandLastIndex(of: operation) else { return }
@@ -312,7 +329,11 @@ final class FormulaReader {
         print("substring of range before:", expression[firstIndex...secondIndex])
         expression = expression.replacingCharacters(in: firstIndex...secondIndex, with: result)
         print("new expression:", expression)
-//        print("substring of range after:", expression[firstIndex...secondIndex])
+        let resultNumber = Double(result) ?? 0.0
+        let formattedFirstOperand = FormatManager.shared.formatNumber(number: firstNumber, style: .none)
+        let formattedSecondOperand = FormatManager.shared.formatNumber(number: secondNumber, style: .none)
+        let formattedResult = FormatManager.shared.formatNumber(number: resultNumber, style: .decimal)
+        steps.append("\(operationType): \(formattedFirstOperand) \(operation) \(formattedSecondOperand) = \(formattedResult)")
         correctExpression(expression: &expression)
         print("expression after correcting:", expression)
     }
