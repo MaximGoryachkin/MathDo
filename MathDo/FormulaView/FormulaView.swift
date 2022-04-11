@@ -65,6 +65,8 @@ final class FormulaView: UIView {
         variableTableView.reloadData()
     }
     
+    
+    
     private func addVariableValue(_ value: Double ,for indexPath: IndexPath) {
         guard let variables = formula.variables?.array as? [VariableModel] else { return }
         variables[indexPath.row].variableValue = value

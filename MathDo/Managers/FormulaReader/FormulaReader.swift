@@ -234,7 +234,7 @@ final class FormulaReader {
     }
     
     private func getFirstFromBrackets(expression: String) -> String? {
-        expression.newSlice(from: "(", to: ")")
+        expression.slice(from: "(", to: ")")
     }
     
     private func getAddition(expression: String) -> [String] {
