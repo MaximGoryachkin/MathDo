@@ -105,41 +105,11 @@ extension FormulaViewController: FormulaViewProtocol {
     }
     
     func presentSetValueAlert(for indexPath: IndexPath) {
-//        let alert = UIAlertController(title: "Set the value", message: "You shuold set the value of variable", preferredStyle: .alert)
-//        let enterAction = UIAlertAction(title: "Enter", style: .default) { [weak self] _ in
-//            guard let valueString = alert.textFields?.first?.text else { return }
-//            if let value = Double(valueString) {
-//                let variables = self?.formula.variables?.array as? [VariableModel]
-//                variables?[indexPath.row].variableValue = value
-//                self?.formulaView.variableTableView.reloadRows(at: [indexPath], with: .automatic)
-//            } else {
-//                self?.presentErrorAlert(text: "Enter one dot between numbers, not more!")
-//            }
-//        }
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-//
-//        alert.addAction(enterAction)
-//        alert.addAction(cancelAction)
-//        alert.actions.first?.isEnabled = false
-//
-//        alert.addTextField { textField in
-//            textField.keyboardType = .decimalPad
-//            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification,
-//                                                   object: textField,
-//                                                   queue: OperationQueue.main, using: {_ in
-//                let textCount = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0
-//                let textIsNotEmpty = textCount > 0
-//                enterAction.isEnabled = textIsNotEmpty
-//            })
-//        }
-//
-//
-//        present(alert, animated: true)
-        
         
         showAlertWithTextField(title: "Set the value", message: "You should set the value of variable", buttonTitle: "Set", style: .alert, placeholder: "Value", delegate: nil, textFieldText: "") { [weak self] text, button, buttonTapped, textField in
             
             textField.keyboardType = .decimalPad
+            textField.delegate = self
             let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
             let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
             let minus: UIBarButtonItem = UIBarButtonItem(title: "minus", style: .done, target: self, action: #selector(self?.addMinusInTextField))
@@ -148,6 +118,7 @@ extension FormulaViewController: FormulaViewProtocol {
             toolBar.items = items
             toolBar.barStyle = .default
             textField.inputAccessoryView = toolBar
+            
             self?.inputTextField = textField
             if buttonTapped {
                 guard let valueString = textField.text else { return }
@@ -165,4 +136,16 @@ extension FormulaViewController: FormulaViewProtocol {
             }
         }
     }
+}
+
+extension FormulaViewController: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let maxLength = 12
+            let currentString: NSString = (textField.text ?? "") as NSString
+            let newString: NSString =
+                currentString.replacingCharacters(in: range, with: string) as NSString
+            return newString.length <= maxLength
+    }
+    
 }
