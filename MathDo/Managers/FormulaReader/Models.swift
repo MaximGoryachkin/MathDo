@@ -39,13 +39,13 @@ struct AllowedSymbols {
     var digits = "0123456789"
     var operations = OperationType.getOperationSymbols()
     var brackets = "()"
-    var possibleVariables: [Character] {
+    lazy var possibleVariables: [Character] = {
         var listOfCharacters = Array<Character>()
         alphabet.forEach { char in
             listOfCharacters.append(char)
         }
         return listOfCharacters
-    }
+    }()
     
     lazy var possibleVariablesStrings: [String] = {
         var listOfCharacters = Array<String>()
@@ -67,7 +67,7 @@ struct AllowedSymbols {
         return allowedSymbolsWithVariables
     }
     
-    func getPossibleVariables(without variables: NSOrderedSet) -> [Character] {
+    mutating func getPossibleVariables(without variables: NSOrderedSet) -> [Character] {
         guard let variables = variables.array as? [VariableModel] else { return [] }
         var variableCharacters = Set<Character>()
         variables.forEach { variable in

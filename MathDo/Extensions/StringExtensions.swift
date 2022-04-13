@@ -14,22 +14,7 @@ extension String {
         self.index(before: endIndex)
     }
     
-    func slice(from: String, to: String) -> String? {
-        return (range(of: from)?.upperBound).flatMap { substringFrom in
-            return (range(of: to, range: substringFrom..<endIndex)?.upperBound).map { substringTo in
-                if self[substringFrom..<substringTo].contains(from) {
-                    return String(self[substringFrom..<substringTo])
-                } else {
-                    return (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map {
-                        substringTo in
-                        String(self[substringFrom..<substringTo])
-                    } ?? ""
-                }
-            }
-        }
-    }
-    
-    func newSlice(from: Character, to: Character) -> String? {
+    func slice(from: Character, to: Character) -> String? {
         var charArray = Array<Character>()
         var capturingBegins = false
         var openBracketsCount = 0
@@ -61,9 +46,9 @@ extension String {
     
     
     func getFirstOperandStartIndex(of operation: Character) -> String.Index? {
-        let operationsSymbols: [Character] = ["+", "-", "/", "*", "^", "!"]
+        let operationsSymbols: [Character] = OperationType.getOperationSymbols()
         guard let operationIndex = self.firstIndex(of: operation) else { return nil }
-            
+        
         func startFindingIndexRecursion(index: String.Index) -> String.Index {
             guard self.startIndex != index else { return index }
             let indexBefore = self.index(before: index)
@@ -79,8 +64,8 @@ extension String {
     }
     
     func getFirstOperandStartIndex(of operationIndex: String.Index) -> String.Index? {
-        let operationsSymbols: [Character] = ["+", "-", "/", "*", "^", "!"]
-            
+        let operationsSymbols: [Character] = OperationType.getOperationSymbols()
+        
         func startFindingIndexRecursion(index: String.Index) -> String.Index {
             guard self.startIndex != index else { return index }
             let indexBefore = self.index(before: index)
@@ -97,7 +82,7 @@ extension String {
     
     
     func getSecondOperandLastIndex(of operation: Character) -> String.Index? {
-        let operationsSymbols: [Character] = ["+", "-", "/", "*", "^", "!"]
+        let operationsSymbols: [Character] = OperationType.getOperationSymbols()
         guard let operationIndex = self.firstIndex(of: operation) else { return nil }
         
         func startFindingIndexRecursion(index: String.Index, isFirst: Bool) -> String.Index {
@@ -113,12 +98,12 @@ extension String {
         }
         
         return startFindingIndexRecursion(index: operationIndex, isFirst: true)
-        }
+    }
     
     func getFirstOperand(of operation: Character) -> String? {
         guard let firstIndex = self.getFirstOperandStartIndex(of: operation) else { return nil}
         guard let secondIndex = self.firstIndex(of: operation) else { return nil }
-//        guard firstIndex != self.startIndex else { return nil }
+        //        guard firstIndex != self.startIndex else { return nil }
         let firstOperand = String(self[firstIndex..<secondIndex] )
         if firstOperand.contains("minus") {
             return firstOperand.replacingOccurrences(of: "minus", with: "-")
@@ -130,7 +115,7 @@ extension String {
     func getFirstOperand(of operationIndex: String.Index) -> String? {
         guard let firstIndex = self.getFirstOperandStartIndex(of: operationIndex) else { return nil}
         let secondIndex = operationIndex
-//        guard firstIndex != self.startIndex else { return nil }
+        //        guard firstIndex != self.startIndex else { return nil }
         let firstOperand = String(self[firstIndex..<secondIndex] )
         if firstOperand.contains("minus") {
             return firstOperand.replacingOccurrences(of: "minus", with: "-")
@@ -171,35 +156,5 @@ extension String {
         guard index != self.lastIndex || indexAfter != self.endIndex else { return nil }
         return self[indexAfter]
     }
-    
-    }
-
-
-
-  //                let operationsSymbols: [Character] = ["+", "-", "/", "*", "^", "!"]
-  //                let indexAfter = expression.index(after: index)
-  //                let charAfter = expression[indexAfter]
-  //                if operationsSymbols.contains(charAfter) {
-  //                    return indexAfter
-  //                } else {
-  //                    return getEndIndex(index: indexAfter)
-  //                }
-  //            }
-    
-//    func slice(from: String, to: String) -> String? {
-//
-//
-//        return (range(of: from)?.upperBound).flatMap { substringFrom in
-//            return (range(of: to, range: substringFrom..<endIndex)?.upperBound).map { substringTo in
-//                if self[substringFrom..<substringTo].contains(from) {
-//                    return String(self[substringFrom..<substringTo])
-//                } else {
-//                    return (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map {
-//                        substringTo in
-//                        String(self[substringFrom..<substringTo])
-//                    } ?? ""
-//                }
-//            }
-//        }
-//    }
+}
 
