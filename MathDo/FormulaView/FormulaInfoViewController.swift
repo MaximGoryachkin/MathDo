@@ -8,7 +8,7 @@
 import UIKit
 
 
-class FormulaInfoViewController: UIViewController {
+final class FormulaInfoViewController: UIViewController {
     
     var formula: FormulaModel!
     private var steps = Array<String>()

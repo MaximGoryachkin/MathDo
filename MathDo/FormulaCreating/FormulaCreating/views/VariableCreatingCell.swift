@@ -11,6 +11,7 @@ import UIKit
 protocol VariableCreatingCellDelegate: AnyObject {
     func removeButtonTapped(in cell: VariableCreatingCell)
     func editButtonTapped(in cell: VariableCreatingCell)
+    func addVariableButtonTapped(from cell: VariableCreatingCell)
 }
 
 final class VariableCreatingCell: UITableViewCell {
@@ -39,6 +40,17 @@ final class VariableCreatingCell: UITableViewCell {
         let button = UIButton(type: .system)
         let trashImage = UIImage(systemName: "trash")
         button.setBackgroundImage(trashImage, for: .normal)
+        button.tintColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        button.isHidden = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(buttonDidTapped(sender:)), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var addButton: UIButton = {
+        let button = UIButton(type: .system)
+        let plusImage = UIImage(systemName: "plus")
+        button.setBackgroundImage(plusImage, for: .normal)
         button.tintColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -77,6 +89,7 @@ final class VariableCreatingCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         removeButton.isHidden = !selected
         editButton.isHidden = !selected
+        addButton.isHidden = !selected
     }
     
     @objc private func buttonDidTapped(sender: UIButton) {
@@ -85,6 +98,8 @@ final class VariableCreatingCell: UITableViewCell {
             delegate?.removeButtonTapped(in: self)
         case editButton:
             delegate?.editButtonTapped(in: self)
+        case addButton:
+            delegate?.addVariableButtonTapped(from: self)
         default:
             break
         }
@@ -106,6 +121,7 @@ final class VariableCreatingCell: UITableViewCell {
         let variableLabelWidth: CGFloat = 30
         addSubview(removeButton)
         addSubview(editButton)
+        addSubview(addButton)
         
         variableLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8).isActive = true
         variableLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
@@ -115,10 +131,14 @@ final class VariableCreatingCell: UITableViewCell {
        
         variableDescription.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
 
+        addButton.heightAnchor.constraint(equalTo:  contentView.heightAnchor,multiplier: 0.7).isActive = true
+        addButton.widthAnchor.constraint(equalTo: addButton.heightAnchor, multiplier: 0.7).isActive = true
+        addButton.leadingAnchor.constraint(greaterThanOrEqualTo: variableDescription.trailingAnchor, constant: 10).isActive = true
+        addButton.centerYAnchor.constraint(equalTo: variableDescription.centerYAnchor).isActive = true
         
         editButton.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.7).isActive = true
         editButton.widthAnchor.constraint(equalTo: editButton.heightAnchor, multiplier: 0.7).isActive = true
-        editButton.leadingAnchor.constraint(greaterThanOrEqualTo: variableDescription.trailingAnchor, constant: 10).isActive = true
+        editButton.leadingAnchor.constraint(greaterThanOrEqualTo: addButton.trailingAnchor, constant: 10).isActive = true
         
         removeButton.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.7).isActive = true
         removeButton.widthAnchor.constraint(equalTo: removeButton.heightAnchor, multiplier: 0.7).isActive = true

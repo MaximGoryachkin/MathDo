@@ -194,12 +194,20 @@ extension FormulaCreatingViewController: VariableDisplayProtocol {
         formulaCreatingView.removeVariableFromTableView(cell: cell)
     }
     
+    func addVariableToTextField(from cell: VariableCreatingCell) {
+        formulaCreatingView.addVariableToTextField(cell: cell)
+    }
+    
     func scrollToBottom() {
         formulaCreatingView.scrollToBottom()
     }
 }
 
 extension FormulaCreatingViewController: VariableCreatingCellDelegate {
+    
+    func addVariableButtonTapped(from cell: VariableCreatingCell) {
+        addVariableToTextField(from: cell)
+    }
     
     func removeButtonTapped(in cell: VariableCreatingCell) {
         removeVariable(in: cell)
