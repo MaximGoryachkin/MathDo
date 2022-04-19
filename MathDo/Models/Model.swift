@@ -24,7 +24,7 @@ struct VariableTemporaryModel: Hashable {
     var id: URL?
 }
 
-enum SavingType {
+enum SavingType: Equatable {
     case creating
     case editing(formula: FormulaModel)
 }
