@@ -136,6 +136,7 @@ final class FormulaCreatingView: UIView {
     public func addVariableToTextField(cell: VariableCreatingCell) {
         guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
         guard let variable = formulaCreatingVC.variables?.array[indexPath.row] as? VariableModel else { return }
+        warningLabel.highlightWarning(text: "Added variable", color: .green)
         
         if let selectedRange = formulaTextField.selectedTextRange {
             let cursorPosition = formulaTextField.offset(from: formulaTextField.beginningOfDocument, to: selectedRange.start)

@@ -61,6 +61,7 @@ final class FormulaSavingViewController: UIViewController {
         textField.layer.cornerRadius = 5
         textField.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         textField.autocorrectionType = .no
+        textField.delegate = self
         textField.autocapitalizationType = .none
         
         return textField
@@ -77,6 +78,15 @@ final class FormulaSavingViewController: UIViewController {
         textField.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton: UIBarButtonItem = UIBarButtonItem(title: "done", style: .done, target: self, action: #selector(buttonDidTap(sender:)))
+        doneButton.tag = 2
+                
+        let items = [flexSpace, doneButton]
+        toolBar.items = items
+        toolBar.barStyle = .default
+        textField.inputAccessoryView = toolBar
         return textField
     }()
     
@@ -132,10 +142,13 @@ final class FormulaSavingViewController: UIViewController {
         case 1:
             sender.isEnabled = false
             saveFormula()
+        case 2:
+            descriptionTextField.resignFirstResponder()
         default:
             break
         }
     }
+    
     
     private func setupParameters() {
         view.backgroundColor = #colorLiteral(red: 0.9245480299, green: 0.9361869693, blue: 0.9359821677, alpha: 1)
@@ -181,4 +194,11 @@ final class FormulaSavingViewController: UIViewController {
         }
     }
 
+}
+
+extension FormulaSavingViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

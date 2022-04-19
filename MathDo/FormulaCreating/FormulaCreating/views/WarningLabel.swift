@@ -23,12 +23,12 @@ final class WarningLabel: UILabel {
     }
     
     
-    public func highlightWarning(text: String) {
+    public func highlightWarning(text: String, color: UIColor = .red) {
         self.text = text
         alpha = 0
         isHidden = false
         UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveLinear) { [weak self] in
-            self?.textColor = .red
+            self?.textColor = color
             self?.alpha = 1.0
             self?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         } completion: { [weak self] finished in
@@ -44,7 +44,5 @@ final class WarningLabel: UILabel {
                 self?.text = ""
             }
         }
-
     }
-
 }
