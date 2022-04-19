@@ -14,6 +14,7 @@ final class FormulaCreatingView: UIView {
     lazy var formulaTextField: AttributedTextField  = {
 //        let formulaTextField = UITextField(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
         let formulaTextField = AttributedTextField(borderStyle: .bottom(borderColor: .lightGray))
+        formulaTextField.delegate = self
         formulaTextField.translatesAutoresizingMaskIntoConstraints = false
         formulaTextField.layer.masksToBounds = true
         formulaTextField.borderStyle = .none
@@ -23,6 +24,7 @@ final class FormulaCreatingView: UIView {
         formulaTextField.backgroundColor = .white
         formulaTextField.autocorrectionType = .no
         formulaTextField.autocapitalizationType = .none
+        
         return formulaTextField
     }()
     
@@ -248,5 +250,12 @@ extension FormulaCreatingView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         "Variables"
     }
-    
+
+}
+
+extension FormulaCreatingView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        formulaTextField.resignFirstResponder()
+        return true
+    }
 }

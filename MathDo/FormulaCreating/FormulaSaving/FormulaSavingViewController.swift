@@ -132,6 +132,7 @@ final class FormulaSavingViewController: UIViewController {
         super.viewDidLoad()
         setupParameters()
         setConstraints()
+        hideKeyboardOnTouch()
     }
     
     

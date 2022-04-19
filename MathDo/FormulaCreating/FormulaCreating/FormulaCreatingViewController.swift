@@ -43,6 +43,7 @@ final class FormulaCreatingViewController: UIViewController {
     
     override func viewDidLoad() {
         setupGUI()
+        hideKeyboardOnTouch()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -252,12 +253,12 @@ extension FormulaCreatingViewController: VariableCreatingCellDelegate {
     }
 }
 
-extension FormulaCreatingViewController: AlertTextFieldDelegate {
-   @objc func textDidChange(sender: UITextField) {
-        guard let text = sender.text, text != "" else { saveAction?.isEnabled = false; return }
-        saveAction?.isEnabled = true
-    }
-}
+//extension FormulaCreatingViewController: AlertTextFieldDelegate {
+//   @objc func textDidChange(sender: UITextField) {
+//        guard let text = sender.text, text != "" else { saveAction?.isEnabled = false; return }
+//        saveAction?.isEnabled = true
+//    }
+//}
 
 extension FormulaCreatingViewController: FormulaSavingDelegate {
     func formulaSavingVCDidClose() {

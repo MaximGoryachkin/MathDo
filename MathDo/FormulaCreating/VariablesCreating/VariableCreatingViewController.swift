@@ -35,6 +35,7 @@ final class VariableCreatingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        hideKeyboardOnTouch()
     }
     
     override func loadView() {
