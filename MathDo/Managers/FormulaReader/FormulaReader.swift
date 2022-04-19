@@ -272,11 +272,7 @@ final class FormulaReader {
            try OperationType.allCases.forEach { operation in
                             try toOperate(expression: &expression, operationType: operation)
             }
-//            try toOperate(expression: &expression, operationType: .division)
-//            try toOperate(expression: &expression, operationType: .exponentiation)
-//            try toOperate(expression: &expression, operationType: .multiplication)
-//            try toOperate(expression: &expression, operationType: .addition)
-//            try toOperate(expression: &expression, operationType: .subtraction)
+            
             try startCalculatingRecursion(expression: &expression)
         }
         

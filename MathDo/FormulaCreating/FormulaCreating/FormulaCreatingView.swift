@@ -14,6 +14,7 @@ final class FormulaCreatingView: UIView {
     lazy var formulaTextField: AttributedTextField  = {
 //        let formulaTextField = UITextField(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
         let formulaTextField = AttributedTextField(borderStyle: .bottom(borderColor: .lightGray))
+        formulaTextField.delegate = self
         formulaTextField.translatesAutoresizingMaskIntoConstraints = false
         formulaTextField.layer.masksToBounds = true
         formulaTextField.borderStyle = .none
@@ -23,6 +24,7 @@ final class FormulaCreatingView: UIView {
         formulaTextField.backgroundColor = .white
         formulaTextField.autocorrectionType = .no
         formulaTextField.autocapitalizationType = .none
+        
         return formulaTextField
     }()
     
@@ -52,7 +54,7 @@ final class FormulaCreatingView: UIView {
         return tableView
     }()
     
-    private lazy var addVariableButton: UIButton = {
+    private lazy var insertingVariableButton: UIButton = {
         let addVariableButton = UIButton(type: .system)
         addVariableButton.translatesAutoresizingMaskIntoConstraints = false
         addVariableButton.setTitle("New variable", for: .normal)
@@ -133,9 +135,23 @@ final class FormulaCreatingView: UIView {
         }
     }
     
+    public func addVariableToTextField(cell: VariableCreatingCell) {
+        guard let indexPath = variablesTableView.indexPath(for: cell) else { return }
+        guard let variable = formulaCreatingVC.variables?.array[indexPath.row] as? VariableModel else { return }
+        warningLabel.highlightWarning(text: "Added variable", color: .green)
+        
+        if let selectedRange = formulaTextField.selectedTextRange {
+            let cursorPosition = formulaTextField.offset(from: formulaTextField.beginningOfDocument, to: selectedRange.start)
+            guard let startIndex = formulaTextField.text?.startIndex else { return }
+            guard let cursorIndex = formulaTextField.text?.index(startIndex, offsetBy: cursorPosition) else { return }
+            formulaTextField.text?.insert(Character(variable.character), at: cursorIndex)
+        }
+    }
+    
     public func getIndexPath(of cell: VariableCreatingCell) -> IndexPath? {
         variablesTableView.indexPath(for: cell)
     }
+    
     public func scrollToBottom() {
         guard let variablesCount = formulaCreatingVC.variables?.array.count else { return }
         guard variablesCount > 0 else { return }
@@ -155,7 +171,7 @@ final class FormulaCreatingView: UIView {
         stackView.addArrangedSubview(formulaTextField)
         stackView.addArrangedSubview(warningLabel)
         stackView.addArrangedSubview(variablesTableView)
-        stackView.addArrangedSubview(addVariableButton)
+        stackView.addArrangedSubview(insertingVariableButton)
         addSubview(stackView)
         setupLayout()
         layoutSubviews()
@@ -205,9 +221,9 @@ final class FormulaCreatingView: UIView {
     
     private func setAddVariableButtonSettings() {
 //        addVariableButton.addTarget(formulaCreatingVC, action: #selector(formulaCreatingVC?.addVariableButtonTapped(sender:)), for: .touchUpInside)
-        addVariableButton.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0 / 7 ).isActive = true
-        addVariableButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
-        addVariableButton.translatesAutoresizingMaskIntoConstraints = false
+        insertingVariableButton.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0 / 7 ).isActive = true
+        insertingVariableButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+        insertingVariableButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
 }
@@ -234,5 +250,12 @@ extension FormulaCreatingView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         "Variables"
     }
-    
+
+}
+
+extension FormulaCreatingView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        formulaTextField.resignFirstResponder()
+        return true
+    }
 }

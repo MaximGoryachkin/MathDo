@@ -46,10 +46,11 @@ final class VariablesCreatingView: UIView {
     }()
     
     private lazy var variableDescriptionTextField: UITextField  = {
-        let formulaTextField = AdvancedTextField()
-        formulaTextField.translatesAutoresizingMaskIntoConstraints = false
-        formulaTextField.placeholder = "Write name of variable"
-        return formulaTextField
+        let advancedTextField = AdvancedTextField()
+        advancedTextField.translatesAutoresizingMaskIntoConstraints = false
+        advancedTextField.placeholder = "Write name of variable"
+        advancedTextField.delegate = self
+        return advancedTextField
     }()
     
     
@@ -199,4 +200,11 @@ extension VariablesCreatingView: UIPickerViewDataSource, UIPickerViewDelegate {
         selectedView?.setColor(color)
     }
     
+}
+
+extension VariablesCreatingView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        variableDescriptionTextField.resignFirstResponder()
+        return true
+    }
 }
