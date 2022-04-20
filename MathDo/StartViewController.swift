@@ -10,7 +10,7 @@ import UIKit
 final class StartViewController: UITableViewController {
     
     var formulas = Array<FormulaModel>()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setButtonSettings()
@@ -22,12 +22,8 @@ final class StartViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         formulas = DatabaseManager.shared.fetchFormulas()
+        setLeftBarButton()
         tableView.reloadData()
-        if !formulas.isEmpty {
-            navigationItem.leftBarButtonItem = editButtonItem
-        } else {
-            navigationItem.leftBarButtonItem = nil
-        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,8 +36,9 @@ final class StartViewController: UITableViewController {
         var content = cell.defaultContentConfiguration()
         content.image = UIImage(systemName: "function")
         content.text = formulas[indexPath.row].name
+        content.secondaryText = formulas[indexPath.row].formulaDescription
         cell.contentConfiguration = content
-        
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
@@ -50,16 +47,13 @@ final class StartViewController: UITableViewController {
         formulaVC.formula = formulas[indexPath.row]
         show(formulaVC, sender: nil)
     }
- 
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            
-            DatabaseManager.shared.delete(formula: formulas[indexPath.row]) {
-                formulas.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-                if formulas.isEmpty {
-                    navigationItem.leftBarButtonItem = nil
-                }
+        DatabaseManager.shared.delete(formula: formulas[indexPath.row]) {
+            formulas.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            if formulas.isEmpty {
+                navigationItem.leftBarButtonItem = nil
             }
         }
     }
@@ -81,8 +75,14 @@ final class StartViewController: UITableViewController {
     }
     
     private func setButtonSettings() {
-        let addItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(routeToFomulaCreatingVC))
-        let backBarButtton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        let addItem = UIBarButtonItem(title: "Add",
+                                      style: .plain,
+                                      target: self,
+                                      action: #selector(routeToFomulaCreatingVC))
+        let backBarButtton = UIBarButtonItem(title: "",
+                                             style: .plain,
+                                             target: nil,
+                                             action: nil)
         
         navigationItem.rightBarButtonItem = addItem
         navigationItem.backBarButtonItem = backBarButtton
@@ -92,5 +92,37 @@ final class StartViewController: UITableViewController {
         navigationItem.title = "MathDo"
     }
     
+    private func setLeftBarButton() {
+        if !formulas.isEmpty {
+            navigationItem.leftBarButtonItem = editButtonItem()
+        } else {
+            navigationItem.leftBarButtonItem = nil
+        }
+    }
+    
+    private func editButtonItem() -> UIBarButtonItem {
+        let editButton = UIBarButtonItem(title: "Edit",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(editButtonAction(sender:)))
+        return editButton
+    }
+    
+    @objc func editButtonAction(sender: UIBarButtonItem) {
+        var isEditing = self.tableView.isEditing
+        if isEditing {
+            isEditing.toggle()
+            sender.title = "Edit"
+            sender.style = UIBarButtonItem.Style.plain
+            self.navigationItem.rightBarButtonItem?.isEnabled.toggle()
+            self.navigationController?.setEditing(isEditing, animated: true)
+        } else {
+            isEditing.toggle()
+            sender.title = "Done"
+            sender.style = UIBarButtonItem.Style.done
+            self.navigationItem.rightBarButtonItem?.isEnabled.toggle()
+            self.navigationController?.setEditing(isEditing, animated: true)
+        }
+    }
 }
 
