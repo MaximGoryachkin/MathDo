@@ -13,17 +13,16 @@ final class StartViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setButtonSettings()
-        setNavigationBarSettings()
         view.backgroundColor = .white
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        setNavigationItems()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         formulas = DatabaseManager.shared.fetchFormulas()
-        setLeftBarButton()
         tableView.reloadData()
+        setLeftBarButton()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -54,6 +53,7 @@ final class StartViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             if formulas.isEmpty {
                 navigationItem.leftBarButtonItem = nil
+                navigationItem.rightBarButtonItem?.isEnabled.toggle()
             }
         }
     }
@@ -69,46 +69,38 @@ final class StartViewController: UITableViewController {
         return UISwipeActionsConfiguration(actions: [favorite])
     }
     
-    @objc private func routeToFomulaCreatingVC() {
-        let formulaCreatingVC = FormulaCreatingViewController()
-        show(formulaCreatingVC, sender: nil)
-    }
-    
-    private func setButtonSettings() {
+    private func setNavigationItems() {
         let addItem = UIBarButtonItem(title: "Add",
                                       style: .plain,
                                       target: self,
                                       action: #selector(routeToFomulaCreatingVC))
-        let backBarButtton = UIBarButtonItem(title: "",
+        let backItem = UIBarButtonItem(title: "",
                                              style: .plain,
                                              target: nil,
                                              action: nil)
         
-        navigationItem.rightBarButtonItem = addItem
-        navigationItem.backBarButtonItem = backBarButtton
-    }
-    
-    private func setNavigationBarSettings() {
         navigationItem.title = "MathDo"
+        navigationItem.rightBarButtonItem = addItem
+        navigationItem.backBarButtonItem = backItem
     }
     
     private func setLeftBarButton() {
-        if !formulas.isEmpty {
-            navigationItem.leftBarButtonItem = editButtonItem()
-        } else {
-            navigationItem.leftBarButtonItem = nil
-        }
-    }
-    
-    private func editButtonItem() -> UIBarButtonItem {
         let editButton = UIBarButtonItem(title: "Edit",
                                          style: .plain,
                                          target: self,
                                          action: #selector(editButtonAction(sender:)))
-        return editButton
+        if !formulas.isEmpty {
+            navigationItem.leftBarButtonItem = editButton
+        }
     }
     
-    @objc func editButtonAction(sender: UIBarButtonItem) {
+    @objc private func routeToFomulaCreatingVC() {
+        let formulaCreatingVC = FormulaCreatingViewController()
+        self.navigationController?.isEditing = false
+        show(formulaCreatingVC, sender: nil)
+    }
+    
+    @objc private func editButtonAction(sender: UIBarButtonItem) {
         var isEditing = self.tableView.isEditing
         if isEditing {
             isEditing.toggle()
