@@ -15,7 +15,7 @@ final class StartViewController: UITableViewController {
         super.viewDidLoad()
         setButtonSettings()
         setNavigationBarSettings()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "BackgroundColorSet")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
@@ -27,18 +27,20 @@ final class StartViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        formulas.count
+        formulas.count > 0 ? formulas.count : 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.image = UIImage(systemName: "function")
-        content.text = formulas[indexPath.row].name
-        content.secondaryText = formulas[indexPath.row].formulaDescription
+        content.image = !formulas.isEmpty ? UIImage(systemName: "function") : nil
+        content.text = !formulas.isEmpty ? formulas[indexPath.row].name : "No have formulas"
+        content.secondaryText = !formulas.isEmpty ? formulas[indexPath.row].formulaDescription : ""
+        cell.isUserInteractionEnabled = !formulas.isEmpty
         cell.contentConfiguration = content
-        cell.accessoryType = .disclosureIndicator
+        cell.accessoryType = !formulas.isEmpty ? .disclosureIndicator : .none
         return cell
     }
     
@@ -49,9 +51,16 @@ final class StartViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard formulas.count > 0 else { return }
         DatabaseManager.shared.delete(formula: formulas[indexPath.row]) {
-            formulas.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.performBatchUpdates {
+                formulas.remove(at: indexPath.row)
+                if formulas.isEmpty {
+                    tableView.reloadData()
+                } else {
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                }
+            }
             if formulas.isEmpty {
                 navigationItem.leftBarButtonItem = nil
             }
@@ -59,12 +68,14 @@ final class StartViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard formulas.count > 0 else { return nil }
         let favorite = UIContextualAction(style: .normal, title: nil) { [weak self] action, view, _ in
             view.backgroundColor = .gray
             guard let formula = self?.formulas[indexPath.row] else { return }
             self?.show(FormulaCreatingViewController(savingType: .editing(formula: formula)), sender: nil)
         }
-        favorite.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        //        favorite.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        favorite.backgroundColor = UIColor(named: "GreenColorSet")
         favorite.title = "Edit"
         return UISwipeActionsConfiguration(actions: [favorite])
     }

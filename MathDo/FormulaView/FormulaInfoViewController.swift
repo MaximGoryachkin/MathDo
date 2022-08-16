@@ -19,14 +19,14 @@ final class FormulaInfoViewController: UIViewController {
         label.textAlignment = .center
         label.text = "Formula body"
         label.textColor = .white
-        label.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        label.backgroundColor = UIColor(named: "GreenColorSet")
         return label
     }()
     
     private lazy var bodyLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
         label.font = UIFont(name: "Avenir", size: 50)
-        label.textColor = .black
+        label.textColor = UIColor(named: "BackgroundColorSetInverted")
         label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -73,7 +73,7 @@ final class FormulaInfoViewController: UIViewController {
     }
     
     private func setupGUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "BackgroundColorSet")
         bodyLabel.text = formula.body
     }
 

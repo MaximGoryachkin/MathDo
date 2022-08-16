@@ -21,7 +21,7 @@ final class FormulaCreatingView: UIView {
         formulaTextField.layer.cornerRadius = 5
         formulaTextField.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         formulaTextField.placeholder = "Write your formula"
-        formulaTextField.backgroundColor = .white
+        formulaTextField.backgroundColor = UIColor(named: "BackgroundColorSet")
         formulaTextField.autocorrectionType = .no
         formulaTextField.autocapitalizationType = .none
         
@@ -59,7 +59,7 @@ final class FormulaCreatingView: UIView {
         addVariableButton.translatesAutoresizingMaskIntoConstraints = false
         addVariableButton.setTitle("New variable", for: .normal)
         addVariableButton.layer.cornerRadius = 10
-        addVariableButton.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        addVariableButton.backgroundColor = UIColor(named: "GreenColorSet")
         addVariableButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         addVariableButton.tintColor = .white
         addVariableButton.addTarget(formulaCreatingVC, action: #selector(formulaCreatingVC?.addVariableButtonTapped(sender:)), for: .touchUpInside)
@@ -167,7 +167,7 @@ final class FormulaCreatingView: UIView {
     }
     
     private func setPrimarySettings() {
-        backgroundColor = #colorLiteral(red: 0.9245480299, green: 0.9361869693, blue: 0.9359821677, alpha: 1)
+        backgroundColor = UIColor(named: "BackgroundColorSetSecond")
         stackView.addArrangedSubview(formulaTextField)
         stackView.addArrangedSubview(warningLabel)
         stackView.addArrangedSubview(variablesTableView)

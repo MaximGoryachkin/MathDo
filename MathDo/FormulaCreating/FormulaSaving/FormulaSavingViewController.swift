@@ -20,7 +20,7 @@ final class FormulaSavingViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 15
-        stackView.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        stackView.backgroundColor = UIColor(named: "GreenColorSet")
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -55,7 +55,7 @@ final class FormulaSavingViewController: UIViewController {
     private lazy var nameTextField: AttributedTextField = {
         let textField = AttributedTextField(borderStyle: .bottom(borderColor: .black))
         textField.placeholder = "Name"
-        textField.backgroundColor = .white
+        textField.backgroundColor = UIColor(named: "BackgroundColorSet")
         textField.text = formulaCreatingVC?.formula?.name
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.cornerRadius = 5
@@ -71,7 +71,7 @@ final class FormulaSavingViewController: UIViewController {
         let textField = AttributedTextView(borderStyle: .bottom(borderColor: .black))
         textField.placeholderText = "Description (optional)"
         textField.placeholderTextColor = .lightGray
-        textField.backgroundColor = .white
+        textField.backgroundColor = UIColor(named: "BackgroundColorSet")
         textField.text = formulaCreatingVC.formula?.formulaDescription
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.cornerRadius = 5
@@ -152,7 +152,8 @@ final class FormulaSavingViewController: UIViewController {
     
     
     private func setupParameters() {
-        view.backgroundColor = #colorLiteral(red: 0.9245480299, green: 0.9361869693, blue: 0.9359821677, alpha: 1)
+//        view.backgroundColor = #colorLiteral(red: 0.9245480299, green: 0.9361869693, blue: 0.9359821677, alpha: 1)
+        view.backgroundColor = UIColor(named: "BackgroundColorSetSecond")
         horizontalStackView.addArrangedSubview(cancelButton)
         horizontalStackView.addArrangedSubview(savingLabel)
         horizontalStackView.addArrangedSubview(saveButton)
@@ -187,7 +188,6 @@ final class FormulaSavingViewController: UIViewController {
         guard let formula = formulaCreatingVC.formula else { return }
         formula.name = nameTextField.text
         formula.formulaDescription = descriptionTextField.text
-        print("name:", formula.name)
         DatabaseManager.shared.save(formula)
         print("try to popToRoot")
         dismiss(animated: true) { [weak self] in

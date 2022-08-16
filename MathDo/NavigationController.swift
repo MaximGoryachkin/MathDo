@@ -19,11 +19,12 @@ final class NavigationController: UINavigationController {
     }
     
     private func setupNavigationBar() {
+        guard let color = UIColor(named: "BackgroundColorSet") else { return }
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithOpaqueBackground()
         navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        navBarAppearance.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: color]
+        navBarAppearance.backgroundColor = UIColor(named: "GreenColorSet")
         
         navigationBar.standardAppearance = navBarAppearance
         navigationBar.scrollEdgeAppearance = navBarAppearance

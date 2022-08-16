@@ -49,7 +49,7 @@ final class FormulaTableViewCell: UITableViewCell {
     
     
     private func setPrimarySettings() {
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "BackgroundColorSet")
         selectionStyle = .default
         addSubview(variableLabel)
         addSubview(descriptionLabel)

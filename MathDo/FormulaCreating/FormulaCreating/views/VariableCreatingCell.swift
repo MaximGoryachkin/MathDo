@@ -40,7 +40,7 @@ final class VariableCreatingCell: UITableViewCell {
         let button = UIButton(type: .system)
         let trashImage = UIImage(systemName: "trash")
         button.setBackgroundImage(trashImage, for: .normal)
-        button.tintColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        button.tintColor = UIColor(named: "GreenColorSet")
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(buttonDidTapped(sender:)), for: .touchUpInside)
@@ -51,7 +51,7 @@ final class VariableCreatingCell: UITableViewCell {
         let button = UIButton(type: .system)
         let plusImage = UIImage(systemName: "plus")
         button.setBackgroundImage(plusImage, for: .normal)
-        button.tintColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        button.tintColor = UIColor(named: "GreenColorSet")
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(buttonDidTapped(sender:)), for: .touchUpInside)
@@ -63,7 +63,7 @@ final class VariableCreatingCell: UITableViewCell {
         let trashImage = UIImage(systemName: "pencil")
         button.tag = 1
         button.setBackgroundImage(trashImage, for: .normal)
-        button.tintColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        button.tintColor = UIColor(named: "GreenColorSet")
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(buttonDidTapped(sender:)), for: .touchUpInside)
@@ -111,7 +111,7 @@ final class VariableCreatingCell: UITableViewCell {
     }
     
     private func setPrimaryParameters() {
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "BackgroundColorSet")
         selectionStyle = .none
         addSubview(variableLabel)
         addSubview(variableDescription)

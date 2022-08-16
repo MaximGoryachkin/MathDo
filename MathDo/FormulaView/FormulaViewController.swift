@@ -26,7 +26,7 @@ final class FormulaViewController: UIViewController {
     
     override func loadView() {
         self.view = formulaView
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "BackgroundColorSet")
     }
     
     override func viewDidLoad() {

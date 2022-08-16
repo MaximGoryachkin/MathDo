@@ -25,6 +25,8 @@ final class FormulaView: UIView {
     private lazy var resultView: UILabel = {
         let view = UILabel()
         view.backgroundColor = .clear
+        view.textColor = UIColor(named: "BackgroundColorSet")?.inverted
+        view.text = "0"
         view.textAlignment = .center
         view.font = UIFont(name: "Avenir", size: 100)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +41,7 @@ final class FormulaView: UIView {
     
     private lazy var resultButtonView: UIButton = {
         let view = UIButton(type: .system)
-        view.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        view.backgroundColor = UIColor(named: "GreenColorSet")
         view.tintColor = .white
         view.setTitle("Get Result", for: .normal)
         view.titleLabel?.font = UIFont.systemFont(ofSize: 20)

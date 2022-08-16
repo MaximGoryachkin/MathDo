@@ -33,8 +33,8 @@ final class VariablesCreatingView: UIView {
         let label = UILabel()
         label.textAlignment = .center
         label.text = "Create variable"
-        label.textColor = .white
-        label.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        label.textColor = UIColor(named: "BackgroundColorSet")
+        label.backgroundColor = UIColor(named: "GreenColorSet")
         return label
     }()
     
@@ -59,8 +59,8 @@ final class VariablesCreatingView: UIView {
         variableCreatingButton.translatesAutoresizingMaskIntoConstraints = false
         variableCreatingButton.setTitle("Done", for: .normal)
         variableCreatingButton.layer.cornerRadius = 10
-        variableCreatingButton.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
-        variableCreatingButton.tintColor = .white
+        variableCreatingButton.backgroundColor = UIColor(named: "GreenColorSet")
+        variableCreatingButton.tintColor = UIColor(named: "BackgroundColorSet")
         variableCreatingButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         variableCreatingButton.addTarget(self, action: #selector(createVariableButtonTapped(sender:)), for: .touchUpInside)
         return variableCreatingButton
@@ -106,7 +106,7 @@ final class VariablesCreatingView: UIView {
         guard let usedVariables = variableCreatingVC.variableDisplay.variables else { return }
         variablesCharacters = FormulaReader.shared.allowedSymbols.getPossibleVariables(without: usedVariables)
         
-        backgroundColor = .white
+        backgroundColor = UIColor(named: "BackgroundColorSet")
         addSubview(pickerView)
         addSubview(titleLabel)
         stackView.addArrangedSubview(characterLabel)
@@ -196,7 +196,7 @@ extension VariablesCreatingView: UIPickerViewDataSource, UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedView = pickerView.view(forRow: row, forComponent: component) as? VariableView
-        let color = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+        guard let color = UIColor(named: "PickerViewColorSet") else { return }
         selectedView?.setColor(color)
     }
     
